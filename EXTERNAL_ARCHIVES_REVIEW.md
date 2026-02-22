@@ -1,6 +1,6 @@
 # External PS4 Archives Review
 
-- Generated: 2026-02-22 09:59:04 KST
+- Generated: 2026-02-22 19:42:58 KST
 - Rule: archives with status `likely_extracted` are likely safe to delete.
 - Verify manually before deleting.
 

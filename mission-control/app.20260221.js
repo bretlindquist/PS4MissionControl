@@ -47,7 +47,7 @@ const state = {
   visualUninstalledCard: {
     selectedRowKey: "",
     menuRowKey: "",
-    expandedRowKey: "",
+    sortAsc: true,
   },
   ps4Status: {
     online: false,
@@ -58,6 +58,10 @@ const state = {
     online: false,
     ip: "",
     port: 12800,
+  },
+  ftpConfig: {
+    host: "",
+    port: 2121,
   },
   ps4Storage: {
     available: false,
@@ -79,6 +83,7 @@ const el = {
   kpiWatch: document.getElementById("kpiWatch"),
   kpiPs4Online: document.getElementById("kpiPs4Online"),
   kpiRpiOnline: document.getElementById("kpiRpiOnline"),
+  headerFtpInfo: document.getElementById("headerFtpInfo"),
   kpiInternalFree: document.getElementById("kpiInternalFree"),
   kpiExternalFree: document.getElementById("kpiExternalFree"),
   chips: [...document.querySelectorAll("#viewChips .chip")],
@@ -93,7 +98,9 @@ const el = {
   extUninstalledTbody: document.querySelector("#extUninstalledTable tbody"),
   visualUninstalledLabel: document.getElementById("visualUninstalledLabel"),
   visualUninstalledSummary: document.getElementById("visualUninstalledSummary"),
+  visualSortBtn: document.getElementById("visualSortBtn"),
   visualUninstalledGrid: document.getElementById("visualUninstalledGrid"),
+  visualDetailsBody: document.getElementById("visualDetailsBody"),
   visualSendToPs4Btn: document.getElementById("visualSendToPs4Btn"),
   uninstalledTableLabel: document.getElementById("uninstalledTableLabel"),
   uninstalledInlineFilter: document.getElementById("uninstalledInlineFilter"),
@@ -156,6 +163,7 @@ async function loadServerState() {
     state.ignore = Array.isArray(payload.ignore) ? payload.ignore : [];
     state.hidden = Array.isArray(payload.hide) ? payload.hide : [];
     state.localIcons = payload.localIcons && typeof payload.localIcons === "object" ? payload.localIcons : {};
+    state.ftpConfig = payload.ftpConfig || state.ftpConfig;
     state.ps4Status = payload.ps4Status || state.ps4Status;
     state.rpiStatus = payload.rpiStatus || state.rpiStatus;
     state.ps4Storage = payload.ps4Storage || state.ps4Storage;
@@ -379,6 +387,10 @@ function bindEvents() {
   el.sendToPs4Btn?.addEventListener("click", sendSelectedUninstalledToPs4);
   el.extSendToPs4Btn?.addEventListener("click", sendSelectedExtUninstalledToPs4);
   el.visualSendToPs4Btn?.addEventListener("click", sendSelectedVisualUninstalledToPs4);
+  el.visualSortBtn?.addEventListener("click", () => {
+    state.visualUninstalledCard.sortAsc = !state.visualUninstalledCard.sortAsc;
+    renderVisualUninstalledCard();
+  });
   el.refreshTasksBtn?.addEventListener("click", refreshRpiTasks);
   el.clearTasksBtn?.addEventListener("click", clearFinishedRpiTasks);
   el.refreshBtn.addEventListener("click", refreshData);
@@ -494,7 +506,6 @@ async function refreshStorageData() {
 function renderAll() {
   renderWatchList();
   renderKpis();
-  renderExternalUninstalledCard();
   renderUninstalledCard();
   renderVisualUninstalledCard();
   renderRpiTasks();
@@ -654,6 +665,11 @@ function renderKpis() {
     const ip = state.ps4Status?.ip ? ` (${state.ps4Status.ip})` : "";
     el.kpiPs4Online.title = `GoldHEN status${ip}`;
   }
+  if (el.headerFtpInfo) {
+    const host = String(state.ftpConfig?.host || state.ps4Status?.ip || "").trim();
+    const port = Number(state.ftpConfig?.port) || 2121;
+    el.headerFtpInfo.textContent = host ? `FTP ${host}:${port}` : `FTP :${port}`;
+  }
   if (el.kpiRpiOnline) {
     const online = !!state.rpiStatus?.online;
     const port = Number(state.rpiStatus?.port) || 12800;
@@ -807,13 +823,24 @@ function extractVersionHints(file, path) {
 function visualPackagesForRow(row) {
   const cusa = String(row.CUSA || row["Title ID"] || "").toUpperCase().trim();
   const titleNorm = normalizeTitle(row.Title || row.File || "");
-  const all = state.data.externalGames || [];
+  const all = [
+    ...(state.data.externalGames || []).map((r) => ({ ...r, __src: "game" })),
+    ...(state.data.nonGames || []).map((r) => ({ ...r, __src: "non_game" })),
+    ...(state.data.dlc || []).map((r) => ({ ...r, __src: "dlc" })),
+    ...(state.data.themes || []).map((r) => ({ ...r, __src: "theme" })),
+  ];
   let matches = [];
   if (cusa) matches = all.filter((r) => String(r.CUSA || "").toUpperCase().trim() === cusa);
   if (!matches.length && titleNorm) {
     matches = all.filter((r) => isLikelySameGameTitle(normalizeTitle(r.Title || r.File || ""), titleNorm));
   }
-  return matches.map((r) => {
+  const dedup = new Map();
+  matches.forEach((r) => {
+    const key = String(r.Path || r.File || "").trim().toLowerCase();
+    if (!key) return;
+    if (!dedup.has(key)) dedup.set(key, r);
+  });
+  return [...dedup.values()].map((r) => {
     const file = String(r.File || "");
     const path = String(r.Path || "");
     const sizeNum = parseFloat(String(r["Size (GB)"] || "").replace(/[^\d.-]/g, ""));
@@ -827,6 +854,7 @@ function visualPackagesForRow(row) {
       sizeGb,
       type: inferPackageType(file, path),
       versionHint: hints.join(", ") || "-",
+      source: String(r.__src || "unknown"),
     };
   });
 }
@@ -840,6 +868,9 @@ function buildVisualDetailsHtml(row) {
   const biggest = packages.length ? Math.max(...packages.map((p) => Number(p.sizeGb) || 0)) : 0;
   const hints = [...new Set(packages.flatMap((p) => (p.versionHint && p.versionHint !== "-" ? p.versionHint.split(", ").map((x) => x.trim()) : [])))];
   const hintsText = hints.length ? hints.slice(0, 8).join(", ") : "-";
+  const hasGameSource = packages.some((p) => p.source === "game");
+  const hasNonGameSource = packages.some((p) => p.source === "non_game");
+  const classState = hasGameSource ? "game-labeled" : (hasNonGameSource ? "? (non-game-labeled)" : "?");
   const sortedPkgs = [...packages].sort((a, b) => (b.sizeGb - a.sizeGb) || a.file.localeCompare(b.file));
   const pkgRows = sortedPkgs.length
     ? sortedPkgs.map((p) => `<tr>
@@ -854,8 +885,9 @@ function buildVisualDetailsHtml(row) {
     <div class="visual-details-grid">
       <div><span>Title</span><strong>${escapeHtml(title)}</strong></div>
       <div><span>Drive</span><strong>${escapeHtml(drives)}</strong></div>
-      <div><span>Example Path</span><code title="${escapeHtml(examplePath)}">${escapeHtml(examplePath)}</code></div>
+      <div><span>Path</span><code title="${escapeHtml(examplePath)}">${escapeHtml(examplePath)}</code></div>
       <div><span>Size (GB)</span><strong>${biggest > 0 ? biggest.toFixed(2) : "-"}</strong></div>
+      <div><span>Classification</span><strong>${escapeHtml(classState)}</strong></div>
       <div><span>Pkg Type Guess</span><strong>${escapeHtml(typeSummary)}</strong></div>
       <div><span>Version Hint(s)</span><strong>${escapeHtml(hintsText)}</strong></div>
     </div>
@@ -869,6 +901,15 @@ function buildVisualDetailsHtml(row) {
       </div>
     </div>
   </div>`;
+}
+
+function renderVisualDetailsPanel(row) {
+  if (!el.visualDetailsBody) return;
+  if (!row) {
+    el.visualDetailsBody.innerHTML = `<div class="visual-empty">Select a tile to view details.</div>`;
+    return;
+  }
+  el.visualDetailsBody.innerHTML = buildVisualDetailsHtml(row);
 }
 
 async function autoExtractMissingIcons() {
@@ -916,13 +957,26 @@ async function autoExtractMissingIcons() {
 }
 
 function renderVisualUninstalledCard() {
-  const rows = (state.data.externalUninstalled || []).filter((r) => (r.Installed || "").toLowerCase() !== "installed");
+  const rows = (state.data.externalUninstalled || [])
+    .filter((r) => (r.Installed || "").toLowerCase() !== "installed")
+    .sort((a, b) => {
+      const at = String(a.Title || a.File || a.CUSA || a["Title ID"] || "").toLowerCase();
+      const bt = String(b.Title || b.File || b.CUSA || b["Title ID"] || "").toLowerCase();
+      if (at < bt) return state.visualUninstalledCard.sortAsc ? -1 : 1;
+      if (at > bt) return state.visualUninstalledCard.sortAsc ? 1 : -1;
+      return 0;
+    });
   if (el.visualUninstalledLabel) el.visualUninstalledLabel.textContent = `Drive Scan Uninstalled (Visual) (${rows.length})`;
   if (el.visualUninstalledSummary) el.visualUninstalledSummary.textContent = `${rows.length} candidates`;
+  if (el.visualSortBtn) {
+    el.visualSortBtn.textContent = state.visualUninstalledCard.sortAsc ? "A-Z" : "Z-A";
+    el.visualSortBtn.title = `Toggle visual tile sort (${state.visualUninstalledCard.sortAsc ? "A-Z" : "Z-A"})`;
+  }
   updateVisualSendToPs4Button(rows);
   if (!el.visualUninstalledGrid) return;
   if (!rows.length) {
     el.visualUninstalledGrid.innerHTML = `<div class="visual-empty">No rows yet. Run refresh first.</div>`;
+    renderVisualDetailsPanel(null);
     return;
   }
   el.visualUninstalledGrid.innerHTML = rows
@@ -930,7 +984,6 @@ function renderVisualUninstalledCard() {
     .map((row, idx) => {
       const key = makeRule(row).key || String(idx);
       const selectedClass = state.visualUninstalledCard.selectedRowKey === key ? "selected" : "";
-      const expandedClass = state.visualUninstalledCard.expandedRowKey === key ? "expanded" : "";
       const menuOpenClass = state.visualUninstalledCard.menuRowKey === key ? "menu-open" : "";
       const title = row.Title || row.File || "Unknown";
       const cusa = row.CUSA || row["Title ID"] || "-";
@@ -948,17 +1001,19 @@ function renderVisualUninstalledCard() {
             </div>
           </div>`
         : "";
-      return `<button class="visual-tile ${selectedClass} ${expandedClass}" type="button" data-idx="${idx}" data-key="${escapeHtml(key)}" title="${escapeHtml(title)}">
+      return `<button class="visual-tile ${selectedClass}" type="button" data-idx="${idx}" data-key="${escapeHtml(key)}" title="${escapeHtml(title)}">
         ${menuHtml}
         <div class="visual-thumb">${thumbHtml}</div>
         <div class="visual-meta">
           <div class="visual-title">${escapeHtml(title)}</div>
           <div class="visual-sub">${escapeHtml(cusa)}${subtitle ? ` · ${escapeHtml(subtitle)}` : ""}</div>
         </div>
-        ${buildVisualDetailsHtml(row)}
       </button>`;
     })
     .join("");
+
+  const selectedRow = getSelectedVisualUninstalledRow(rows);
+  renderVisualDetailsPanel(selectedRow);
 
   el.visualUninstalledGrid.querySelectorAll(".visual-tile").forEach((tile) => {
     tile.addEventListener("click", async () => {
@@ -971,17 +1026,8 @@ function renderVisualUninstalledCard() {
       state.visualUninstalledCard.selectedRowKey = nextKey;
       el.visualUninstalledGrid.querySelectorAll(".visual-tile.selected").forEach((t) => t.classList.remove("selected"));
       tile.classList.add("selected");
-      const prevExpanded = state.visualUninstalledCard.expandedRowKey;
-      const nextExpanded = prevExpanded === nextKey ? "" : nextKey;
-      state.visualUninstalledCard.expandedRowKey = nextExpanded;
-      if (prevExpanded && prevExpanded !== nextExpanded) {
-        const prevTile = [...el.visualUninstalledGrid.querySelectorAll(".visual-tile")]
-          .find((t) => (t.dataset.key || "") === prevExpanded);
-        prevTile?.classList.remove("expanded");
-      }
-      if (nextExpanded) tile.classList.add("expanded");
-      else tile.classList.remove("expanded");
       updateVisualSendToPs4Button(rows);
+      renderVisualDetailsPanel(row);
       const id = extractRowId(row);
       if (id) {
         try {

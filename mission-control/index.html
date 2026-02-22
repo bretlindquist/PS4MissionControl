@@ -15,6 +15,16 @@
         <h1>PS4 Mission Control</h1>
         <p>Installed, external, uninstalled targets, and watch list</p>
       </div>
+      <div class="topbar__status">
+        <div class="status-stack">
+          <span id="kpiPs4Online" class="kpi kpi-status offline">Offline</span>
+          <small id="headerFtpInfo">FTP --:--</small>
+        </div>
+        <div class="status-stack">
+          <span id="kpiRpiOnline" class="kpi kpi-status offline">Offline</span>
+          <small>RPI 12800</small>
+        </div>
+      </div>
       <div class="topbar__right">
         <button id="refreshBtn" class="btn">Refresh Data</button>
         <button id="refreshStorageBtn" class="btn ghost">Refresh Storage</button>
@@ -36,8 +46,6 @@
           <div><span id="kpiExternal" class="kpi">0</span><small>Game PKGs on externals</small></div>
           <div><span id="kpiUninstalled" class="kpi">0</span><small>Uninstalled candidates</small></div>
           <div><span id="kpiWatch" class="kpi">0</span><small>Watch list</small></div>
-          <div><span id="kpiPs4Online" class="kpi kpi-status offline">Offline</span><small>PS4 Online</small></div>
-          <div><span id="kpiRpiOnline" class="kpi kpi-status offline">Offline</span><small>RPI 12800</small></div>
           <div><span id="kpiInternalFree" class="kpi kpi-storage">--</span><small>Internal Free</small></div>
           <div><span id="kpiExternalFree" class="kpi kpi-storage">--</span><small>External Free</small></div>
         </div>
@@ -87,22 +95,6 @@
         <small id="listCounts"></small>
       </section>
 
-      <section class="card ext-uninstalled-card">
-        <div class="card-head">
-          <p class="label">Drive Scan Uninstalled</p>
-          <div class="inline-tools">
-            <small id="extUninstalledSummary"></small>
-            <button id="extSendToPs4Btn" class="btn ghost" title="Send selected drive-scan row to PS4 RPI">Send to PS4</button>
-          </div>
-        </div>
-        <div class="table-wrap compact">
-          <table id="extUninstalledTable">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-
       <section class="card uninstalled-card" id="uninstalledTableCard">
         <div class="card-head">
           <p class="label" id="uninstalledTableLabel">Uninstalled Games</p>
@@ -138,13 +130,24 @@
 
       <section class="card visual-uninstalled-card" id="visualUninstalledCard">
         <div class="card-head">
-          <p class="label" id="visualUninstalledLabel">Drive Scan Uninstalled (Visual)</p>
+          <div class="label-inline">
+            <p class="label" id="visualUninstalledLabel">Drive Scan Uninstalled (Visual)</p>
+            <button id="visualSortBtn" class="btn ghost visual-sort-btn" title="Toggle visual tile sort order">A-Z</button>
+          </div>
           <div class="inline-tools">
             <small id="visualUninstalledSummary"></small>
             <button id="visualSendToPs4Btn" class="btn ghost" title="Send selected visual row to PS4 RPI">Send to PS4</button>
           </div>
         </div>
-        <div id="visualUninstalledGrid" class="visual-grid"></div>
+        <div class="visual-layout">
+          <div id="visualUninstalledGrid" class="visual-grid"></div>
+          <aside id="visualDetailsPane" class="visual-details-pane">
+            <p class="label">Selection Details</p>
+            <div id="visualDetailsBody" class="visual-details-body">
+              <div class="visual-empty">Select a tile to view details.</div>
+            </div>
+          </aside>
+        </div>
       </section>
 
       <section class="card table-card" id="mainTableCard">

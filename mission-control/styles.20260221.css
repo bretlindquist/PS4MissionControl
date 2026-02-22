@@ -57,6 +57,30 @@ body {
 .topbar h1 { margin: 0; font-size: clamp(1.6rem, 2.6vw, 2.1rem); font-weight: 800; }
 .topbar p { margin: 0.15rem 0 0; color: var(--muted); font-size: 0.92rem; }
 .topbar__right { display: flex; align-items: center; gap: 0.6rem; }
+.topbar__left { min-width: 0; }
+.topbar__status {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.55rem;
+  margin: 0 0.75rem;
+  flex-shrink: 0;
+}
+.status-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+.status-stack small {
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.1;
+}
+.topbar__status .kpi-status {
+  min-height: 2rem;
+  padding: 0.08rem 0.62rem;
+  font-size: 0.95rem;
+}
 
 input[type="search"], .watch-form input {
   border: 1px solid var(--border);
@@ -136,7 +160,7 @@ input::placeholder { color: var(--muted); }
 }
 .hero__numbers {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 0.8rem;
 }
 .hero__head {
@@ -206,8 +230,14 @@ input::placeholder { color: var(--muted); }
   gap: 0.6rem;
   margin-bottom: 0.65rem;
 }
+.label-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 .inline-tools { display: flex; gap: 0.55rem; align-items: center; }
 .inline-tools input { width: 230px; }
+.visual-sort-btn { margin-left: 10px; }
 
 .table-wrap {
   overflow: auto;
@@ -227,6 +257,23 @@ input::placeholder { color: var(--muted); }
   border-radius: var(--radius-sm);
   padding: 0.72rem;
   background: color-mix(in srgb, var(--bg-soft) 40%, transparent);
+}
+.visual-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(300px, 28vw, 420px);
+  gap: 0.72rem;
+  align-items: start;
+}
+.visual-details-pane {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.72rem;
+  background: color-mix(in srgb, var(--bg-soft) 52%, transparent);
+  position: sticky;
+  top: 98px;
+}
+.visual-details-body {
+  margin-top: 0.4rem;
 }
 .visual-tile {
   position: relative;
@@ -346,17 +393,14 @@ input::placeholder { color: var(--muted); }
   font-size: 0.74rem;
 }
 .visual-details {
-  display: none;
-  margin-top: 0.2rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
-}
-.visual-tile.expanded .visual-details {
   display: block;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 .visual-details-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 0.35rem 0.6rem;
   margin-bottom: 0.45rem;
 }
@@ -382,9 +426,9 @@ input::placeholder { color: var(--muted); }
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.25rem 0.35rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .visual-package-title {
   margin: 0 0 0.3rem 0;
@@ -395,12 +439,13 @@ input::placeholder { color: var(--muted); }
 .visual-package-wrap {
   border: 1px solid var(--border);
   border-radius: 8px;
-  max-height: 180px;
-  overflow: auto;
+  max-height: none;
+  overflow: visible;
 }
 .visual-package-wrap table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   font-size: 0.72rem;
 }
 .visual-package-wrap th,
@@ -408,6 +453,8 @@ input::placeholder { color: var(--muted); }
   padding: 0.25rem 0.35rem;
   text-align: left;
   border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .visual-package-wrap th {
   position: sticky;
@@ -573,4 +620,7 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
   .hero__head { flex-direction: column; align-items: flex-start; }
   .hero__numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .topbar { flex-direction: column; align-items: flex-start; }
+  .topbar__status { margin: 0; align-self: flex-start; }
+  .visual-layout { grid-template-columns: 1fr; }
+  .visual-details-pane { position: static; }
 }

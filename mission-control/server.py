@@ -32,6 +32,7 @@ DATA = {
 }
 FTP_SNAPSHOT_SCRIPT = ROOT / "scripts" / "fetch_ps4_ftp_snapshot.py"
 DEFAULT_PS4_IP = os.environ.get("PS4_IP", "192.168.0.26")
+DEFAULT_FTP_PORT = int(os.environ.get("PS4_FTP_PORT", "2121"))
 DEFAULT_BINLOADER_PORT = int(os.environ.get("PS4_BINLOADER_PORT", "9090"))
 STORAGE_PAYLOAD_BIN = ROOT / "payloads" / "storage-snapshot" / "payload.bin"
 DEFAULT_RPI_PORT = int(os.environ.get("PS4_RPI_PORT", "12800"))
@@ -784,6 +785,10 @@ class Handler(SimpleHTTPRequestHandler):
                 "ignore": _read_json(DATA["ignore"]),
                 "hide": _read_json(DATA["hide"]),
                 "localIcons": _local_icon_map(),
+                "ftpConfig": {
+                    "host": DEFAULT_PS4_IP,
+                    "port": DEFAULT_FTP_PORT,
+                },
                 "ps4Status": ps4_status,
                 "rpiStatus": rpi_status,
                 "ps4Storage": storage,

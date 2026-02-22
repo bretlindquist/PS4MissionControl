@@ -1,6 +1,6 @@
 # External PS4 Games List
 
-- Generated: 2026-02-22 09:59:04 KST
+- Generated: 2026-02-22 19:42:58 KST
 - Drives scanned: `/Volumes/PS4`, `/Volumes/MagicLantern`
 - Game PKGs detected: 137
 - Game archives detected: 1
@@ -8,37 +8,6 @@
 ## Game PKGs
 | Drive | File | CUSA | Size (GB) | Date | Path |
 |---|---|---|---:|---|---|
-| MagicLantern | [Downloadgameps3.com]-EP1018-CUSA04402_00-SHADOWOFMORDOR02-A0100-V0100.pkg | CUSA04402 | 40.10 | 2021-02-14 | `/Volumes/MagicLantern/PS4/GAME Shadow of War - LOTR/[Downloadgameps3.com]-EP1018-CUSA04402_00-SHADOWOFMORDOR02-A0100-V0100.pkg` |
-| MagicLantern | [Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSCROWXXXXXXXX-A0000-V0100.pkg | CUSA03694 | 0.00 | 2021-01-25 | `/Volumes/MagicLantern/PS4/Various Files/Gravity Rush 2-CUSA03694-DLC/[Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSCROWXXXXXXXX-A0000-V0100.pkg` |
-| MagicLantern | [Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSKIT17XXXXXXX-A0000-V0100.pkg | CUSA03694 | 0.00 | 2021-01-25 | `/Volumes/MagicLantern/PS4/Various Files/Gravity Rush 2-CUSA03694-DLC/[Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSKIT17XXXXXXX-A0000-V0100.pkg` |
-| MagicLantern | [Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSPSO2XXXXXXXX-A0000-V0100.pkg | CUSA03694 | 0.00 | 2021-01-25 | `/Volumes/MagicLantern/PS4/Various Files/Gravity Rush 2-CUSA03694-DLC/[Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSPSO2XXXXXXXX-A0000-V0100.pkg` |
-| MagicLantern | [Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSX1NIERXXXXXX-A0000-V0100.pkg | CUSA03694 | 0.00 | 2021-01-25 | `/Volumes/MagicLantern/PS4/Various Files/Gravity Rush 2-CUSA03694-DLC/[Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSX1NIERXXXXXX-A0000-V0100.pkg` |
-| MagicLantern | [SPSX]-Assassins.Creed.Rogue.Remastered-CUSA10123-Game-(5.05 )-PS4.pkg | CUSA10123 | 9.17 | 2025-01-30 | `/Volumes/MagicLantern/PS4/Assassins.Creed.Rogue.Remastered-CUSA10123/[SPSX]-Assassins.Creed.Rogue.Remastered-CUSA10123-Game-(5.05 )-PS4.pkg` |
-| MagicLantern | [SPSX]-Blazing.Strike-CUSA34460-USA-Game-(9.00 )-PS4.pkg | CUSA34460 | 1.08 | 2024-12-15 | `/Volumes/MagicLantern/PS4/Installed/Blazing.Strike-CUSA34460/[SPSX]-Blazing.Strike-CUSA34460-USA-Game-(9.00 )-PS4.pkg` |
-| MagicLantern | [SPSX]-Call.of.Duty.Ghosts-CUSA00018-USA-Game-(5.05 )-PS4.pkg | CUSA00018 | 28.78 | 2024-12-14 | `/Volumes/MagicLantern/PS4/Call.of.Duty.Ghosts - CUSA00018/[SPSX]-Call.of.Duty.Ghosts-CUSA00018-USA-Game-(5.05 )-PS4.pkg` |
-| MagicLantern | [SPSX]-COD.BO.Cold.War-CUSA15010-USA-v1.00-Game-PS4-CyB1K.pkg | CUSA15010 | 12.68 | 2024-12-13 | `/Volumes/MagicLantern/PS4/COD.BO.Cold.War-CUSA15010-USA/[SPSX]-COD.BO.Cold.War-CUSA15010-USA-v1.00-Game-PS4-CyB1K.pkg` |
-| MagicLantern | [SPSX]-Gundam.Breaker.3.Break.Edition-CUSA07651-ASIA-Game-(5.05 )-PS4.pkg | CUSA07651 | 12.08 | 2025-02-13 | `/Volumes/MagicLantern/PS4/Various Files/[SPSX]-Gundam.Breaker.3.Break.Edition-CUSA07651-ASIA-Game-(5.05 )-PS4.pkg` |
-| MagicLantern | [SPSX]-Kona.2.Brume-CUSA30548-USA-Game-(9.00)-PS4.pkg | CUSA30548 | 4.82 | 2025-02-17 | `/Volumes/MagicLantern/PS4/Various Files/[SPSX]-Kona.2.Brume-CUSA30548-USA-Game-(9.00)-PS4.pkg` |
-| MagicLantern | [SPSX]-Marvel.vs.Capcom.Infinite-CUSA06380-EUR-Game-v1.06-(5.05 )-PS4.pkg | CUSA06380 | 40.43 | 2025-02-07 | `/Volumes/MagicLantern/PS4/Various Files/[SPSX]-Marvel.vs.Capcom.Infinite-CUSA06380-EUR-Game-v1.06-(5.05 )-PS4.pkg` |
-| MagicLantern | [SPSX]-Marvels.Iron.Man.VR-CUSA16206-EUR-Game-(6.72+)-PS4-DUPLEX.pkg | CUSA16206 | 30.76 | 2025-03-23 | `/Volumes/MagicLantern/PS4/[SPSX]-Marvels.Iron.Man.VR-CUSA16206-EUR-Game-(6.72+)-PS4-DUPLEX.pkg` |
-| MagicLantern | [SuperPSX.com]-Archangel-CUSA09220–EUR-Game-v1.00_[4.00]_OPOISSO893.pkg | CUSA09220 | 4.89 | 2021-11-12 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Archangel-CUSA09220–EUR-Game-v1.00_[4.00]_OPOISSO893/[SuperPSX.com]-Archangel-CUSA09220–EUR-Game-v1.00_[4.00]_OPOISSO893.pkg` |
-| MagicLantern | [SuperPSX.com]-Arise.A.Simple.Story-CUSA12772–EUR-Game-v.100_[6.72]_OPOISSO893.pkg | CUSA12772 | 4.69 | 2024-11-26 | `/Volumes/MagicLantern/PS4/Installed/Arise.A.Simple.Story-CUSA12772–EUR/[SuperPSX.com]-Arise.A.Simple.Story-CUSA12772–EUR-Game-v.100_[6.72]_OPOISSO893.pkg` |
-| MagicLantern | [SuperPSX.com]-Assassins.Creed.Origins_CUSA05625_v1.00_[5.05]_OPOISSO893.pkg | CUSA05625 | 39.60 | 2024-12-20 | `/Volumes/MagicLantern/PS4/Assassins.Creed.Origins.Deluxe.DLC-CUSA05625/[SuperPSX.com]-Assassins.Creed.Origins_CUSA05625_v1.00_[5.05]_OPOISSO893.pkg` |
-| MagicLantern | [SuperPSX.com]-Assassins.Creed.Origins_CUSA05625_v1.44_[5.05]_OPOISSO893.pkg | CUSA05625 | 7.20 | 2024-12-20 | `/Volumes/MagicLantern/PS4/Assassins.Creed.Origins.Deluxe.DLC-CUSA05625/[SuperPSX.com]-Assassins.Creed.Origins_CUSA05625_v1.44_[5.05]_OPOISSO893.pkg` |
-| MagicLantern | [SuperPSX.com]-CUSA19302-Star_Wars_Republic_Commando_UPD_v1_02.pkg | CUSA19302 | 0.03 | 2022-01-02 | `/Volumes/MagicLantern/PS4/Star_Wars_Republic_Commando-CUSA19302/[SuperPSX.com]-CUSA19302-Star_Wars_Republic_Commando_UPD_v1_02.pkg` |
-| MagicLantern | [SuperPSX.com]-CUSA19302-Star_Wars_Republic_Commando.pkg | CUSA19302 | 1.72 | 2022-01-02 | `/Volumes/MagicLantern/PS4/Star_Wars_Republic_Commando-CUSA19302/[SuperPSX.com]-CUSA19302-Star_Wars_Republic_Commando.pkg` |
-| MagicLantern | [SuperPSX.com]-Doctor.Who.The.Lonely.Assassins-CUSA28640-EUR-Game-[8.00]_OPOISSO893.pkg | CUSA28640 | 1.17 | 2025-02-05 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Doctor.Who.The.Lonely.Assassins-CUSA28640-EUR-Game-[8.00]_OPOISSO893.pkg` |
-| MagicLantern | [SuperPSX.com]-Doctor.Who.The.Lonely.Assassins-CUSA28640-EUR-Game-[8.00]_v1.01__OPOISSO893.pkg | CUSA28640 | 0.20 | 2023-01-04 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Doctor.Who.The.Lonely.Assassins-CUSA28640-EUR-Game-[8.00]_v1.01__OPOISSO893.pkg` |
-| MagicLantern | [SuperPSX.com]-It.Takes.Two_CUSA16742_v1.03_FullGame_[8.00]_OPOISSO893.pkg | CUSA16742 | 34.33 | 2024-09-19 | `/Volumes/MagicLantern/PS4/It Takes Two/[SuperPSX.com]-It.Takes.Two_CUSA16742_v1.03_FullGame_[8.00]_OPOISSO893.pkg` |
-| MagicLantern | [SuperPSX.com]-Raw.Data-CUSA09759-EUR-Game-(v1.04)-PS4.pkg | CUSA09759 | 7.43 | 2025-03-24 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Raw.Data-CUSA09759-EUR-Game-(v1.04)-PS4.pkg` |
-| MagicLantern | [SuperPSX.com]-Ultra Age-CUSA14637–USA-Game-(v2.02)-PS4-CyB1K.pkg | CUSA14637 | 5.14 | 2025-02-13 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Ultra Age-CUSA14637–USA-Game-(v2.02)-PS4-CyB1K.pkg` |
-| MagicLantern | [SuperPSX]-Assassins.Creed.3.Remastered-CUSA11711-USA-Game-(5.50 )-PS4.pkg | CUSA11711 | 35.52 | 2025-02-15 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-Assassins.Creed.3.Remastered-CUSA11711-USA-Game-(5.50 )-PS4.pkg` |
-| MagicLantern | [SuperPSX]-DREDGE-CUSA35761-EUR-Game-(9.00 )-PS4-OPOISSO893.pkg | CUSA35761 | 0.72 | 2025-02-16 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-DREDGE-CUSA35761-EUR-Game-(9.00 )-PS4-OPOISSO893.pkg` |
-| MagicLantern | [SuperPSX]-Gravity.Rush.2-CUSA03694-USA-Game-(5.05 )-PS4.pkg | CUSA03694 | 15.95 | 2025-02-16 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-Gravity.Rush.2-CUSA03694-USA-Game-(5.05 )-PS4.pkg` |
-| MagicLantern | [SuperPSX]-Guilty.Gear.-Strive-_CUSA25325_v1.00_[7.50]-PS4.pkg | CUSA25325 | 10.92 | 2025-02-13 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-Guilty.Gear.-Strive-_CUSA25325_v1.00_[7.50]-PS4.pkg` |
-| MagicLantern | [SuperPSX]-Guilty.Gear.-Strive-_CUSA25325_v1.40_[9.00 ]-PS4.pkg | CUSA25325 | 13.84 | 2025-02-12 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-Guilty.Gear.-Strive-_CUSA25325_v1.40_[9.00 ]-PS4.pkg` |
-| MagicLantern | [SuperPSX]-Stranger.of.Paradise.FFO-CUSA29579-EUR-Game-(9.00 )-PS4.pkg | CUSA29579 | 29.46 | 2025-02-06 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-Stranger.of.Paradise.FFO-CUSA29579-EUR-Game-(9.00 )-PS4.pkg` |
-| MagicLantern | [SuperPSX]-The.Callisto.Protocol-CUSA27372-USA-Game-(9.00 )-PS4.pkg | CUSA27372 | 27.10 | 2025-02-14 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-The.Callisto.Protocol-CUSA27372-USA-Game-(9.00 )-PS4.pkg` |
 | MagicLantern | Arkham.Horror.Mothers.Embrace.v1.00-CUSA23393.pkg | CUSA23393 | 3.99 | 2024-01-12 | `/Volumes/MagicLantern/PS4/Installed/Arkham.Horror.Mothers.Embrace/Arkham.Horror.Mothers.Embrace.v1.00-CUSA23393.pkg` |
 | MagicLantern | Battlefield.4.MULTI.PS4-PRELUDE.pkg | - | 30.00 | 2019-03-02 | `/Volumes/MagicLantern/PS4/Installed/Battlefield.4/Battlefield.4.MULTI.PS4-PRELUDE.pkg` |
 | MagicLantern | CUSA00785_THE_ORDER_1886_FXDv1.00_[405].pkg | CUSA00785 | 29.41 | 2018-08-18 | `/Volumes/MagicLantern/PS4/The Order 1886/CUSA00785_THE_ORDER_1886_FXDv1.00_[405].pkg` |
@@ -76,26 +45,37 @@
 | MagicLantern | UP1001-CUSA03980_00-BIOSHOCKCOMPLETE-A0100-V0100.pkg | CUSA03980 | 30.10 | 2025-01-30 | `/Volumes/MagicLantern/PS4/Installed/Bioshock/UP1001-CUSA03980_00-BIOSHOCKCOMPLETE-A0100-V0100.pkg` |
 | MagicLantern | UP4108-CUSA33393_00-GAME000000000000-A0100-V0100-CyB1K.pkg | CUSA33393 | 20.81 | 2024-09-27 | `/Volumes/MagicLantern/PS4/UP4108-CUSA33393 00-GAME000000000000-A0100-V0100-CyB1K/UP4108-CUSA33393_00-GAME000000000000-A0100-V0100-CyB1K.pkg` |
 | MagicLantern | UP4873-CUSA14637_00-ULTRAAGEPS400000-A0202-V0100-CyB1K.pkg | CUSA14637 | 0.16 | 2022-10-08 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Ultra Age-CUSA14637–USA-(v2.02)-[Fix-5.05.6.72.7.02.7.55.9.00]-PS4-CyB1K/UP4873-CUSA14637_00-ULTRAAGEPS400000-A0202-V0100-CyB1K.pkg` |
-| PS4 | [SPSX]-Farpoint.VR-CUSA04179-USA-Game-(4.00 )-PS4.pkg | CUSA04179 | 10.64 | 2025-03-30 | `/Volumes/PS4/[SPSX]-Farpoint.VR-CUSA04179-USA-Game-(4.00 )-PS4.pkg` |
-| PS4 | [SPSX]-Here.They.Lie.VR-CUSA05344-EUR-Game-(5.05+)-PS4.pkg | CUSA05344 | 5.85 | 2025-10-01 | `/Volumes/PS4/Installed/[SPSX]-Here.They.Lie.VR-CUSA05344-EUR-Game-(5.05+)-PS4.pkg` |
-| PS4 | [SPSX]-Retromania.Wrestling-CUSA28394-EUR-Game-PS4-TRIFECTA-CyB1K.pkg | CUSA28394 | 0.42 | 2025-09-30 | `/Volumes/PS4/Installed/[SPSX]-Retromania.Wrestling-CUSA28394-EUR-Game-PS4-TRIFECTA-CyB1K.pkg` |
-| PS4 | [SuperPSX.com]-Crisis.Vrigade.2-CUSA18828-EUR-Game-v1.00_[7.02]_OPOISSO893.pkg | CUSA18828 | 2.78 | 2025-03-31 | `/Volumes/PS4/[SuperPSX.com]-Crisis.Vrigade.2-CUSA18828-EUR-Game-v1.00_[7.02]_OPOISSO893.pkg` |
-| PS4 | [SuperPSX.com]-Gran.Turismo.Sport-CUSA03220-USA-Game-PS4-[High-Speed].pkg | CUSA03220 | 40.04 | 2025-03-23 | `/Volumes/PS4/Installed/[SuperPSX.com]-Gran.Turismo.Sport-CUSA03220-USA-Game-PS4-[High-Speed].pkg` |
-| PS4 | [SuperPSX]-Chernobylite_CUSA28037_v1.00_[9.00]-PS4.pkg | CUSA28037 | 10.29 | 2025-02-16 | `/Volumes/PS4/[SuperPSX]-Chernobylite_CUSA28037_v1.00_[9.00]-PS4.pkg` |
-| PS4 | [SuperPSX]-Chernobylite_CUSA28037_v1.12_[9.00]-PS4.pkg | CUSA28037 | 10.18 | 2025-02-15 | `/Volumes/PS4/[SuperPSX]-Chernobylite_CUSA28037_v1.12_[9.00]-PS4.pkg` |
-| PS4 | [SuperPSX]-ELDEN.RING_CUSA18723_v1.22_MOD_[9.00+]_PS4.pkg | CUSA18723 | 16.16 | 2025-09-30 | `/Volumes/PS4/Installed/[SuperPSX]-ELDEN.RING_CUSA18723_v1.22_MOD_[9.00+]_PS4.pkg` |
-| PS4 | [SuperPSX]-I.Expect.You.To.Die.2_CUSA27601_v1.00_[9.00+]-PS4_OPOISSO893.pkg | CUSA27601 | 0.77 | 2025-09-30 | `/Volumes/PS4/Installed/[SuperPSX]-I.Expect.You.To.Die.2_CUSA27601_v1.00_[9.00+]-PS4_OPOISSO893.pkg` |
-| PS4 | [SuperPSX]-Keep.Talking.and.Nobody.Explodes_CUSA06561_v1.00_[5.05]-PS4.pkg | CUSA06561 | 0.22 | 2025-03-21 | `/Volumes/PS4/Installed/[SuperPSX]-Keep.Talking.and.Nobody.Explodes_CUSA06561_v1.00_[5.05]-PS4.pkg` |
-| PS4 | [SuperPSX]-Keep.Talking.and.Nobody.Explodes_CUSA06561_v1.07_[6.72]-PS4.pkg | CUSA06561 | 0.24 | 2025-03-21 | `/Volumes/PS4/Installed/[SuperPSX]-Keep.Talking.and.Nobody.Explodes_CUSA06561_v1.07_[6.72]-PS4.pkg` |
-| PS4 | [SuperPSX]-Moss.VR-CUSA09760-EUR-Game-(5.05+)-PS4.pkg | CUSA09760 | 6.04 | 2025-03-22 | `/Volumes/PS4/Various Files/[SuperPSX]-Moss.VR-CUSA09760-EUR-Game-(5.05+)-PS4.pkg` |
-| PS4 | [SuperPSX]-RESIDENT.EVIL.REVELATIONS_CUSA06212_v1.00_[5.05]-PS4.pkg | CUSA06212 | 16.26 | 2025-02-16 | `/Volumes/PS4/[SuperPSX]-RESIDENT.EVIL.REVELATIONS_CUSA06212_v1.00_[5.05]-PS4.pkg` |
-| PS4 | [SuperPSX]-Star-Trek-Resurgence-CUSA41367-EUR-Game-PS4.pkg | CUSA41367 | 20.47 | 2025-10-19 | `/Volumes/PS4/Installed/[SuperPSX]-Star-Trek-Resurgence-CUSA41367-EUR-Game-PS4.pkg` |
-| PS4 | [SuperPSX]-SUPERHOT.VR_CUSA08165_v1.00_[4.70]-PS4.pkg | CUSA08165 | 1.00 | 2025-03-21 | `/Volumes/PS4/Installed/[SuperPSX]-SUPERHOT.VR_CUSA08165_v1.00_[4.70]-PS4.pkg` |
-| PS4 | [SuperPSX]-SUPERHOT.VR_CUSA08165_v1.13_[7.50]-PS4.pkg | CUSA08165 | 0.77 | 2025-03-21 | `/Volumes/PS4/Installed/[SuperPSX]-SUPERHOT.VR_CUSA08165_v1.13_[7.50]-PS4.pkg` |
-| PS4 | [SuperPSX]-The.Persistence_CUSA07814_v1.00_[6.72]-PS4.pkg | CUSA07814 | 2.09 | 2025-03-24 | `/Volumes/PS4/Various Files/[SuperPSX]-The.Persistence_CUSA07814_v1.00_[6.72]-PS4.pkg` |
-| PS4 | [SuperPSX]-The.Persistence_CUSA07814_v1.12_[9.00]-PS4.pkg | CUSA07814 | 2.10 | 2025-03-24 | `/Volumes/PS4/Various Files/[SuperPSX]-The.Persistence_CUSA07814_v1.12_[9.00]-PS4.pkg` |
-| PS4 | [SuperPSX]-Tiny.Tina.s.Wonderlands_CUSA23767_v1.11_[9.00]-PS4.pkg | CUSA23767 | 9.05 | 2026-02-08 | `/Volumes/PS4/[SuperPSX]-Tiny.Tina.s.Wonderlands_CUSA23767_v1.11_[9.00]-PS4.pkg` |
-| PS4 | [SuperPSX]-Tom.Clancys.Ghost.Recon.Wildlands.UE-CUSA02902-USA-Game-(5.05 )-PS4.pkg | CUSA02902 | 35.93 | 2025-02-12 | `/Volumes/PS4/[SuperPSX]-Tom.Clancys.Ghost.Recon.Wildlands.UE-CUSA02902-USA-Game-(5.05 )-PS4.pkg` |
+| MagicLantern | [Downloadgameps3.com]-EP1018-CUSA04402_00-SHADOWOFMORDOR02-A0100-V0100.pkg | CUSA04402 | 40.10 | 2021-02-14 | `/Volumes/MagicLantern/PS4/GAME Shadow of War - LOTR/[Downloadgameps3.com]-EP1018-CUSA04402_00-SHADOWOFMORDOR02-A0100-V0100.pkg` |
+| MagicLantern | [Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSCROWXXXXXXXX-A0000-V0100.pkg | CUSA03694 | 0.00 | 2021-01-25 | `/Volumes/MagicLantern/PS4/Various Files/Gravity Rush 2-CUSA03694-DLC/[Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSCROWXXXXXXXX-A0000-V0100.pkg` |
+| MagicLantern | [Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSKIT17XXXXXXX-A0000-V0100.pkg | CUSA03694 | 0.00 | 2021-01-25 | `/Volumes/MagicLantern/PS4/Various Files/Gravity Rush 2-CUSA03694-DLC/[Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSKIT17XXXXXXX-A0000-V0100.pkg` |
+| MagicLantern | [Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSPSO2XXXXXXXX-A0000-V0100.pkg | CUSA03694 | 0.00 | 2021-01-25 | `/Volumes/MagicLantern/PS4/Various Files/Gravity Rush 2-CUSA03694-DLC/[Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSPSO2XXXXXXXX-A0000-V0100.pkg` |
+| MagicLantern | [Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSX1NIERXXXXXX-A0000-V0100.pkg | CUSA03694 | 0.00 | 2021-01-25 | `/Volumes/MagicLantern/PS4/Various Files/Gravity Rush 2-CUSA03694-DLC/[Downloadgameps3.com]-UP9000-CUSA03694_00-ACUSX1NIERXXXXXX-A0000-V0100.pkg` |
+| MagicLantern | [SPSX]-Assassins.Creed.Rogue.Remastered-CUSA10123-Game-(5.05 )-PS4.pkg | CUSA10123 | 9.17 | 2025-01-30 | `/Volumes/MagicLantern/PS4/Assassins.Creed.Rogue.Remastered-CUSA10123/[SPSX]-Assassins.Creed.Rogue.Remastered-CUSA10123-Game-(5.05 )-PS4.pkg` |
+| MagicLantern | [SPSX]-Blazing.Strike-CUSA34460-USA-Game-(9.00 )-PS4.pkg | CUSA34460 | 1.08 | 2024-12-15 | `/Volumes/MagicLantern/PS4/Installed/Blazing.Strike-CUSA34460/[SPSX]-Blazing.Strike-CUSA34460-USA-Game-(9.00 )-PS4.pkg` |
+| MagicLantern | [SPSX]-Call.of.Duty.Ghosts-CUSA00018-USA-Game-(5.05 )-PS4.pkg | CUSA00018 | 28.78 | 2024-12-14 | `/Volumes/MagicLantern/PS4/Call.of.Duty.Ghosts - CUSA00018/[SPSX]-Call.of.Duty.Ghosts-CUSA00018-USA-Game-(5.05 )-PS4.pkg` |
+| MagicLantern | [SPSX]-COD.BO.Cold.War-CUSA15010-USA-v1.00-Game-PS4-CyB1K.pkg | CUSA15010 | 12.68 | 2024-12-13 | `/Volumes/MagicLantern/PS4/COD.BO.Cold.War-CUSA15010-USA/[SPSX]-COD.BO.Cold.War-CUSA15010-USA-v1.00-Game-PS4-CyB1K.pkg` |
+| MagicLantern | [SPSX]-Gundam.Breaker.3.Break.Edition-CUSA07651-ASIA-Game-(5.05 )-PS4.pkg | CUSA07651 | 12.08 | 2025-02-13 | `/Volumes/MagicLantern/PS4/Various Files/[SPSX]-Gundam.Breaker.3.Break.Edition-CUSA07651-ASIA-Game-(5.05 )-PS4.pkg` |
+| MagicLantern | [SPSX]-Kona.2.Brume-CUSA30548-USA-Game-(9.00)-PS4.pkg | CUSA30548 | 4.82 | 2025-02-17 | `/Volumes/MagicLantern/PS4/Various Files/[SPSX]-Kona.2.Brume-CUSA30548-USA-Game-(9.00)-PS4.pkg` |
+| MagicLantern | [SPSX]-Marvel.vs.Capcom.Infinite-CUSA06380-EUR-Game-v1.06-(5.05 )-PS4.pkg | CUSA06380 | 40.43 | 2025-02-07 | `/Volumes/MagicLantern/PS4/Various Files/[SPSX]-Marvel.vs.Capcom.Infinite-CUSA06380-EUR-Game-v1.06-(5.05 )-PS4.pkg` |
+| MagicLantern | [SPSX]-Marvels.Iron.Man.VR-CUSA16206-EUR-Game-(6.72+)-PS4-DUPLEX.pkg | CUSA16206 | 30.76 | 2025-03-23 | `/Volumes/MagicLantern/PS4/[SPSX]-Marvels.Iron.Man.VR-CUSA16206-EUR-Game-(6.72+)-PS4-DUPLEX.pkg` |
+| MagicLantern | [SuperPSX.com]-Archangel-CUSA09220–EUR-Game-v1.00_[4.00]_OPOISSO893.pkg | CUSA09220 | 4.89 | 2021-11-12 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Archangel-CUSA09220–EUR-Game-v1.00_[4.00]_OPOISSO893/[SuperPSX.com]-Archangel-CUSA09220–EUR-Game-v1.00_[4.00]_OPOISSO893.pkg` |
+| MagicLantern | [SuperPSX.com]-Arise.A.Simple.Story-CUSA12772–EUR-Game-v.100_[6.72]_OPOISSO893.pkg | CUSA12772 | 4.69 | 2024-11-26 | `/Volumes/MagicLantern/PS4/Installed/Arise.A.Simple.Story-CUSA12772–EUR/[SuperPSX.com]-Arise.A.Simple.Story-CUSA12772–EUR-Game-v.100_[6.72]_OPOISSO893.pkg` |
+| MagicLantern | [SuperPSX.com]-Assassins.Creed.Origins_CUSA05625_v1.00_[5.05]_OPOISSO893.pkg | CUSA05625 | 39.60 | 2024-12-20 | `/Volumes/MagicLantern/PS4/Assassins.Creed.Origins.Deluxe.DLC-CUSA05625/[SuperPSX.com]-Assassins.Creed.Origins_CUSA05625_v1.00_[5.05]_OPOISSO893.pkg` |
+| MagicLantern | [SuperPSX.com]-Assassins.Creed.Origins_CUSA05625_v1.44_[5.05]_OPOISSO893.pkg | CUSA05625 | 7.20 | 2024-12-20 | `/Volumes/MagicLantern/PS4/Assassins.Creed.Origins.Deluxe.DLC-CUSA05625/[SuperPSX.com]-Assassins.Creed.Origins_CUSA05625_v1.44_[5.05]_OPOISSO893.pkg` |
+| MagicLantern | [SuperPSX.com]-CUSA19302-Star_Wars_Republic_Commando.pkg | CUSA19302 | 1.72 | 2022-01-02 | `/Volumes/MagicLantern/PS4/Star_Wars_Republic_Commando-CUSA19302/[SuperPSX.com]-CUSA19302-Star_Wars_Republic_Commando.pkg` |
+| MagicLantern | [SuperPSX.com]-CUSA19302-Star_Wars_Republic_Commando_UPD_v1_02.pkg | CUSA19302 | 0.03 | 2022-01-02 | `/Volumes/MagicLantern/PS4/Star_Wars_Republic_Commando-CUSA19302/[SuperPSX.com]-CUSA19302-Star_Wars_Republic_Commando_UPD_v1_02.pkg` |
+| MagicLantern | [SuperPSX.com]-Doctor.Who.The.Lonely.Assassins-CUSA28640-EUR-Game-[8.00]_OPOISSO893.pkg | CUSA28640 | 1.17 | 2025-02-05 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Doctor.Who.The.Lonely.Assassins-CUSA28640-EUR-Game-[8.00]_OPOISSO893.pkg` |
+| MagicLantern | [SuperPSX.com]-Doctor.Who.The.Lonely.Assassins-CUSA28640-EUR-Game-[8.00]_v1.01__OPOISSO893.pkg | CUSA28640 | 0.20 | 2023-01-04 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Doctor.Who.The.Lonely.Assassins-CUSA28640-EUR-Game-[8.00]_v1.01__OPOISSO893.pkg` |
+| MagicLantern | [SuperPSX.com]-It.Takes.Two_CUSA16742_v1.03_FullGame_[8.00]_OPOISSO893.pkg | CUSA16742 | 34.33 | 2024-09-19 | `/Volumes/MagicLantern/PS4/It Takes Two/[SuperPSX.com]-It.Takes.Two_CUSA16742_v1.03_FullGame_[8.00]_OPOISSO893.pkg` |
+| MagicLantern | [SuperPSX.com]-Raw.Data-CUSA09759-EUR-Game-(v1.04)-PS4.pkg | CUSA09759 | 7.43 | 2025-03-24 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Raw.Data-CUSA09759-EUR-Game-(v1.04)-PS4.pkg` |
+| MagicLantern | [SuperPSX.com]-Ultra Age-CUSA14637–USA-Game-(v2.02)-PS4-CyB1K.pkg | CUSA14637 | 5.14 | 2025-02-13 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX.com]-Ultra Age-CUSA14637–USA-Game-(v2.02)-PS4-CyB1K.pkg` |
+| MagicLantern | [SuperPSX]-Assassins.Creed.3.Remastered-CUSA11711-USA-Game-(5.50 )-PS4.pkg | CUSA11711 | 35.52 | 2025-02-15 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-Assassins.Creed.3.Remastered-CUSA11711-USA-Game-(5.50 )-PS4.pkg` |
+| MagicLantern | [SuperPSX]-DREDGE-CUSA35761-EUR-Game-(9.00 )-PS4-OPOISSO893.pkg | CUSA35761 | 0.72 | 2025-02-16 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-DREDGE-CUSA35761-EUR-Game-(9.00 )-PS4-OPOISSO893.pkg` |
+| MagicLantern | [SuperPSX]-Gravity.Rush.2-CUSA03694-USA-Game-(5.05 )-PS4.pkg | CUSA03694 | 15.95 | 2025-02-16 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-Gravity.Rush.2-CUSA03694-USA-Game-(5.05 )-PS4.pkg` |
+| MagicLantern | [SuperPSX]-Guilty.Gear.-Strive-_CUSA25325_v1.00_[7.50]-PS4.pkg | CUSA25325 | 10.92 | 2025-02-13 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-Guilty.Gear.-Strive-_CUSA25325_v1.00_[7.50]-PS4.pkg` |
+| MagicLantern | [SuperPSX]-Guilty.Gear.-Strive-_CUSA25325_v1.40_[9.00 ]-PS4.pkg | CUSA25325 | 13.84 | 2025-02-12 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-Guilty.Gear.-Strive-_CUSA25325_v1.40_[9.00 ]-PS4.pkg` |
+| MagicLantern | [SuperPSX]-Stranger.of.Paradise.FFO-CUSA29579-EUR-Game-(9.00 )-PS4.pkg | CUSA29579 | 29.46 | 2025-02-06 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-Stranger.of.Paradise.FFO-CUSA29579-EUR-Game-(9.00 )-PS4.pkg` |
+| MagicLantern | [SuperPSX]-The.Callisto.Protocol-CUSA27372-USA-Game-(9.00 )-PS4.pkg | CUSA27372 | 27.10 | 2025-02-14 | `/Volumes/MagicLantern/PS4/Various Files/[SuperPSX]-The.Callisto.Protocol-CUSA27372-USA-Game-(9.00 )-PS4.pkg` |
 | PS4 | 1aa EP9000-CUSA02172_00-JOURNEYCOLHD0001-A0100-V0100.pkg | CUSA02172 | 1.92 | 2024-01-08 | `/Volumes/PS4/Journey Collector＇s Edition/1aa EP9000-CUSA02172_00-JOURNEYCOLHD0001-A0100-V0100.pkg` |
 | PS4 | 1aa UP9000-CUSA05202_00-EVT1100000000000-A0100-V0101.pkg | CUSA05202 | 7.56 | 2022-09-15 | `/Volumes/PS4/PlayStation VR Worlds (USA)/1aa UP9000-CUSA05202_00-EVT1100000000000-A0100-V0101.pkg` |
 | PS4 | Chernobylite_CUSA28037_Black.Smoke_OPOISSO893.pkg | CUSA28037 | 0.13 | 2025-02-05 | `/Volumes/PS4/Chernobylite_CUSA28037_Black.Smoke_OPOISSO893.pkg` |
@@ -110,8 +90,8 @@
 | PS4 | Dead.Cells_CUSA10484_The.Queen.and.the.Sea_OPOISSO893.pkg | CUSA10484 | 0.00 | 2025-01-23 | `/Volumes/PS4/untitled folder/Dead.Cells_CUSA10484_The.Queen.and.the.Sea_OPOISSO893.pkg` |
 | PS4 | Dead.Cells_CUSA10484_v1.00_[5.05]_OPOISSO893.pkg | CUSA10484 | 0.42 | 2025-01-23 | `/Volumes/PS4/untitled folder/Dead.Cells_CUSA10484_v1.00_[5.05]_OPOISSO893.pkg` |
 | PS4 | Dirty Rally 1 blz-dr.pkg | - | 37.87 | 2018-02-01 | `/Volumes/PS4/Dirty Rally 1 blz-dr.pkg` |
-| PS4 | ELDEN.RING_CUSA18723_v1.22_9.005 D_PS4.pkg | CUSA18723 | 16.16 | 2025-09-30 | `/Volumes/PS4/Installed/ELDEN.RING_CUSA18723_v1.22_9.005 D_PS4.pkg` |
 | PS4 | Elden.Ring-CUSA18723-EUR-Game-9.00-OPOISSO893.pkg | CUSA18723 | 29.45 | 2025-09-30 | `/Volumes/PS4/Installed/Elden.Ring-CUSA18723-EUR-Game-9.00-OPOISSO893.pkg` |
+| PS4 | ELDEN.RING_CUSA18723_v1.22_9.005 D_PS4.pkg | CUSA18723 | 16.16 | 2025-09-30 | `/Volumes/PS4/Installed/ELDEN.RING_CUSA18723_v1.22_9.005 D_PS4.pkg` |
 | PS4 | EP0944-CUSA06297_00-HEADMASTER100000-A0100-V0100-CyB1K.pkg | CUSA06297 | 0.91 | 2026-02-10 | `/Volumes/PS4/EP0944-CUSA06297_00-HEADMASTER100000-A0100-V0100-CyB1K.pkg` |
 | PS4 | EP0944-CUSA06297_00-LOSTLESSONS00001-A0000-V0100-CyB1K.pkg | CUSA06297 | 0.00 | 2026-02-11 | `/Volumes/PS4/EP0944-CUSA06297_00-LOSTLESSONS00001-A0000-V0100-CyB1K.pkg` |
 | PS4 | EP1001-CUSA12320_00-WWE2K19ACCELE001-A0000-V0100.pkg | CUSA12320 | 0.00 | 2020-11-07 | `/Volumes/PS4/untitled folder/EP1001-CUSA12320_00-WWE2K19ACCELE001-A0000-V0100.pkg` |
@@ -145,6 +125,26 @@
 | PS4 | UP9000-SCUS97101_00-SCUS971010000001-A0100-V0100.pkg | - | 3.58 | 2026-02-19 | `/Volumes/PS4/UP9000-SCUS97101_00-SCUS971010000001-A0100-V0100.pkg` |
 | PS4 | Wanderer PS4 VR EP5977-CUSA28551_00-4146881205642323-A0100-V0102-[DLPSGAME.COM].pkg | CUSA28551 | 10.35 | 2024-06-17 | `/Volumes/PS4/Wanderer PS4 VR EP5977-CUSA28551_00-4146881205642323-A0100-V0102-[DLPSGAME.COM].pkg` |
 | PS4 | WipEout.Omega.Collection.v1.00-CUSA05670.pkg | CUSA05670 | 22.23 | 2020-09-04 | `/Volumes/PS4/WipEout.Omega.Collection.v1.00-CUSA05670.pkg` |
+| PS4 | [SPSX]-Farpoint.VR-CUSA04179-USA-Game-(4.00 )-PS4.pkg | CUSA04179 | 10.64 | 2025-03-30 | `/Volumes/PS4/[SPSX]-Farpoint.VR-CUSA04179-USA-Game-(4.00 )-PS4.pkg` |
+| PS4 | [SPSX]-Here.They.Lie.VR-CUSA05344-EUR-Game-(5.05+)-PS4.pkg | CUSA05344 | 5.85 | 2025-10-01 | `/Volumes/PS4/Installed/[SPSX]-Here.They.Lie.VR-CUSA05344-EUR-Game-(5.05+)-PS4.pkg` |
+| PS4 | [SPSX]-Retromania.Wrestling-CUSA28394-EUR-Game-PS4-TRIFECTA-CyB1K.pkg | CUSA28394 | 0.42 | 2025-09-30 | `/Volumes/PS4/Installed/[SPSX]-Retromania.Wrestling-CUSA28394-EUR-Game-PS4-TRIFECTA-CyB1K.pkg` |
+| PS4 | [SuperPSX.com]-Crisis.Vrigade.2-CUSA18828-EUR-Game-v1.00_[7.02]_OPOISSO893.pkg | CUSA18828 | 2.78 | 2025-03-31 | `/Volumes/PS4/[SuperPSX.com]-Crisis.Vrigade.2-CUSA18828-EUR-Game-v1.00_[7.02]_OPOISSO893.pkg` |
+| PS4 | [SuperPSX.com]-Gran.Turismo.Sport-CUSA03220-USA-Game-PS4-[High-Speed].pkg | CUSA03220 | 40.04 | 2025-03-23 | `/Volumes/PS4/Installed/[SuperPSX.com]-Gran.Turismo.Sport-CUSA03220-USA-Game-PS4-[High-Speed].pkg` |
+| PS4 | [SuperPSX]-Chernobylite_CUSA28037_v1.00_[9.00]-PS4.pkg | CUSA28037 | 10.29 | 2025-02-16 | `/Volumes/PS4/[SuperPSX]-Chernobylite_CUSA28037_v1.00_[9.00]-PS4.pkg` |
+| PS4 | [SuperPSX]-Chernobylite_CUSA28037_v1.12_[9.00]-PS4.pkg | CUSA28037 | 10.18 | 2025-02-15 | `/Volumes/PS4/[SuperPSX]-Chernobylite_CUSA28037_v1.12_[9.00]-PS4.pkg` |
+| PS4 | [SuperPSX]-ELDEN.RING_CUSA18723_v1.22_MOD_[9.00+]_PS4.pkg | CUSA18723 | 16.16 | 2025-09-30 | `/Volumes/PS4/Installed/[SuperPSX]-ELDEN.RING_CUSA18723_v1.22_MOD_[9.00+]_PS4.pkg` |
+| PS4 | [SuperPSX]-I.Expect.You.To.Die.2_CUSA27601_v1.00_[9.00+]-PS4_OPOISSO893.pkg | CUSA27601 | 0.77 | 2025-09-30 | `/Volumes/PS4/Installed/[SuperPSX]-I.Expect.You.To.Die.2_CUSA27601_v1.00_[9.00+]-PS4_OPOISSO893.pkg` |
+| PS4 | [SuperPSX]-Keep.Talking.and.Nobody.Explodes_CUSA06561_v1.00_[5.05]-PS4.pkg | CUSA06561 | 0.22 | 2025-03-21 | `/Volumes/PS4/Installed/[SuperPSX]-Keep.Talking.and.Nobody.Explodes_CUSA06561_v1.00_[5.05]-PS4.pkg` |
+| PS4 | [SuperPSX]-Keep.Talking.and.Nobody.Explodes_CUSA06561_v1.07_[6.72]-PS4.pkg | CUSA06561 | 0.24 | 2025-03-21 | `/Volumes/PS4/Installed/[SuperPSX]-Keep.Talking.and.Nobody.Explodes_CUSA06561_v1.07_[6.72]-PS4.pkg` |
+| PS4 | [SuperPSX]-Moss.VR-CUSA09760-EUR-Game-(5.05+)-PS4.pkg | CUSA09760 | 6.04 | 2025-03-22 | `/Volumes/PS4/Various Files/[SuperPSX]-Moss.VR-CUSA09760-EUR-Game-(5.05+)-PS4.pkg` |
+| PS4 | [SuperPSX]-RESIDENT.EVIL.REVELATIONS_CUSA06212_v1.00_[5.05]-PS4.pkg | CUSA06212 | 16.26 | 2025-02-16 | `/Volumes/PS4/[SuperPSX]-RESIDENT.EVIL.REVELATIONS_CUSA06212_v1.00_[5.05]-PS4.pkg` |
+| PS4 | [SuperPSX]-Star-Trek-Resurgence-CUSA41367-EUR-Game-PS4.pkg | CUSA41367 | 20.47 | 2025-10-19 | `/Volumes/PS4/Installed/[SuperPSX]-Star-Trek-Resurgence-CUSA41367-EUR-Game-PS4.pkg` |
+| PS4 | [SuperPSX]-SUPERHOT.VR_CUSA08165_v1.00_[4.70]-PS4.pkg | CUSA08165 | 1.00 | 2025-03-21 | `/Volumes/PS4/Installed/[SuperPSX]-SUPERHOT.VR_CUSA08165_v1.00_[4.70]-PS4.pkg` |
+| PS4 | [SuperPSX]-SUPERHOT.VR_CUSA08165_v1.13_[7.50]-PS4.pkg | CUSA08165 | 0.77 | 2025-03-21 | `/Volumes/PS4/Installed/[SuperPSX]-SUPERHOT.VR_CUSA08165_v1.13_[7.50]-PS4.pkg` |
+| PS4 | [SuperPSX]-The.Persistence_CUSA07814_v1.00_[6.72]-PS4.pkg | CUSA07814 | 2.09 | 2025-03-24 | `/Volumes/PS4/Various Files/[SuperPSX]-The.Persistence_CUSA07814_v1.00_[6.72]-PS4.pkg` |
+| PS4 | [SuperPSX]-The.Persistence_CUSA07814_v1.12_[9.00]-PS4.pkg | CUSA07814 | 2.10 | 2025-03-24 | `/Volumes/PS4/Various Files/[SuperPSX]-The.Persistence_CUSA07814_v1.12_[9.00]-PS4.pkg` |
+| PS4 | [SuperPSX]-Tiny.Tina.s.Wonderlands_CUSA23767_v1.11_[9.00]-PS4.pkg | CUSA23767 | 9.05 | 2026-02-08 | `/Volumes/PS4/[SuperPSX]-Tiny.Tina.s.Wonderlands_CUSA23767_v1.11_[9.00]-PS4.pkg` |
+| PS4 | [SuperPSX]-Tom.Clancys.Ghost.Recon.Wildlands.UE-CUSA02902-USA-Game-(5.05 )-PS4.pkg | CUSA02902 | 35.93 | 2025-02-12 | `/Volumes/PS4/[SuperPSX]-Tom.Clancys.Ghost.Recon.Wildlands.UE-CUSA02902-USA-Game-(5.05 )-PS4.pkg` |
 
 ## Game Archives (RAR/ZIP/7z/001)
 | Drive | Archive | CUSA | Size (GB) | Date | Status | Path |
