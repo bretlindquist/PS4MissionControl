@@ -1,6 +1,16 @@
 const DATA_VERSION = "20260222-1";
 const AUTO_EXTRACT_SEEN_KEY = "ps4mc_auto_extract_seen_cusas_v1";
 const AUTO_EXTRACT_MAX_PER_REFRESH = 3;
+const SETTINGS_KEY = "ps4mc_settings_v1";
+const DEFAULT_SETTINGS = Object.freeze({
+  ps4Ip: "192.168.0.26",
+  ftpPort: 2121,
+  rpiPort: 12800,
+  binloaderPort: 9090,
+  autoRefreshOnLoad: false,
+  confirmBeforeSend: true,
+  autoExtractMissingIcons: true,
+});
 const SOURCES = {
   installed: `../GAMES_LIST.md?v=${DATA_VERSION}`,
   installedDlc: `../INSTALLED_DLC_LIST.md?v=${DATA_VERSION}`,
@@ -74,6 +84,7 @@ const state = {
   rpiTasks: [],
   sendJobs: [],
   rpiPollTimer: null,
+  settings: { ...DEFAULT_SETTINGS },
 };
 
 const el = {
@@ -129,6 +140,15 @@ const el = {
   settingsPanel: document.getElementById("settingsPanel"),
   settingsBtn: document.getElementById("settingsBtn"),
   closeSettingsBtn: document.getElementById("closeSettingsBtn"),
+  settingsPs4Ip: document.getElementById("settingsPs4Ip"),
+  settingsFtpPort: document.getElementById("settingsFtpPort"),
+  settingsRpiPort: document.getElementById("settingsRpiPort"),
+  settingsBinloaderPort: document.getElementById("settingsBinloaderPort"),
+  settingsAutoRefreshOnLoad: document.getElementById("settingsAutoRefreshOnLoad"),
+  settingsConfirmSend: document.getElementById("settingsConfirmSend"),
+  settingsAutoExtractMissingIcons: document.getElementById("settingsAutoExtractMissingIcons"),
+  settingsSaveBtn: document.getElementById("settingsSaveBtn"),
+  settingsResetBtn: document.getElementById("settingsResetBtn"),
   palette: document.getElementById("palette"),
   paletteInput: document.getElementById("paletteInput"),
   paletteList: document.getElementById("paletteList"),
@@ -143,6 +163,7 @@ init().catch((err) => {
 });
 
 async function init() {
+  loadSettings();
   loadAutoExtractSeen();
   await loadServerState();
   await loadMarkdownData();
@@ -153,13 +174,88 @@ async function init() {
   bindEvents();
   renderSourceList();
   renderAll();
+  renderSettingsForm();
   renderPalette();
   startRpiPolling();
+  if (state.settings.autoRefreshOnLoad && state.apiEnabled) {
+    refreshData().catch(() => {});
+  }
+}
+
+function normalizePort(value, fallback) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return fallback;
+  if (n < 1 || n > 65535) return fallback;
+  return Math.trunc(n);
+}
+
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    const next = {
+      ps4Ip: String(parsed?.ps4Ip || DEFAULT_SETTINGS.ps4Ip).trim() || DEFAULT_SETTINGS.ps4Ip,
+      ftpPort: normalizePort(parsed?.ftpPort, DEFAULT_SETTINGS.ftpPort),
+      rpiPort: normalizePort(parsed?.rpiPort, DEFAULT_SETTINGS.rpiPort),
+      binloaderPort: normalizePort(parsed?.binloaderPort, DEFAULT_SETTINGS.binloaderPort),
+      autoRefreshOnLoad: !!parsed?.autoRefreshOnLoad,
+      confirmBeforeSend: parsed?.confirmBeforeSend !== false,
+      autoExtractMissingIcons: parsed?.autoExtractMissingIcons !== false,
+    };
+    state.settings = next;
+  } catch {
+    state.settings = { ...DEFAULT_SETTINGS };
+  }
+}
+
+function saveSettings() {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(state.settings));
+}
+
+function applySettingsFromForm() {
+  state.settings = {
+    ps4Ip: String(el.settingsPs4Ip?.value || DEFAULT_SETTINGS.ps4Ip).trim() || DEFAULT_SETTINGS.ps4Ip,
+    ftpPort: normalizePort(el.settingsFtpPort?.value, DEFAULT_SETTINGS.ftpPort),
+    rpiPort: normalizePort(el.settingsRpiPort?.value, DEFAULT_SETTINGS.rpiPort),
+    binloaderPort: normalizePort(el.settingsBinloaderPort?.value, DEFAULT_SETTINGS.binloaderPort),
+    autoRefreshOnLoad: !!el.settingsAutoRefreshOnLoad?.checked,
+    confirmBeforeSend: !!el.settingsConfirmSend?.checked,
+    autoExtractMissingIcons: !!el.settingsAutoExtractMissingIcons?.checked,
+  };
+  saveSettings();
+}
+
+function renderSettingsForm() {
+  if (el.settingsPs4Ip) el.settingsPs4Ip.value = state.settings.ps4Ip || "";
+  if (el.settingsFtpPort) el.settingsFtpPort.value = String(state.settings.ftpPort || DEFAULT_SETTINGS.ftpPort);
+  if (el.settingsRpiPort) el.settingsRpiPort.value = String(state.settings.rpiPort || DEFAULT_SETTINGS.rpiPort);
+  if (el.settingsBinloaderPort) el.settingsBinloaderPort.value = String(state.settings.binloaderPort || DEFAULT_SETTINGS.binloaderPort);
+  if (el.settingsAutoRefreshOnLoad) el.settingsAutoRefreshOnLoad.checked = !!state.settings.autoRefreshOnLoad;
+  if (el.settingsConfirmSend) el.settingsConfirmSend.checked = !!state.settings.confirmBeforeSend;
+  if (el.settingsAutoExtractMissingIcons) el.settingsAutoExtractMissingIcons.checked = !!state.settings.autoExtractMissingIcons;
+}
+
+function requestSettingsQuery() {
+  const q = new URLSearchParams();
+  q.set("ps4_ip", state.settings.ps4Ip || DEFAULT_SETTINGS.ps4Ip);
+  q.set("ftp_port", String(state.settings.ftpPort || DEFAULT_SETTINGS.ftpPort));
+  q.set("rpi_port", String(state.settings.rpiPort || DEFAULT_SETTINGS.rpiPort));
+  q.set("binloader_port", String(state.settings.binloaderPort || DEFAULT_SETTINGS.binloaderPort));
+  return q.toString();
+}
+
+function requestSettingsBody() {
+  return {
+    ps4_ip: state.settings.ps4Ip || DEFAULT_SETTINGS.ps4Ip,
+    ftp_port: state.settings.ftpPort || DEFAULT_SETTINGS.ftpPort,
+    rpi_port: state.settings.rpiPort || DEFAULT_SETTINGS.rpiPort,
+    binloader_port: state.settings.binloaderPort || DEFAULT_SETTINGS.binloaderPort,
+  };
 }
 
 async function loadServerState() {
   try {
-    const res = await fetch("/api/state", { cache: "no-store" });
+    const res = await fetch(`/api/state?${requestSettingsQuery()}`, { cache: "no-store" });
     if (!res.ok) throw new Error("no api");
     const payload = await res.json();
     state.watch = Array.isArray(payload.watch) ? payload.watch : [];
@@ -170,6 +266,10 @@ async function loadServerState() {
     state.ps4Status = payload.ps4Status || state.ps4Status;
     state.rpiStatus = payload.rpiStatus || state.rpiStatus;
     state.ps4Storage = payload.ps4Storage || state.ps4Storage;
+    state.settings.ps4Ip = String(payload?.ftpConfig?.host || state.settings.ps4Ip || DEFAULT_SETTINGS.ps4Ip).trim() || DEFAULT_SETTINGS.ps4Ip;
+    state.settings.ftpPort = normalizePort(payload?.ftpConfig?.port, state.settings.ftpPort);
+    state.settings.rpiPort = normalizePort(payload?.rpiStatus?.port, state.settings.rpiPort);
+    saveSettings();
     state.apiEnabled = true;
   } catch {
     state.watch = JSON.parse(localStorage.getItem("ps4_watch_list") || "[]");
@@ -402,6 +502,19 @@ function bindEvents() {
   el.closeInspector.addEventListener("click", closeInspector);
   el.settingsBtn?.addEventListener("click", openSettings);
   el.closeSettingsBtn?.addEventListener("click", closeSettings);
+  el.settingsSaveBtn?.addEventListener("click", async () => {
+    applySettingsFromForm();
+    await loadServerState();
+    renderKpis();
+    closeSettings();
+  });
+  el.settingsResetBtn?.addEventListener("click", async () => {
+    state.settings = { ...DEFAULT_SETTINGS };
+    saveSettings();
+    renderSettingsForm();
+    await loadServerState();
+    renderKpis();
+  });
   el.cmdBtn.addEventListener("click", openPalette);
   el.themeBtn.addEventListener("click", toggleTheme);
 
@@ -445,14 +558,18 @@ async function refreshData() {
   setButtonBusy(el.refreshBtn, true);
   try {
     if (state.apiEnabled) {
-      const res = await fetch("/api/refresh", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
+      const res = await fetch("/api/refresh", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestSettingsBody()),
+      });
       const payload = await res.json();
       if (!payload.ok) throw new Error(payload.stderr || "refresh failed");
     }
     await loadMarkdownData();
     await loadThumbCache();
     await hydrateThumbsForExternalUninstalled();
-    const auto = await autoExtractMissingIcons();
+    const auto = state.settings.autoExtractMissingIcons ? await autoExtractMissingIcons() : { extracted: 0, attempted: 0 };
     renderAll();
     if (auto.extracted > 0) {
       alert(`Data refreshed. Auto-extracted ${auto.extracted} new icon(s).`);
@@ -495,7 +612,7 @@ async function refreshStorageData() {
     const res = await fetch("/api/refresh-storage", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: "{}",
+      body: JSON.stringify(requestSettingsBody()),
     });
     const payload = await res.json();
     if (!payload.ok) throw new Error(payload?.send?.error || payload?.snapshot?.stderr || "storage refresh failed");
@@ -1188,6 +1305,10 @@ async function sendSelectedUninstalledToPs4() {
     alert("Send to PS4 requires API mode (start mission-control/server.py).");
     return;
   }
+  if (state.settings.confirmBeforeSend) {
+    const ok = window.confirm(`Send this package to PS4?\n\n${path}`);
+    if (!ok) return;
+  }
   const btn = el.sendToPs4Btn;
   const prev = btn?.textContent || "Send to PS4";
   if (btn) {
@@ -1198,7 +1319,7 @@ async function sendSelectedUninstalledToPs4() {
     const res = await fetch("/api/send-to-ps4", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path }),
+      body: JSON.stringify({ path, ip: state.settings.ps4Ip, rpi_port: state.settings.rpiPort }),
     });
     const payload = await res.json();
     if (!payload.ok) throw new Error(payload.error || payload.body || "send failed");
@@ -1250,6 +1371,10 @@ async function sendSelectedExtUninstalledToPs4() {
     alert("Send to PS4 requires API mode (start mission-control/server.py).");
     return;
   }
+  if (state.settings.confirmBeforeSend) {
+    const ok = window.confirm(`Send this package to PS4?\n\n${path}`);
+    if (!ok) return;
+  }
   const btn = el.extSendToPs4Btn;
   const prev = btn?.textContent || "Send to PS4";
   if (btn) {
@@ -1260,7 +1385,7 @@ async function sendSelectedExtUninstalledToPs4() {
     const res = await fetch("/api/send-to-ps4", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path }),
+      body: JSON.stringify({ path, ip: state.settings.ps4Ip, rpi_port: state.settings.rpiPort }),
     });
     const payload = await res.json();
     if (!payload.ok) throw new Error(payload.error || payload.body || "send failed");
@@ -1312,6 +1437,10 @@ async function sendSelectedVisualUninstalledToPs4() {
     alert("Send to PS4 requires API mode (start mission-control/server.py).");
     return;
   }
+  if (state.settings.confirmBeforeSend) {
+    const ok = window.confirm(`Send this package to PS4?\n\n${path}`);
+    if (!ok) return;
+  }
   const btn = el.visualSendToPs4Btn;
   const prev = btn?.textContent || "Send to PS4";
   if (btn) {
@@ -1322,7 +1451,7 @@ async function sendSelectedVisualUninstalledToPs4() {
     const res = await fetch("/api/send-to-ps4", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path }),
+      body: JSON.stringify({ path, ip: state.settings.ps4Ip, rpi_port: state.settings.rpiPort }),
     });
     const payload = await res.json();
     if (!payload.ok) throw new Error(payload.error || payload.body || "send failed");
@@ -1409,7 +1538,7 @@ async function refreshRpiTasks() {
     const res = await fetch("/api/rpi-task-progress", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ task_ids: ids }),
+      body: JSON.stringify({ task_ids: ids, ip: state.settings.ps4Ip, rpi_port: state.settings.rpiPort }),
     });
     const payload = await res.json();
     const tasks = Array.isArray(payload.tasks) ? payload.tasks : [];
@@ -1689,6 +1818,7 @@ function closeInspector() {
 
 function openSettings() {
   if (!el.settingsPanel) return;
+  renderSettingsForm();
   el.settingsPanel.classList.add("open");
   el.settingsPanel.setAttribute("aria-hidden", "false");
 }
