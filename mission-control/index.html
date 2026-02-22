@@ -187,7 +187,55 @@
         <button id="closeSettingsBtn" class="btn ghost">Close</button>
       </div>
       <div class="settings-panel__body">
-        <p class="settings-muted">Settings UI scaffold ready. Wiring comes in next chunk.</p>
+        <section class="settings-group">
+          <p class="label">Connection</p>
+          <div class="settings-grid">
+            <label class="settings-field">
+              <span>PS4 IP</span>
+              <input id="settingsPs4Ip" type="text" placeholder="192.168.0.26" />
+            </label>
+            <label class="settings-field">
+              <span>FTP Port</span>
+              <input id="settingsFtpPort" type="number" min="1" max="65535" placeholder="2121" />
+            </label>
+            <label class="settings-field">
+              <span>RPI Port</span>
+              <input id="settingsRpiPort" type="number" min="1" max="65535" placeholder="12800" />
+            </label>
+            <label class="settings-field">
+              <span>Binloader Port</span>
+              <input id="settingsBinloaderPort" type="number" min="1" max="65535" placeholder="9090" />
+            </label>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <p class="label">Behavior</p>
+          <label class="settings-check">
+            <input id="settingsAutoRefreshOnLoad" type="checkbox" />
+            <span>Auto refresh on page load (API mode)</span>
+          </label>
+          <label class="settings-check">
+            <input id="settingsConfirmSend" type="checkbox" />
+            <span>Confirm before "Send to PS4"</span>
+          </label>
+          <label class="settings-check">
+            <input id="settingsAutoExtractMissingIcons" type="checkbox" />
+            <span>Auto extract missing icons after refresh</span>
+          </label>
+        </section>
+
+        <section class="settings-group">
+          <p class="label">Notes</p>
+          <p class="settings-muted">
+            Settings are stored locally in your browser for this machine/profile.
+            If you use one-time FTP passwords, keep this off and refresh from terminal.
+          </p>
+        </section>
+      </div>
+      <div class="settings-panel__foot">
+        <button id="settingsResetBtn" class="btn ghost">Reset Defaults</button>
+        <button id="settingsSaveBtn" class="btn">Save</button>
       </div>
     </aside>
 
