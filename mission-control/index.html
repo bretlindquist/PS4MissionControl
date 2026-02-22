@@ -210,7 +210,107 @@
         </section>
 
         <section class="settings-group">
-          <p class="label">Behavior</p>
+          <p class="label">Paths & Scan</p>
+          <label class="settings-field settings-field--full">
+            <span>Watch Roots (comma-separated prefixes)</span>
+            <input id="settingsWatchRoots" type="text" placeholder="/Volumes/PS4,/Volumes/MagicLantern" />
+          </label>
+          <div class="settings-grid">
+            <label class="settings-field">
+              <span>Max Path Depth Hint</span>
+              <input id="settingsMaxDepth" type="number" min="1" max="32" placeholder="12" />
+            </label>
+            <label class="settings-check settings-check--inline">
+              <input id="settingsIncludeArchives" type="checkbox" />
+              <span>Include archive rows in views</span>
+            </label>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <p class="label">Send Defaults</p>
+          <div class="settings-grid">
+            <label class="settings-field">
+              <span>Send Retries</span>
+              <input id="settingsSendRetries" type="number" min="0" max="5" placeholder="1" />
+            </label>
+            <label class="settings-field">
+              <span>Retry Backoff (ms)</span>
+              <input id="settingsSendBackoffMs" type="number" min="100" max="10000" step="100" placeholder="900" />
+            </label>
+          </div>
+          <label class="settings-check">
+            <input id="settingsRequireOnlinePreflight" type="checkbox" />
+            <span>Require PS4 + RPI online preflight before send</span>
+          </label>
+        </section>
+
+        <section class="settings-group">
+          <p class="label">Classification Rules</p>
+          <label class="settings-field settings-field--full">
+            <span>Ambiguous Package Policy</span>
+            <select id="settingsAmbiguousPolicy">
+              <option value="unknown">Keep as ?</option>
+              <option value="game">Treat as game-labeled</option>
+              <option value="non_game">Treat as non-game-labeled</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="settings-group">
+          <p class="label">UI Defaults</p>
+          <div class="settings-grid">
+            <label class="settings-field">
+              <span>Default View</span>
+              <select id="settingsDefaultView">
+                <option value="external_uninstalled">Drive Scan Uninstalled</option>
+                <option value="external">External Games</option>
+                <option value="installed">Installed</option>
+                <option value="installed_dlc">Installed DLC</option>
+                <option value="updates_pending">Updates Pending</option>
+                <option value="dlc">DLC</option>
+                <option value="themes">Themes</option>
+                <option value="archives">Archives</option>
+                <option value="cleanup">Archive Cleanup</option>
+                <option value="nongames">Non-Games</option>
+              </select>
+            </label>
+            <label class="settings-field">
+              <span>Default Sort</span>
+              <select id="settingsDefaultSortKey">
+                <option value="">None</option>
+                <option value="Title">Title</option>
+                <option value="CUSA">CUSA</option>
+                <option value="Size (GB)">Size (GB)</option>
+                <option value="Date">Date</option>
+                <option value="Installed Check">Installed Check</option>
+              </select>
+            </label>
+          </div>
+          <div class="settings-grid">
+            <label class="settings-field">
+              <span>Sort Direction</span>
+              <select id="settingsDefaultSortAsc">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </label>
+            <label class="settings-field">
+              <span>Density</span>
+              <select id="settingsDensity">
+                <option value="comfortable">Comfortable</option>
+                <option value="compact">Compact</option>
+              </select>
+            </label>
+          </div>
+          <label class="settings-check">
+            <input id="settingsStickyVisualDetails" type="checkbox" />
+            <span>Sticky visual details pane</span>
+          </label>
+        </section>
+
+        <section class="settings-group">
+          <p class="label">Behavior & Safety</p>
           <label class="settings-check">
             <input id="settingsAutoRefreshOnLoad" type="checkbox" />
             <span>Auto refresh on page load (API mode)</span>
@@ -222,6 +322,41 @@
           <label class="settings-check">
             <input id="settingsAutoExtractMissingIcons" type="checkbox" />
             <span>Auto extract missing icons after refresh</span>
+          </label>
+          <label class="settings-check">
+            <input id="settingsEnableFinderDblClick" type="checkbox" />
+            <span>Enable double-click to reveal path in Finder</span>
+          </label>
+          <label class="settings-check">
+            <input id="settingsConfirmBulkActions" type="checkbox" />
+            <span>Confirm bulk clear actions</span>
+          </label>
+        </section>
+
+        <section class="settings-group">
+          <p class="label">Data & Cache</p>
+          <div class="settings-inline-buttons">
+            <button id="settingsClearThumbCacheBtn" class="btn ghost" type="button">Clear Thumb Cache</button>
+            <button id="settingsForceReindexBtn" class="btn ghost" type="button">Force Reindex</button>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <p class="label">Integrations</p>
+          <div class="settings-inline-buttons">
+            <button id="settingsOpenReadmeBtn" class="btn ghost" type="button">Open README</button>
+            <button id="settingsOpenInstallerSpecBtn" class="btn ghost" type="button">Open Installer Spec</button>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <p class="label">Export</p>
+          <label class="settings-field settings-field--full">
+            <span>CSV Profile</span>
+            <select id="settingsExportProfile">
+              <option value="full">Full (all columns)</option>
+              <option value="minimal">Minimal (title/cusa/path/size/status)</option>
+            </select>
           </label>
         </section>
 

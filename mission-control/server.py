@@ -872,6 +872,14 @@ class Handler(SimpleHTTPRequestHandler):
             out = {tid: cache.get(tid, {}) for tid in ids if isinstance(tid, str)}
             return self._json(200, {"ok": True, "items": out, "count": len(out)})
 
+        if p == "/api/thumb-cache-clear":
+            try:
+                if THUMB_CACHE.exists():
+                    THUMB_CACHE.unlink()
+                return self._json(200, {"ok": True, "cleared": str(THUMB_CACHE)})
+            except Exception as exc:
+                return self._json(500, {"ok": False, "error": str(exc)})
+
         if p == "/api/extract-icon":
             raw_path = str(payload.get("path", "")).strip()
             raw_cusa = str(payload.get("cusa", "")).strip().upper()

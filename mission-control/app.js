@@ -7,9 +7,24 @@ const DEFAULT_SETTINGS = Object.freeze({
   ftpPort: 2121,
   rpiPort: 12800,
   binloaderPort: 9090,
+  watchRoots: "/Volumes/PS4,/Volumes/MagicLantern",
+  maxDepth: 12,
+  includeArchives: false,
+  sendRetries: 1,
+  sendBackoffMs: 900,
+  requireOnlinePreflight: true,
+  ambiguousPolicy: "unknown",
+  defaultView: "external_uninstalled",
+  defaultSortKey: "",
+  defaultSortAsc: true,
+  density: "comfortable",
+  stickyVisualDetails: true,
   autoRefreshOnLoad: false,
   confirmBeforeSend: true,
   autoExtractMissingIcons: true,
+  enableFinderDblClick: true,
+  confirmBulkActions: true,
+  exportProfile: "full",
 });
 const SOURCES = {
   installed: `../GAMES_LIST.md?v=${DATA_VERSION}`,
@@ -144,9 +159,28 @@ const el = {
   settingsFtpPort: document.getElementById("settingsFtpPort"),
   settingsRpiPort: document.getElementById("settingsRpiPort"),
   settingsBinloaderPort: document.getElementById("settingsBinloaderPort"),
+  settingsWatchRoots: document.getElementById("settingsWatchRoots"),
+  settingsMaxDepth: document.getElementById("settingsMaxDepth"),
+  settingsIncludeArchives: document.getElementById("settingsIncludeArchives"),
+  settingsSendRetries: document.getElementById("settingsSendRetries"),
+  settingsSendBackoffMs: document.getElementById("settingsSendBackoffMs"),
+  settingsRequireOnlinePreflight: document.getElementById("settingsRequireOnlinePreflight"),
+  settingsAmbiguousPolicy: document.getElementById("settingsAmbiguousPolicy"),
+  settingsDefaultView: document.getElementById("settingsDefaultView"),
+  settingsDefaultSortKey: document.getElementById("settingsDefaultSortKey"),
+  settingsDefaultSortAsc: document.getElementById("settingsDefaultSortAsc"),
+  settingsDensity: document.getElementById("settingsDensity"),
+  settingsStickyVisualDetails: document.getElementById("settingsStickyVisualDetails"),
   settingsAutoRefreshOnLoad: document.getElementById("settingsAutoRefreshOnLoad"),
   settingsConfirmSend: document.getElementById("settingsConfirmSend"),
   settingsAutoExtractMissingIcons: document.getElementById("settingsAutoExtractMissingIcons"),
+  settingsEnableFinderDblClick: document.getElementById("settingsEnableFinderDblClick"),
+  settingsConfirmBulkActions: document.getElementById("settingsConfirmBulkActions"),
+  settingsClearThumbCacheBtn: document.getElementById("settingsClearThumbCacheBtn"),
+  settingsForceReindexBtn: document.getElementById("settingsForceReindexBtn"),
+  settingsOpenReadmeBtn: document.getElementById("settingsOpenReadmeBtn"),
+  settingsOpenInstallerSpecBtn: document.getElementById("settingsOpenInstallerSpecBtn"),
+  settingsExportProfile: document.getElementById("settingsExportProfile"),
   settingsSaveBtn: document.getElementById("settingsSaveBtn"),
   settingsResetBtn: document.getElementById("settingsResetBtn"),
   palette: document.getElementById("palette"),
@@ -164,6 +198,10 @@ init().catch((err) => {
 
 async function init() {
   loadSettings();
+  applyUiSettings();
+  state.view = state.settings.defaultView || state.view;
+  state.sort.key = state.settings.defaultSortKey || null;
+  state.sort.asc = !!state.settings.defaultSortAsc;
   loadAutoExtractSeen();
   await loadServerState();
   await loadMarkdownData();
@@ -175,6 +213,7 @@ async function init() {
   renderSourceList();
   renderAll();
   renderSettingsForm();
+  el.chips.forEach((c) => c.classList.toggle("active", c.dataset.view === state.view));
   renderPalette();
   startRpiPolling();
   if (state.settings.autoRefreshOnLoad && state.apiEnabled) {
@@ -189,6 +228,14 @@ function normalizePort(value, fallback) {
   return Math.trunc(n);
 }
 
+function normalizeInt(value, fallback, min = 0, max = 999999) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return fallback;
+  const i = Math.trunc(n);
+  if (i < min || i > max) return fallback;
+  return i;
+}
+
 function loadSettings() {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
@@ -198,9 +245,24 @@ function loadSettings() {
       ftpPort: normalizePort(parsed?.ftpPort, DEFAULT_SETTINGS.ftpPort),
       rpiPort: normalizePort(parsed?.rpiPort, DEFAULT_SETTINGS.rpiPort),
       binloaderPort: normalizePort(parsed?.binloaderPort, DEFAULT_SETTINGS.binloaderPort),
+      watchRoots: String(parsed?.watchRoots || DEFAULT_SETTINGS.watchRoots).trim() || DEFAULT_SETTINGS.watchRoots,
+      maxDepth: normalizeInt(parsed?.maxDepth, DEFAULT_SETTINGS.maxDepth, 1, 64),
+      includeArchives: !!parsed?.includeArchives,
+      sendRetries: normalizeInt(parsed?.sendRetries, DEFAULT_SETTINGS.sendRetries, 0, 5),
+      sendBackoffMs: normalizeInt(parsed?.sendBackoffMs, DEFAULT_SETTINGS.sendBackoffMs, 100, 20000),
+      requireOnlinePreflight: parsed?.requireOnlinePreflight !== false,
+      ambiguousPolicy: ["unknown", "game", "non_game"].includes(String(parsed?.ambiguousPolicy || "")) ? String(parsed.ambiguousPolicy) : DEFAULT_SETTINGS.ambiguousPolicy,
+      defaultView: String(parsed?.defaultView || DEFAULT_SETTINGS.defaultView),
+      defaultSortKey: String(parsed?.defaultSortKey || DEFAULT_SETTINGS.defaultSortKey),
+      defaultSortAsc: parsed?.defaultSortAsc !== false,
+      density: String(parsed?.density || DEFAULT_SETTINGS.density) === "compact" ? "compact" : "comfortable",
+      stickyVisualDetails: parsed?.stickyVisualDetails !== false,
       autoRefreshOnLoad: !!parsed?.autoRefreshOnLoad,
       confirmBeforeSend: parsed?.confirmBeforeSend !== false,
       autoExtractMissingIcons: parsed?.autoExtractMissingIcons !== false,
+      enableFinderDblClick: parsed?.enableFinderDblClick !== false,
+      confirmBulkActions: parsed?.confirmBulkActions !== false,
+      exportProfile: String(parsed?.exportProfile || DEFAULT_SETTINGS.exportProfile) === "minimal" ? "minimal" : "full",
     };
     state.settings = next;
   } catch {
@@ -218,11 +280,27 @@ function applySettingsFromForm() {
     ftpPort: normalizePort(el.settingsFtpPort?.value, DEFAULT_SETTINGS.ftpPort),
     rpiPort: normalizePort(el.settingsRpiPort?.value, DEFAULT_SETTINGS.rpiPort),
     binloaderPort: normalizePort(el.settingsBinloaderPort?.value, DEFAULT_SETTINGS.binloaderPort),
+    watchRoots: String(el.settingsWatchRoots?.value || DEFAULT_SETTINGS.watchRoots).trim() || DEFAULT_SETTINGS.watchRoots,
+    maxDepth: normalizeInt(el.settingsMaxDepth?.value, DEFAULT_SETTINGS.maxDepth, 1, 64),
+    includeArchives: !!el.settingsIncludeArchives?.checked,
+    sendRetries: normalizeInt(el.settingsSendRetries?.value, DEFAULT_SETTINGS.sendRetries, 0, 5),
+    sendBackoffMs: normalizeInt(el.settingsSendBackoffMs?.value, DEFAULT_SETTINGS.sendBackoffMs, 100, 20000),
+    requireOnlinePreflight: !!el.settingsRequireOnlinePreflight?.checked,
+    ambiguousPolicy: String(el.settingsAmbiguousPolicy?.value || DEFAULT_SETTINGS.ambiguousPolicy),
+    defaultView: String(el.settingsDefaultView?.value || DEFAULT_SETTINGS.defaultView),
+    defaultSortKey: String(el.settingsDefaultSortKey?.value || DEFAULT_SETTINGS.defaultSortKey),
+    defaultSortAsc: String(el.settingsDefaultSortAsc?.value || "asc") !== "desc",
+    density: String(el.settingsDensity?.value || DEFAULT_SETTINGS.density) === "compact" ? "compact" : "comfortable",
+    stickyVisualDetails: !!el.settingsStickyVisualDetails?.checked,
     autoRefreshOnLoad: !!el.settingsAutoRefreshOnLoad?.checked,
     confirmBeforeSend: !!el.settingsConfirmSend?.checked,
     autoExtractMissingIcons: !!el.settingsAutoExtractMissingIcons?.checked,
+    enableFinderDblClick: !!el.settingsEnableFinderDblClick?.checked,
+    confirmBulkActions: !!el.settingsConfirmBulkActions?.checked,
+    exportProfile: String(el.settingsExportProfile?.value || "full") === "minimal" ? "minimal" : "full",
   };
   saveSettings();
+  applyUiSettings();
 }
 
 function renderSettingsForm() {
@@ -230,9 +308,29 @@ function renderSettingsForm() {
   if (el.settingsFtpPort) el.settingsFtpPort.value = String(state.settings.ftpPort || DEFAULT_SETTINGS.ftpPort);
   if (el.settingsRpiPort) el.settingsRpiPort.value = String(state.settings.rpiPort || DEFAULT_SETTINGS.rpiPort);
   if (el.settingsBinloaderPort) el.settingsBinloaderPort.value = String(state.settings.binloaderPort || DEFAULT_SETTINGS.binloaderPort);
+  if (el.settingsWatchRoots) el.settingsWatchRoots.value = String(state.settings.watchRoots || DEFAULT_SETTINGS.watchRoots);
+  if (el.settingsMaxDepth) el.settingsMaxDepth.value = String(state.settings.maxDepth || DEFAULT_SETTINGS.maxDepth);
+  if (el.settingsIncludeArchives) el.settingsIncludeArchives.checked = !!state.settings.includeArchives;
+  if (el.settingsSendRetries) el.settingsSendRetries.value = String(state.settings.sendRetries ?? DEFAULT_SETTINGS.sendRetries);
+  if (el.settingsSendBackoffMs) el.settingsSendBackoffMs.value = String(state.settings.sendBackoffMs ?? DEFAULT_SETTINGS.sendBackoffMs);
+  if (el.settingsRequireOnlinePreflight) el.settingsRequireOnlinePreflight.checked = !!state.settings.requireOnlinePreflight;
+  if (el.settingsAmbiguousPolicy) el.settingsAmbiguousPolicy.value = state.settings.ambiguousPolicy || DEFAULT_SETTINGS.ambiguousPolicy;
+  if (el.settingsDefaultView) el.settingsDefaultView.value = state.settings.defaultView || DEFAULT_SETTINGS.defaultView;
+  if (el.settingsDefaultSortKey) el.settingsDefaultSortKey.value = state.settings.defaultSortKey || "";
+  if (el.settingsDefaultSortAsc) el.settingsDefaultSortAsc.value = state.settings.defaultSortAsc ? "asc" : "desc";
+  if (el.settingsDensity) el.settingsDensity.value = state.settings.density || DEFAULT_SETTINGS.density;
+  if (el.settingsStickyVisualDetails) el.settingsStickyVisualDetails.checked = !!state.settings.stickyVisualDetails;
   if (el.settingsAutoRefreshOnLoad) el.settingsAutoRefreshOnLoad.checked = !!state.settings.autoRefreshOnLoad;
   if (el.settingsConfirmSend) el.settingsConfirmSend.checked = !!state.settings.confirmBeforeSend;
   if (el.settingsAutoExtractMissingIcons) el.settingsAutoExtractMissingIcons.checked = !!state.settings.autoExtractMissingIcons;
+  if (el.settingsEnableFinderDblClick) el.settingsEnableFinderDblClick.checked = !!state.settings.enableFinderDblClick;
+  if (el.settingsConfirmBulkActions) el.settingsConfirmBulkActions.checked = !!state.settings.confirmBulkActions;
+  if (el.settingsExportProfile) el.settingsExportProfile.value = state.settings.exportProfile || "full";
+}
+
+function applyUiSettings() {
+  document.body.classList.toggle("density-compact", state.settings.density === "compact");
+  document.body.classList.toggle("details-not-sticky", !state.settings.stickyVisualDetails);
 }
 
 function requestSettingsQuery() {
@@ -241,6 +339,8 @@ function requestSettingsQuery() {
   q.set("ftp_port", String(state.settings.ftpPort || DEFAULT_SETTINGS.ftpPort));
   q.set("rpi_port", String(state.settings.rpiPort || DEFAULT_SETTINGS.rpiPort));
   q.set("binloader_port", String(state.settings.binloaderPort || DEFAULT_SETTINGS.binloaderPort));
+  q.set("watch_roots", String(state.settings.watchRoots || ""));
+  q.set("max_depth", String(state.settings.maxDepth || DEFAULT_SETTINGS.maxDepth));
   return q.toString();
 }
 
@@ -250,6 +350,8 @@ function requestSettingsBody() {
     ftp_port: state.settings.ftpPort || DEFAULT_SETTINGS.ftpPort,
     rpi_port: state.settings.rpiPort || DEFAULT_SETTINGS.rpiPort,
     binloader_port: state.settings.binloaderPort || DEFAULT_SETTINGS.binloaderPort,
+    watch_roots: String(state.settings.watchRoots || ""),
+    max_depth: state.settings.maxDepth || DEFAULT_SETTINGS.maxDepth,
   };
 }
 
@@ -506,15 +608,23 @@ function bindEvents() {
     applySettingsFromForm();
     await loadServerState();
     renderKpis();
+    renderAll();
     closeSettings();
   });
   el.settingsResetBtn?.addEventListener("click", async () => {
     state.settings = { ...DEFAULT_SETTINGS };
     saveSettings();
+    applyUiSettings();
     renderSettingsForm();
     await loadServerState();
-    renderKpis();
+    renderAll();
   });
+  el.settingsClearThumbCacheBtn?.addEventListener("click", clearThumbCacheNow);
+  el.settingsForceReindexBtn?.addEventListener("click", async () => {
+    await refreshData();
+  });
+  el.settingsOpenReadmeBtn?.addEventListener("click", () => window.open("../README.md", "_blank", "noopener"));
+  el.settingsOpenInstallerSpecBtn?.addEventListener("click", () => window.open("../PS4MISSIONCONTROL_INSTALLER_SPEC.md", "_blank", "noopener"));
   el.cmdBtn.addEventListener("click", openPalette);
   el.themeBtn.addEventListener("click", toggleTheme);
 
@@ -626,6 +736,29 @@ async function refreshStorageData() {
   }
 }
 
+async function clearThumbCacheNow() {
+  if (!state.apiEnabled) {
+    state.thumbCache = {};
+    alert("Local thumb cache cleared in browser state.");
+    renderVisualUninstalledCard();
+    return;
+  }
+  try {
+    const res = await fetch("/api/thumb-cache-clear", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    });
+    const payload = await res.json();
+    if (!payload.ok) throw new Error(payload.error || "clear failed");
+    state.thumbCache = {};
+    alert("Thumb cache cleared. Run Refresh Data to repopulate.");
+    renderVisualUninstalledCard();
+  } catch (err) {
+    alert(`Clear cache failed: ${err.message}`);
+  }
+}
+
 function renderAll() {
   renderWatchList();
   renderKpis();
@@ -675,7 +808,7 @@ function currentDatasetRaw() {
   if (state.view === "external") return state.data.externalGames;
   if (state.view === "dlc") return state.data.dlc;
   if (state.view === "themes") return state.data.themes;
-  if (state.view === "archives") return state.data.archives;
+  if (state.view === "archives") return state.settings.includeArchives ? state.data.archives : [];
   if (state.view === "cleanup") return state.data.archiveCleanup;
   if (state.view === "nongames") return state.data.nonGames;
   return getUninstalledRows();
@@ -686,12 +819,37 @@ function getUninstalledRows() {
     if (r["Installed Check"] === "Verified Installed") return false;
     if (matchesIgnore(r)) return false;
     if (matchesHidden(r)) return false;
+    if (!rowAllowedByPathSettings(r)) return false;
     return true;
   });
 }
 
+function settingsWatchRootList() {
+  return String(state.settings.watchRoots || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function rowAllowedByPathSettings(row) {
+  const path = String(row.Path || row["Example Path"] || "").trim();
+  if (!path) return true;
+  const roots = settingsWatchRootList();
+  if (roots.length > 0) {
+    const okRoot = roots.some((root) => path.startsWith(root));
+    if (!okRoot) return false;
+  }
+  const depth = Number(state.settings.maxDepth || DEFAULT_SETTINGS.maxDepth);
+  if (Number.isFinite(depth) && depth > 0) {
+    const d = path.split("/").filter(Boolean).length;
+    if (d > depth) return false;
+  }
+  return true;
+}
+
 function applyFilters(rows) {
   return rows.filter((row) => {
+    if (!rowAllowedByPathSettings(row)) return false;
     if (matchesHidden(row)) return false;
     const text = [
       row.File || "",
@@ -865,7 +1023,7 @@ function renderExternalUninstalledCard() {
     });
     tr.addEventListener("dblclick", async () => {
       const row = rows[Number(tr.dataset.idx)];
-      await openRowInFinder(row);
+      await maybeOpenRowInFinder(row);
     });
   });
 }
@@ -993,7 +1151,11 @@ function buildVisualDetailsHtml(row) {
   const hintsText = hints.length ? hints.slice(0, 8).join(", ") : "-";
   const hasGameSource = packages.some((p) => p.source === "game");
   const hasNonGameSource = packages.some((p) => p.source === "non_game");
-  const classState = hasGameSource ? "game-labeled" : (hasNonGameSource ? "? (non-game-labeled)" : "?");
+  let classState = hasGameSource ? "game-labeled" : (hasNonGameSource ? "? (non-game-labeled)" : "?");
+  if (!hasGameSource) {
+    if (state.settings.ambiguousPolicy === "game") classState = "game-labeled (forced)";
+    if (state.settings.ambiguousPolicy === "non_game") classState = "non-game-labeled (forced)";
+  }
   const sortedPkgs = [...packages].sort((a, b) => (b.sizeGb - a.sizeGb) || a.file.localeCompare(b.file));
   const pkgRows = sortedPkgs.length
     ? sortedPkgs.map((p) => `<tr>
@@ -1160,7 +1322,7 @@ function renderVisualUninstalledCard() {
     });
     tile.addEventListener("dblclick", async () => {
       const row = rows[Number(tile.dataset.idx)];
-      await openRowInFinder(row);
+      await maybeOpenRowInFinder(row);
     });
   });
 
@@ -1268,7 +1430,7 @@ function renderUninstalledCard() {
     });
     tr.addEventListener("dblclick", async () => {
       const row = rows[Number(tr.dataset.idx)];
-      await openRowInFinder(row);
+      await maybeOpenRowInFinder(row);
     });
   });
 }
@@ -1287,6 +1449,36 @@ function getSelectedUninstalledRow(rows) {
   const key = state.uninstalledCard.selectedRowKey;
   if (!key) return null;
   return data.find((r, idx) => (makeRule(r).key || String(idx)) === key) || null;
+}
+
+function sleepMs(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function sendToPs4WithRetry(path) {
+  if (state.settings.requireOnlinePreflight) {
+    if (!state.ps4Status?.online) throw new Error("PS4 appears offline (GoldHEN status)");
+    if (!state.rpiStatus?.online) throw new Error("RPI appears offline");
+  }
+  const attempts = Math.max(1, Number(state.settings.sendRetries || 0) + 1);
+  const backoff = Math.max(100, Number(state.settings.sendBackoffMs || 900));
+  let lastErr = null;
+  for (let i = 0; i < attempts; i += 1) {
+    try {
+      const res = await fetch("/api/send-to-ps4", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path, ip: state.settings.ps4Ip, rpi_port: state.settings.rpiPort }),
+      });
+      const payload = await res.json();
+      if (!payload.ok) throw new Error(payload.error || payload.body || "send failed");
+      return payload;
+    } catch (err) {
+      lastErr = err;
+      if (i < attempts - 1) await sleepMs(backoff * (i + 1));
+    }
+  }
+  throw lastErr || new Error("send failed");
 }
 
 async function sendSelectedUninstalledToPs4() {
@@ -1316,13 +1508,7 @@ async function sendSelectedUninstalledToPs4() {
     btn.textContent = "Sending...";
   }
   try {
-    const res = await fetch("/api/send-to-ps4", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path, ip: state.settings.ps4Ip, rpi_port: state.settings.rpiPort }),
-    });
-    const payload = await res.json();
-    if (!payload.ok) throw new Error(payload.error || payload.body || "send failed");
+    const payload = await sendToPs4WithRetry(path);
     if (payload.queued) {
       await refreshSendJobs();
       alert(`Queued sender job ${payload.jobId} for PS4.`);
@@ -1382,13 +1568,7 @@ async function sendSelectedExtUninstalledToPs4() {
     btn.textContent = "Sending...";
   }
   try {
-    const res = await fetch("/api/send-to-ps4", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path, ip: state.settings.ps4Ip, rpi_port: state.settings.rpiPort }),
-    });
-    const payload = await res.json();
-    if (!payload.ok) throw new Error(payload.error || payload.body || "send failed");
+    const payload = await sendToPs4WithRetry(path);
     if (payload.queued) {
       await refreshSendJobs();
       alert(`Queued sender job ${payload.jobId} for PS4.`);
@@ -1448,13 +1628,7 @@ async function sendSelectedVisualUninstalledToPs4() {
     btn.textContent = "Sending...";
   }
   try {
-    const res = await fetch("/api/send-to-ps4", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path, ip: state.settings.ps4Ip, rpi_port: state.settings.rpiPort }),
-    });
-    const payload = await res.json();
-    if (!payload.ok) throw new Error(payload.error || payload.body || "send failed");
+    const payload = await sendToPs4WithRetry(path);
     if (payload.queued) {
       await refreshSendJobs();
       alert(`Queued sender job ${payload.jobId} for PS4.`);
@@ -1772,7 +1946,7 @@ function renderMainTable() {
     });
     tr.addEventListener("dblclick", async () => {
       const row = rows[Number(tr.dataset.idx)];
-      await openRowInFinder(row);
+      await maybeOpenRowInFinder(row);
     });
   });
 }
@@ -1899,6 +2073,11 @@ async function openRowInFinder(row) {
   }
 }
 
+async function maybeOpenRowInFinder(row) {
+  if (!state.settings.enableFinderDblClick) return;
+  await maybeOpenRowInFinder(row);
+}
+
 function matchesIgnore(row) {
   const key = makeRule(row).key;
   const cusa = (row.CUSA || "").toUpperCase();
@@ -1913,7 +2092,7 @@ function matchesHidden(row) {
 async function clearList(type) {
   const map = { watch: "watch", ignore: "ignore", hidden: "hide" };
   const arr = type === "watch" ? state.watch : type === "ignore" ? state.ignore : state.hidden;
-  if (!confirm(`Clear ${arr.length} ${type} item(s)?`)) return;
+  if (state.settings.confirmBulkActions && !confirm(`Clear ${arr.length} ${type} item(s)?`)) return;
 
   if (state.apiEnabled) {
     for (let i = arr.length - 1; i >= 0; i -= 1) {
@@ -1966,7 +2145,7 @@ function persistLocalLists() {
 function exportCurrentView() {
   const rows = currentDataset();
   if (!rows.length) return;
-  const headers = Object.keys(rows[0]);
+  const headers = pickExportHeaders(rows);
   const csv = [headers.join(",")]
     .concat(rows.map((r) => headers.map((h) => csvEscape(r[h] || "")).join(",")))
     .join("\n");
@@ -1982,7 +2161,7 @@ function exportCurrentView() {
 function exportUninstalledCard() {
   const rows = uninstalledCardRows();
   if (!rows.length) return;
-  const headers = Object.keys(rows[0]);
+  const headers = pickExportHeaders(rows);
   const csv = [headers.join(",")]
     .concat(rows.map((r) => headers.map((h) => csvEscape(r[h] || "")).join(",")))
     .join("\n");
@@ -1998,6 +2177,14 @@ function exportUninstalledCard() {
 function csvEscape(v) {
   const s = String(v).replace(/"/g, '""');
   return `"${s}"`;
+}
+
+function pickExportHeaders(rows) {
+  const headers = Object.keys(rows[0] || {});
+  if (state.settings.exportProfile !== "minimal") return headers;
+  const preferred = ["Title", "CUSA", "Title ID", "Size (GB)", "Installed Check", "Path", "Example Path", "Drive", "Drive(s)"];
+  const presentPreferred = preferred.filter((h) => headers.includes(h));
+  return presentPreferred.length ? presentPreferred : headers;
 }
 
 function renderSourceList() {

@@ -659,6 +659,18 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
   padding: 0.45rem 0.55rem;
   font: inherit;
 }
+.settings-field select {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text);
+  padding: 0.45rem 0.55rem;
+  font: inherit;
+}
+.settings-field--full {
+  grid-column: 1 / -1;
+}
 .settings-check {
   margin-top: 0.45rem;
   display: flex;
@@ -667,6 +679,32 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
 }
 .settings-check input {
   accent-color: var(--accent);
+}
+.settings-check--inline {
+  margin-top: 1.35rem;
+}
+.settings-inline-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.45rem;
+}
+
+body.density-compact .table-wrap table th,
+body.density-compact .table-wrap table td {
+  padding: 0.45rem 0.5rem;
+}
+body.density-compact .visual-tile {
+  border-radius: 10px;
+}
+body.density-compact .visual-title {
+  font-size: 0.95rem;
+}
+body.density-compact .visual-sub {
+  font-size: 0.78rem;
+}
+body.details-not-sticky .visual-details-pane {
+  position: static;
 }
 
 .palette {
