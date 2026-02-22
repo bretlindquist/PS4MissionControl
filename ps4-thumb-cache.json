@@ -1,0 +1,1394 @@
+{
+  "CUSA00219": {
+    "titleId": "CUSA00219",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00219_00/4/i_23d628f077e4b5b988da15813d8c9adfe1fb0262330241034c8446166ead51a9/i/icon0.png",
+    "name": "Destiny",
+    "contentId": "UP0002-CUSA00219_00-DESTINYTHEGAME01",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00219_00_C77D72410FB5A8A79B4D840747CA2928588DFCD9/CUSA00219_00.json"
+  },
+  "CUSA00568": {
+    "titleId": "CUSA00568",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00568_00/3/i_c024777a9495c9c95f008660b31d0ce8c7ec5fdad038de8824d40a5c8df3ae37/i/icon0.png",
+    "name": "Destiny",
+    "contentId": "EP0002-CUSA00568_00-DESTINYTHEGAME01",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00568_00_921BC42A023780EA51094DEBAB14E44CA27B6222/CUSA00568_00.json"
+  },
+  "CUSA00572": {
+    "titleId": "CUSA00572",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00572_00/1/i_99aead44fb123c33d54eb72b03da03dddad97986111533b2f5007b3cfca8eebd/i/icon0.png",
+    "name": "SHAREfactory™",
+    "contentId": "IP9100-CUSA00572_00-SFRELE0000000100",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00572_00_56455C2B3E2AC91159A71056DC60833E0CE43DFF/CUSA00572_00.json"
+  },
+  "CUSA01000": {
+    "titleId": "CUSA01000",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA01000_00/3/i_7aa8dfdffef63ff7bcfbf2b53aaa1539a4ebaf62940f1263b3e19460087d38f8/i/icon0.png",
+    "name": "Destiny",
+    "contentId": "JP9200-CUSA01000_00-DESTINYTHEGAME01",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA01000_00_08B68275FFA7AF8AEBC45C968237EECF56B23518/CUSA01000_00.json"
+  },
+  "CUSA01697": {
+    "titleId": "CUSA01697",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA01697_00/1/i_cb4e15db86bbec12da44e15a28c304b0cb41d2867152b4a4699602af0b8789ef/i/icon0.png",
+    "name": "PlayStation™Now",
+    "contentId": "IP9100-CUSA01697_00-SFPROD0000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA01697_00_DB1B5578C63BBCEB8DDFF26F73A3F702A436A85F/CUSA01697_00.json"
+  },
+  "CUSA01780": {
+    "titleId": "CUSA01780",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA01780_00/1/i_024575a45a23482da2fa8c2ded636bd8f27116531a3c4843f7f1598e2aa682e7/i/icon0.png",
+    "name": "Spotify",
+    "contentId": "EP4950-CUSA01780_00-0000000000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA01780_00_C41CFB7F0459822148915BF70F5EA184E4ACCBD9/CUSA01780_00.json"
+  },
+  "CUSA02012": {
+    "titleId": "CUSA02012",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA02012_00/1/i_018d3114f496346e1705e2165d8980995ee1253dc9a85c8cc1bfb8ffff1856cb/i/icon0.png",
+    "name": "Media Player",
+    "contentId": "IP9100-CUSA02012_00-PS4MEDIAPLAYER00",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA02012_00_CF6C08F98F39E91A0C6305B9508DE8E62B4DCFA1/CUSA02012_00.json"
+  },
+  "CUSA00001": {
+    "titleId": "CUSA00001",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00001_00/1/i_f10c33e5f30e3b3900a201af324a2a0e3912e843c1090d66e13f378151c1afa1/i/icon0.png",
+    "name": "THE PLAYROOM",
+    "contentId": "IP9100-CUSA00001_00-PLAYROOM00000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00001_00_C32A667A087A40C2AD1889435907AA4B0D9DBA1F/CUSA00001_00.json"
+  },
+  "CUSA00063": {
+    "titleId": "CUSA00063",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00063_00/2/i_d67f5d122b985132a44e333e1b9c91d41608fa932842b3e3274d768c18463c24/i/icon0.png",
+    "name": "LittleBigPlanet™3 (EU)",
+    "contentId": "EP9000-CUSA00063_00-GLITTLEBIG000003",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00063_00_779FB1EA4F4823C6E33080FF57B97A0B0B4B498C/CUSA00063_00.json"
+  },
+  "CUSA00151": {
+    "titleId": "CUSA00151",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00151_00/6/i_72aa4cc1dac1795e44e01193477320395e023b2a1b7f7f40979896fd46ade17e/i/icon0.png",
+    "name": "Guacamelee! Super Turbo Championship Edition",
+    "contentId": "UP2045-CUSA00151_00-GUACSTCE00000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00151_00_CBC764F0558B32B663F804E4A83984DBA4E4D37D/CUSA00151_00.json"
+  },
+  "CUSA00284": {
+    "titleId": "CUSA00284",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00284_00/1/i_181bc079f2e66a65233d0d76a49db231e214d22f6898e065ec3f79fafe0d249e/i/icon0.png",
+    "name": "Rayman® Legends",
+    "contentId": "EP0001-CUSA00284_00-RAYMANLEGENDS001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00284_00_4194743CC1B58D93EA04D64090968F068BD1BB77/CUSA00284_00.json"
+  },
+  "CUSA00460": {
+    "titleId": "CUSA00460",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00460_00/2/i_36eb6af8745fe6e0ec6e21f195b0f7244b45bcefc08bfcc763048e44e4a3ecb0/i/icon0.png",
+    "name": "Sherlock Holmes: Crimes and Punishments",
+    "contentId": "UP4133-CUSA00460_00-SH7CRIMESANDPUNI",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00460_00_CE844B4316BCEDB2E2F828A524C05EA809CDC9F1/CUSA00460_00.json"
+  },
+  "CUSA01867": {
+    "titleId": "CUSA01867",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA01867_00/3/i_1a7f929cf55e4acffb7c4f8be7fd262ad3f8ff1a48343c96495c2251026024c0/i/icon0.png",
+    "name": "Shovel Knight: Treasure Trove",
+    "contentId": "UP2200-CUSA01867_00-SHOVELKNIGHT0001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA01867_00_06E1CFE0D93C46A28EC9E4790BEE0B11BAE12519/CUSA01867_00.json"
+  },
+  "CUSA01994": {
+    "titleId": "CUSA01994",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA01994_00/4/i_d2e62b0ae208f0f1b0cb0a2148982d8136f39e84213ba3265532ed5908b357b7/i/icon0.png",
+    "name": "STARWHAL",
+    "contentId": "EP2177-CUSA01994_00-STARWHALJTT70000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA01994_00_2AF7645D6014196C529F2D3F438D7FFFB3FDFD6F/CUSA01994_00.json"
+  },
+  "CUSA02353": {
+    "titleId": "CUSA02353",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA02353_00/2/i_e52db1bce901ff44be0ed4c4835cc0690e611ef7fb4ee0b89ce176a5d796ab80/i/icon0.png",
+    "name": "Salt and Sanctuary",
+    "contentId": "UP0613-CUSA02353_00-SALTNSANCTUARY00",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA02353_00_698F19C91EB27C92732938AF40FED7276C925E96/CUSA02353_00.json"
+  },
+  "CUSA03887": {
+    "titleId": "CUSA03887",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA03887_00/5/i_c3bcbcd8d1db7a5152460baab27355499986d0c70246ca87e745c4d411a8247b/i/icon0.png",
+    "name": "Broforce",
+    "contentId": "EP3643-CUSA03887_00-00000BROFORCEPS4",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA03887_00_51206F01310C4642F50E3DFDBCC91B48C8148F29/CUSA03887_00.json"
+  },
+  "CUSA04384": {
+    "titleId": "CUSA04384",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA04384_00/1/i_63d2f939b3b551e959c8f1b56eb909ce9da1fd59cf34cb3a7c52f8a992aaafa7/i/icon0.png",
+    "name": "Lovers in a Dangerous Spacetime",
+    "contentId": "EP0045-CUSA04384_00-LOVERS0000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA04384_00_700EAF6839CFD925BDA0ECAE749F8A6FBD2A5D98/CUSA04384_00.json"
+  },
+  "CUSA04785": {
+    "titleId": "CUSA04785",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA04785_00/5/i_4677b9a49f678d9f9414d3728597d888190d4f407cb5a6fe566f1ac6d7d22fa2/i/icon0.png",
+    "name": "Battlezone®",
+    "contentId": "EP4529-CUSA04785_00-BATTLEZONE000000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA04785_00_DC7DF642876F7B03ED3218A416A7E13BA685F55B/CUSA04785_00.json"
+  },
+  "CUSA04865": {
+    "titleId": "CUSA04865",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA04865_00/5/i_218f6ff6670ac9a94466ec9494a39e1a5d34b7fc86ad0e7f6d4f3516e7a9ab43/i/icon0.png",
+    "name": "Gang Beasts",
+    "contentId": "EP2154-CUSA04865_00-GANGBEASTSPS04EU",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA04865_00_A7F88051358226C418DA4D80AFD94A2D89323439/CUSA04865_00.json"
+  },
+  "CUSA05636": {
+    "titleId": "CUSA05636",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA05636_00/3/i_da5cb636d59436a99bb7bda807135d5d282a841c5a2e3f3cdb43144bdcec07be/i/icon0.png",
+    "name": "ACE COMBAT™ 7: SKIES UNKNOWN",
+    "contentId": "UP0700-CUSA05636_00-ACECOMBATCLOUD07",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA05636_00_8849E44D09A6F5E2C674696F4755B9B6C361D87D/CUSA05636_00.json"
+  },
+  "CUSA07098": {
+    "titleId": "CUSA07098",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA07098_00/5/i_b83b60538e6978768f0ea6e53607ec2b107bdd8275df3d250f9db897ad3bab88/i/icon0.png",
+    "name": "Guacamelee! 2",
+    "contentId": "UP2045-CUSA07098_00-GUACAMELEETWOOOO",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA07098_00_73D906F1D9DB4248B7AD29B7EE0B334365DAC0D5/CUSA07098_00.json"
+  },
+  "CUSA07208": {
+    "titleId": "CUSA07208",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA07208_00/3/i_fdc29810d41a66c96714090de2a0e526766f10fae4bb718a3ac226c042b0ed4c/i/icon0.png",
+    "name": "Human Fall Flat",
+    "contentId": "EP4395-CUSA07208_00-HUMANFF00SIEEPS4",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA07208_00_21FA39B7C494E319DB92A0C459BECF470A80B8B0/CUSA07208_00.json"
+  },
+  "CUSA07412": {
+    "titleId": "CUSA07412",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA07412_00/2/i_1e8ce9454c2f98484fd3725bc8b1a66f8dcf6a100743c920a733be8982758562/i/icon0.png",
+    "name": "God of War",
+    "contentId": "EP9000-CUSA07412_00-00000000GODOFWAR",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA07412_00_FF3A637CFCDE5505211E9E3F87C0265CE45D2DFD/CUSA07412_00.json"
+  },
+  "CUSA08268": {
+    "titleId": "CUSA08268",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA08268_00/4/i_fe2439e9995080a3316f644f2bb008985c14443d45de3b8a9d8ba21b20457985/i/icon0.png",
+    "name": "Mega Man Legacy Collection 2",
+    "contentId": "UP0102-CUSA08268_00-RCC2000000000001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA08268_00_0E8C5221AF5EF92DAD23DF2231CF2FCD63445C5A/CUSA08268_00.json"
+  },
+  "CUSA08413": {
+    "titleId": "CUSA08413",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA08413_00/4/i_03e3d26f32832b33b03b9f99f0c6ec23baaf899cb2733775fffa8d4136f4f43e/i/icon0.png",
+    "name": "Guns Gore and Cannoli 2",
+    "contentId": "UP1725-CUSA08413_00-0000000000006666",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA08413_00_1921D68E320B7C9EDFBC58957DF0E7854F8108C8/CUSA08413_00.json"
+  },
+  "CUSA09919": {
+    "titleId": "CUSA09919",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA09919_00/2/i_47c119e9fe44d8d7e60c629bbf025035b9f26e53b04aa5a9d1ba1d21b1a936ee/i/icon0.png",
+    "name": "Outer Wilds",
+    "contentId": "EP2333-CUSA09919_00-OUTERWILDSSIEE00",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA09919_00_491C8B381A3B1355930C6B5F33ECF930BA7B8D37/CUSA09919_00.json"
+  },
+  "CUSA10927": {
+    "titleId": "CUSA10927",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA10927_00/2/i_62b2ef7ffe415dad254d5d704ff03cf5fec7a76c04fca2653695ea6a1d95b069/i/icon0.png",
+    "name": "Wizard of Legend",
+    "contentId": "UP3864-CUSA10927_00-WIZARDOFLEGENDUS",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA10927_00_124774896A635A1DD63D986B85FC43CA154EED55/CUSA10927_00.json"
+  },
+  "CUSA11108": {
+    "titleId": "CUSA11108",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA11108_00/3/i_e574f631eec652e617032e95f7c58d0d7cd165d99a33e160f9346b3d2ea47c9a/i/icon0.png",
+    "name": "Blood & Truth",
+    "contentId": "UP9000-CUSA11108_00-0000000000000000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA11108_00_681DCBC5229227B86948EF80511DD1CD424ACF32/CUSA11108_00.json"
+  },
+  "CUSA11454": {
+    "titleId": "CUSA11454",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA11454_00/7/i_169ef1d093287361f74dca1742d389bdb94a296f8c668eed6a8ecc368fd1ba4d/i/icon0.png",
+    "name": "Control",
+    "contentId": "EP4040-CUSA11454_00-CONTROL000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA11454_00_CD3F6F4624CE9F78D24B2C81D91C734D5F44F70D/CUSA11454_00.json"
+  },
+  "CUSA11456": {
+    "titleId": "CUSA11456",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA11456_00/8/i_1e486a58daac73b20253de32d0afda01a2423e92a2134238c78c5d964c79c4f3/i/icon0.png",
+    "name": "Ghost of Tsushima",
+    "contentId": "UP9000-CUSA11456_00-GHOSTSHIP0000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA11456_00_9B514B0641E58015875ACE2280A5DDF6092B6C96/CUSA11456_00.json"
+  },
+  "CUSA11993": {
+    "titleId": "CUSA11993",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA11993_00/1/i_296e22660685ccb74b037472966f62c9a5b561c44c733bb1ab5afe7d276b3e44/i/icon0.png",
+    "name": "Marvel's Spider-Man",
+    "contentId": "EP9000-CUSA11993_00-MARVELSSPIDERMAN",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA11993_00_125EEDCD05A6F6FFB373BB2515485D3CAACD57F9/CUSA11993_00.json"
+  },
+  "CUSA12047": {
+    "titleId": "CUSA12047",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA12047_00/4/i_4b9471ab2c0407c54f814cf84f6618793b305fa5a9286a08419899177d90414b/i/icon0.png",
+    "name": "Sekiro™: Shadows Die Twice",
+    "contentId": "UP0002-CUSA12047_00-SEKIROGAME000001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA12047_00_8EB53A8BBB7C7A4E2FD1A1CCC21F7F858BC3B0E8/CUSA12047_00.json"
+  },
+  "CUSA12209": {
+    "titleId": "CUSA12209",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA12209_00/4/i_9efdf845bc2e3693cda2ca6e4f680cfcd7c95df3df87627823143578f4a30edc/i/icon0.png",
+    "name": "Truck Driver",
+    "contentId": "EP4541-CUSA12209_00-TRUCKDRIVEREU000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA12209_00_3029B28A8200EE0484754FAAB301E55EF62D2DEA/CUSA12209_00.json"
+  },
+  "CUSA12605": {
+    "titleId": "CUSA12605",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA12605_00/3/i_4118f04738699e6232be654f352839274cee9954e4d281bb7bb95e545df228c4/i/icon0.png",
+    "name": "DEATH STRANDING™",
+    "contentId": "EP9000-CUSA12605_00-DEATHSTRAND00001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA12605_00_633FB622C386F200116E60BC290B2FFA068A7CDE/CUSA12605_00.json"
+  },
+  "CUSA13946": {
+    "titleId": "CUSA13946",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA13946_00/1/i_9ead3e52553582c4d6857bb6eba4cd6e7da53b66fa462d3f99157b4cbaa76c90/i/icon0.png",
+    "name": "Borderlands® 2 VR",
+    "contentId": "EP1001-CUSA13946_00-000000000000BLVR",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA13946_00_65A219D8C639692E9E62D9FFC9F1E0F1B993CB2D/CUSA13946_00.json"
+  },
+  "CUSA14974": {
+    "titleId": "CUSA14974",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA14974_00/1/i_0f219273052dac2a2eb6fda8dcf29d0a218f64f31bdfef40a3067b9f251e80ca/i/icon0.png",
+    "name": "Wargroove",
+    "contentId": "EP2395-CUSA14974_00-WARGROOVE0000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA14974_00_1C0D65FD289D63A8CC0A7E5FFEF90B864D304334/CUSA14974_00.json"
+  },
+  "CUSA15526": {
+    "titleId": "CUSA15526",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA15526_00/1/i_82f0bc4636c3b45cd378670535ca85ffe9303852666585488b7f0f1d4e064581/i/icon0.png",
+    "name": "Nioh 2",
+    "contentId": "EP9000-CUSA15526_00-NIOH2EU000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA15526_00_666D14712AE6BCFE2B5427685BD54DC96821E607/CUSA15526_00.json"
+  },
+  "CUSA16221": {
+    "titleId": "CUSA16221",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA16221_00/1/i_5346de103a52708c12687fcc267c4e28855ff7a6e28dc1cfb0a69c9a73721645/i/icon0.png",
+    "name": "Streets of Rage 4",
+    "contentId": "EP1470-CUSA16221_00-00STREETSOFRAGE4",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA16221_00_04C8A600E7B5C74057BFCFA3D6FF2B0F403B5D6C/CUSA16221_00.json"
+  },
+  "CUSA16742": {
+    "titleId": "CUSA16742",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA16742_00/1/i_bb0b2c2738e9b5c3b5f8b87ab6ae7df5acd2cff79c964e024c35d5bbd1ca6734/i/icon0.png",
+    "name": "It Takes Two",
+    "contentId": "UP0006-CUSA16742_00-NUTSNA0000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA16742_00_51044F43E98C31DA9F17B26ABD72B16FA7A46709/CUSA16742_00.json"
+  },
+  "CUSA16990": {
+    "titleId": "CUSA16990",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA16990_00/4/i_d42b81252b06be64b924ef0e301051ce1ba9dcbc2cd9fa07019e7c73115adda9/i/icon0.png",
+    "name": "Mafia II: Definitive Edition",
+    "contentId": "UP1001-CUSA16990_00-MAFIATWOREMASTER",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA16990_00_00149290FB78EF974E9FD000ACB3963F06E0FB7B/CUSA16990_00.json"
+  },
+  "CUSA18278": {
+    "titleId": "CUSA18278",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA18278_00/2/i_df3e3ce45e584c96949a40e45ef487cffb695dbe2d0a39016e0b9975bd660d63/i/icon0.png",
+    "name": "Cyberpunk 2077",
+    "contentId": "EP4497-CUSA18278_00-00000000000000N2",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA18278_00_16034D987FD2CBC6106378A9D68F24AEDC438EC4/CUSA18278_00.json"
+  },
+  "CUSA18522": {
+    "titleId": "CUSA18522",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA18522_00/1/i_c94cb1cd122d62ab5ca20978c39ac51dd78bb703bb8deccf5d67c5e130d767be/i/icon0.png",
+    "name": "Assassin's Creed® Valhalla",
+    "contentId": "UP0001-CUSA18522_00-GAME000000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA18522_00_F39977494D36917313822D94A1EE676DA2C0667B/CUSA18522_00.json"
+  },
+  "CUSA18742": {
+    "titleId": "CUSA18742",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA18742_00/2/i_412e24bbe64600143dffb7917b3bed0d53a95d22836e83bdad5768952d0352d1/i/icon0.png",
+    "name": "NieR Replicant ver.1.22474487139...",
+    "contentId": "EP0082-CUSA18742_00-0000000000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA18742_00_623B2BA4891FDDBD8D01F372196D79D022ADD5E7/CUSA18742_00.json"
+  },
+  "CUSA19500": {
+    "titleId": "CUSA19500",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA19500_00/8/i_c9f3c14b92d6f83bdde1ce5017975544fe26d5775426a8100248f3735a92cac3/i/icon0.png",
+    "name": "Mass Effect™ Legendary Edition",
+    "contentId": "UP0006-CUSA19500_00-METR000000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA19500_00_17500AE962D49A94B97788C0D99B555C9DA9BA59/CUSA19500_00.json"
+  },
+  "CUSA20469": {
+    "titleId": "CUSA20469",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA20469_00/1/i_3fa25ceb0c4d77fb214dce8cd1ad03d339d78d5db47c4f2511260595cbb38d00/i/icon0.png",
+    "name": "Cuphead",
+    "contentId": "EP8254-CUSA20469_00-CUPHEAD000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA20469_00_3E1422DF6ADD56EA2BCFACB57B907020F550670F/CUSA20469_00.json"
+  },
+  "CUSA23079": {
+    "titleId": "CUSA23079",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA23079_00/5/i_92b201327569550fac6ba444ee01c51e0a3bb789821f82762098305aac239227/i/icon0.png",
+    "name": "Untitled Goose Game",
+    "contentId": "UP3971-CUSA23079_00-HONKHONKHONKHONK",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA23079_00_18F5819698333DD0DC247CD97A93C67C72A4F8F0/CUSA23079_00.json"
+  },
+  "CUSA24361": {
+    "titleId": "CUSA24361",
+    "ok": false,
+    "icon": "",
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA24361_00_C6356782AB2D3A175942A9732F5A37A4F24D5931/CUSA24361_00.json"
+  },
+  "CUSA24899": {
+    "titleId": "CUSA24899",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA24899_00/1/i_9d292798534ec68c44fdaed2d5822cae587aecd40087095f7b6ee446fac1f2cf/i/icon0.png",
+    "name": "Stray",
+    "contentId": "EP2333-CUSA24899_00-STRAYSIEE0000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA24899_00_50E098B8B928095A0BA719583890C973D6D1ACB3/CUSA24899_00.json"
+  },
+  "CUSA27284": {
+    "titleId": "CUSA27284",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA27284_00/6/i_fa6bd92bdd228267013acf45b757ef0bd9364b152f6af6915e0af7d80962952b/i/icon0.png",
+    "name": "Okinawa Rush",
+    "contentId": "EP1987-CUSA27284_00-6376157559899023",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA27284_00_DCA77A67AF5AD3EC081176FA0C8B947FF4D4A893/CUSA27284_00.json"
+  },
+  "CUSA30202": {
+    "titleId": "CUSA30202",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA30202_00/6/i_17329ac698e91a3e5c11efa08052bee22f10246886ea07011c88ccf28fc52cef/i/icon0.png",
+    "name": "SIFU",
+    "contentId": "UP2703-CUSA30202_00-WUGUAN0000000001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA30202_00_4F8FD491D0B31C51E5C4693A3D0B1A058BCB97BD/CUSA30202_00.json"
+  },
+  "CUSA32236": {
+    "titleId": "CUSA32236",
+    "ok": false,
+    "icon": "",
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA32236_00_AD33D5CDD786648EEE4B76BD3B1B71C94F5239F7/CUSA32236_00.json"
+  },
+  "CUSA10484": {
+    "titleId": "CUSA10484",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA10484_00/1/i_5b4acbeddf2a75de6e1ffebf01db558810f0baea2bf3aff462a09cb5b6b39ffe/i/icon0.png",
+    "name": "Dead Cells",
+    "contentId": "EP3862-CUSA10484_00-DEADCELLS0000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA10484_00_B84D5DFBD1AF8F7174D91A3558688C022E281787/CUSA10484_00.json"
+  },
+  "CUSA09311": {
+    "titleId": "CUSA09311",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA09311_00/2/i_ccb50a2a6659c60886f0d5e731d573e0d2ca2996b9b0d82739941fd86e4a3c30/i/icon0.png",
+    "name": "Assassin's Creed® Odyssey",
+    "contentId": "UP0001-CUSA09311_00-GAME000000000001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA09311_00_51994A97522603B8BEDB593D2C184F0645C2FB55/CUSA09311_00.json"
+  },
+  "CUSA00917": {
+    "titleId": "CUSA00917",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00917_00/2/i_5e63cd0f3cf11e0acb1ff41de7d07814322ab4bd09dcb5a3250aed6a3d8fc705/i/icon0.png",
+    "name": "Uncharted™ 4: A Thief’s End",
+    "contentId": "EP9000-CUSA00917_00-UNCHARTED4000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00917_00_57152CFDEC4883A205158FCFF70827600145B96D/CUSA00917_00.json"
+  },
+  "CUSA00785": {
+    "titleId": "CUSA00785",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00785_00/1/i_f21119859b7ed7af6d975270407d20431a14291c5ec6854a8eed8a629fde32fa/i/icon0.png",
+    "name": "The Order: 1886",
+    "contentId": "UP9000-CUSA00785_00-TO1886GAME000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00785_00_DA02D2357205754ABB59D04E210FCF280777DCFF/CUSA00785_00.json"
+  },
+  "CUSA43005": {
+    "titleId": "CUSA43005",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA43005_00/1/i_e5202693b7a518164f7d3522eb30241434f7edc72b1fa43214d88b662282ab0a/i/icon0.png",
+    "name": "Visions of Mana",
+    "contentId": "EP0082-CUSA43005_00-VOMPS4EU00000001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA43005_00_39BA162CB749F73FB51150A4117178C7172577CE/CUSA43005_00.json"
+  },
+  "CUSA04402": {
+    "titleId": "CUSA04402",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA04402_00/4/i_104ac8e1b4e4e700ac38bff7103b9a3625959a28797b01db7d9935cbebc51160/i/icon0.png",
+    "name": "Middle-earth™: Shadow of War™",
+    "contentId": "EP1018-CUSA04402_00-SHADOWOFMORDOR02",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA04402_00_C65A134156363C633B0C51F99AAC26F1F27F8A6F/CUSA04402_00.json"
+  },
+  "CUSA46721": {
+    "titleId": "CUSA46721",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA46721_00/4/i_fa029f1d4e93cff5d66d5d0d6b281c2a47c26e1ebb27cbed16d8ad587d18964b/i/icon0.png",
+    "name": "Shadow of The Ninja",
+    "contentId": "JP0221-CUSA46721_00-0182626413832756",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA46721_00_BEE319A103D397D3F010BA0F95ED9E79901F4574/CUSA46721_00.json"
+  },
+  "CUSA01511": {
+    "titleId": "CUSA01511",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA01511_00/1/i_5a394b605b2c7d7bf952ec158387fd380ecdd47da4c0621d4d7a5a77da79bc59/i/icon0.png",
+    "name": "Everybody's Gone To The Rapture™",
+    "contentId": "EP9000-CUSA01511_00-GONETOTHERAPTURE",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA01511_00_48FF38E3BE6A1129E5FE83955D0A7A9AE6C81089/CUSA01511_00.json"
+  },
+  "CUSA11638": {
+    "titleId": "CUSA11638",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA11638_00/3/i_3c999044c6e14177121164b4ab48d4750b58197c8c5a74781dcb00a7b972a18f/i/icon0.png",
+    "name": "JUMP FORCE",
+    "contentId": "EP0700-CUSA11638_00-JUMP50THANNIV000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA11638_00_B471310774B03856E577DE5776AB6DEF664DAF6B/CUSA11638_00.json"
+  },
+  "CUSA33393": {
+    "titleId": "CUSA33393",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA33393_00/2/i_92bee757efafa80e2fc77372585e1b038603e4bcca2855c47e6d9f3c15c5b12e/i/icon0.png",
+    "name": "Fate/Samurai Remnant",
+    "contentId": "UP4108-CUSA33393_00-GAME000000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA33393_00_5B5C6C25BB586144CCDE4FC4C3552C2D443EA7C8/CUSA33393_00.json"
+  },
+  "CUSA10812": {
+    "titleId": "CUSA10812",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA10812_00/3/i_a4d09cfb51b390c3d5f3ea77531bc847294e59386ed520f6edeb6ef377a3b4d7/i/icon0.png",
+    "name": "A Plague Tale: Innocence",
+    "contentId": "EP4133-CUSA10812_00-APLAGUETALEGAME0",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA10812_00_A7A2D0B319980EC28935ACD7D27C7765E7823C95/CUSA10812_00.json"
+  },
+  "CUSA12320": {
+    "titleId": "CUSA12320",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA12320_00/5/i_bd73fd669ba3b8e701b12727776373059c30702b4f94acffc699c574d3ad5a43/i/icon0.png",
+    "name": "WWE 2K19",
+    "contentId": "EP1001-CUSA12320_00-WWE2K19000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA12320_00_E1BD1AA13152583E0A5EA0129A5284695B62CD54/CUSA12320_00.json"
+  },
+  "CUSA03952": {
+    "titleId": "CUSA03952",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA03952_00/1/i_d77a86670e6897af1314b1190f51cffe92ef4130eff076982e04d4dc5f9b37e4/i/icon0.png",
+    "name": "No Man's Sky",
+    "contentId": "EP2034-CUSA03952_00-NOMANSSKYHG00001",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA03952_00_F4DED53D56AB4F250B23B717CD91EAF7733F161E/CUSA03952_00.json"
+  },
+  "CUSA02290": {
+    "titleId": "CUSA02290",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA02290_00/6/i_3b7d0c899abe5b1f2b06ba89a33adb034f02ecc00152473a8eee4ef92ebbf014/i/icon0.png",
+    "name": "Call of Duty®: Black Ops III",
+    "contentId": "UP0002-CUSA02290_00-BLACKOPS3GAME000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA02290_00_24AEF4EBA2B0A7A1558E32412643DE673073D537/CUSA02290_00.json"
+  },
+  "CUSA08809": {
+    "titleId": "CUSA08809",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA08809_00/1/i_7981e1aa3c69c44a3b07ea68fdf6b1163d8444d157277cb24d88854bc416b405/i/icon0.png",
+    "name": "SHADOW OF THE COLOSSUS™",
+    "contentId": "EP9000-CUSA08809_00-SOTC0000000000EU",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA08809_00_4669A0B532DD81864F69129EE4F7A13EF71C8BF4/CUSA08809_00.json"
+  },
+  "CUSA08216": {
+    "titleId": "CUSA08216",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA08216_00/3/i_8671c05b6f38837c25fb50b6fa9efa60de05847f4fe6c3ca96d2781cc262c23d/i/icon0.png",
+    "name": "Devil May Cry 5",
+    "contentId": "UP0102-CUSA08216_00-DMC5000000000001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA08216_00_43D9EF6CA7969C7BD13F57D0443A4E650B7E2EEF/CUSA08216_00.json"
+  },
+  "CUSA42378": {
+    "titleId": "CUSA42378",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA42378_00/2/i_ae9d14d6d0c0968a24c322fed8941742d6e8947d6a99ef803970076290a316da/i/icon0.png",
+    "name": "Contra: Operation Galuga",
+    "contentId": "EP0101-CUSA42378_00-GALUGA00PS4EU000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA42378_00_F098825CA4C461C6B5B2FCAAB55BD88A7D15D89C/CUSA42378_00.json"
+  },
+  "CUSA05969": {
+    "titleId": "CUSA05969",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA05969_00/5/i_9f32719f8f3cf2ff595cc147b3b703da914546ad44683298799b4083ec049f98/i/icon0.png",
+    "name": "Call of Duty®: WWII",
+    "contentId": "UP0002-CUSA05969_00-CODWWIITHEGAME01",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA05969_00_0B161796CF5BBF868A998ADF92DE7DF1E933D639/CUSA05969_00.json"
+  },
+  "CUSA14496": {
+    "titleId": "CUSA14496",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA14496_00/3/i_cae0b51a5592b0e7fbbcb9df94aaf7defb3c58e1a80db36e6e8fa5294589307d/i/icon0.png",
+    "name": "Journey To The Savage Planet",
+    "contentId": "EP4040-CUSA14496_00-JOURNEYSAVAGEPUS",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA14496_00_4E35A0E4F9193FA831105F076EB72544F7EEBF13/CUSA14496_00.json"
+  },
+  "CUSA12772": {
+    "titleId": "CUSA12772",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA12772_00/2/i_f74905117388ba029fb4698a42d1164219b8aef93f2eceb9a13e7641ddfa35cc/i/icon0.png",
+    "name": "Arise: A simple story",
+    "contentId": "EP2911-CUSA12772_00-ARISETHEGAME00EU",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA12772_00_8EC14B0E077B2E784631FB7C469457E07A20216F/CUSA12772_00.json"
+  },
+  "CUSA18201": {
+    "titleId": "CUSA18201",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA18201_00/6/i_ad7cc5f2ebe7453ef5691f1416130fd56bcc1797ff55fedad38be665da4cf632/i/icon0.png",
+    "name": "HITMAN 3",
+    "contentId": "UP4572-CUSA18201_00-HITMANGAME000003",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA18201_00_2966E5A4C0AA4952B16F72E9CD1044D8D69A5FEF/CUSA18201_00.json"
+  },
+  "CUSA01742": {
+    "titleId": "CUSA01742",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA01742_00/2/i_d9eb6e5026763356bf20cbeb09fb65d9b11b4a9f5d42aad6be7214c098c7d105/i/icon0.png",
+    "name": "ONE PIECE: PIRATE WARRIORS 3",
+    "contentId": "EP0700-CUSA01742_00-PROJECTOP3EU0000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA01742_00_D20A9014FEE9A1D24D564154005B4BA53652D8E8/CUSA01742_00.json"
+  },
+  "CUSA23393": {
+    "titleId": "CUSA23393",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA23393_00/2/i_68ee50dc56f06d625dfb326a75a4bb589880f6b401031f61a0dd8d959ea30401/i/icon0.png",
+    "name": "Arkham Horror: Mother's Embrace",
+    "contentId": "EP4917-CUSA23393_00-7740686034422932",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA23393_00_124D23357CE4BBA10B580840EBF7EA181E5B4BBC/CUSA23393_00.json"
+  },
+  "CUSA15010": {
+    "titleId": "CUSA15010",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA15010_00/2/i_b0b66413a37dc17e5590f043a8763300c041508119c40557aaf9aa5ae67d7e2b/i/icon0.png",
+    "name": "Call of Duty®: Black Ops Cold War",
+    "contentId": "UP0002-CUSA15010_00-CODCWTHEGAME0001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA15010_00_9E5EF084BC1F8DBF3EBFE2CA0242895B516A8221/CUSA15010_00.json"
+  },
+  "CUSA34460": {
+    "titleId": "CUSA34460",
+    "ok": false,
+    "icon": "",
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA34460_00_854442C14F7CDDFD2480CF9A344FC281AF192E78/CUSA34460_00.json"
+  },
+  "CUSA00018": {
+    "titleId": "CUSA00018",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00018_00/3/i_0667f190e148f4309f44586aa02cf9f278ab1021f2d8e8c900a947beab66a24e/i/icon0.png",
+    "name": "Call of Duty® Ghosts",
+    "contentId": "UP0002-CUSA00018_00-CALLDUTYGHOSTSDL",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00018_00_271EBFB8E75DB3DD1894D30C5EBF3048180A9FB2/CUSA00018_00.json"
+  },
+  "CUSA05369": {
+    "titleId": "CUSA05369",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA05369_00/2/i_a8d8bd9753e31a48ddadade919fd2bb0155209ab9dcbb574764a983ad8f008ea/i/icon0.png",
+    "name": "Call of Duty®: Infinite Warfare",
+    "contentId": "UP0002-CUSA05369_00-CODIWTHEGAME0001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA05369_00_EDDE5D15EE2E0DF5BD98C926BCAB90C31C8AE86B/CUSA05369_00.json"
+  },
+  "CUSA05987": {
+    "titleId": "CUSA05987",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA05987_00/1/i_8794a0bb00fac76613b96a725c77c6d7a5d01811a781af776e41df13faad92b4/i/icon0.png",
+    "name": "Death's Gambit",
+    "contentId": "EP0149-CUSA05987_00-DEATHSGAMBITEU00",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA05987_00_A049697CC1EB560B65C02862C87BFD5A17A9308A/CUSA05987_00.json"
+  },
+  "CUSA03220": {
+    "titleId": "CUSA03220",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA03220_00/2/i_80ee597bcb8a1aa1f99fcdf7cb51d87d85b84f9e43e1a282e313926dcbdcfcbc/i/icon0.png",
+    "name": "Gran Turismo®SPORT",
+    "contentId": "UP9000-CUSA03220_00-GTSPORT000000000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA03220_00_B35408B8C790ED46F5D8D7FE6647CD1031B6384B/CUSA03220_00.json"
+  },
+  "CUSA20221": {
+    "titleId": "CUSA20221",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA20221_00/5/i_6add61dcf7e34635b84880345f8f1fbbdbfbde5c2157f0ec5cc0014abe4064dc/i/icon0.png",
+    "name": "Chorus",
+    "contentId": "EP4062-CUSA20221_00-CHORUSGAMEEUR000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA20221_00_AADF2D78EAAE1C8092A31E339EF995EC56A3B0FB/CUSA20221_00.json"
+  },
+  "CUSA10960": {
+    "titleId": "CUSA10960",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA10960_00/2/i_5f3957cbc83bf8a4755784e61f44bad551dbcb6890cc3e1b1ce93fe3deae2427/i/icon0.png",
+    "name": "Hello Neighbor",
+    "contentId": "EP0096-CUSA10960_00-HELLONEIGHBOR4EU",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA10960_00_821EC0EE123CAC071B7DEF062AA3A875334E037E/CUSA10960_00.json"
+  },
+  "CUSA19234": {
+    "titleId": "CUSA19234",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA19234_00/1/i_04c47c61950412e634deca2988393588fc803b0008e7a661799367ada906e50d/i/icon0.png",
+    "name": "Star Wars: Republic Commando",
+    "contentId": "EP1875-CUSA19234_00-STARWARSCOMMANDO",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA19234_00_C61D1594C101BFCC57A2F10773C4DD675A303085/CUSA19234_00.json"
+  },
+  "CUSA00049": {
+    "titleId": "CUSA00049",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00049_00/3/i_3836dd7afcf43e5ec1e276f0db327ada1fc7d63fbda8e701aebc73fa29446b54/i/icon0.png",
+    "name": "Battlefield 4™",
+    "contentId": "EP0006-CUSA00049_00-BATTLEFIELD40000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00049_00_55CB2689E94A242289DF523C312B921054B7A1AD/CUSA00049_00.json"
+  },
+  "CUSA00002": {
+    "titleId": "CUSA00002",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00002_00/6/i_2f38547845ff4d6814383c59be221436c610b7bd29fcd02e40afdf3b218c62bb/i/icon0.png",
+    "name": "KILLZONE™ SHADOW FALL",
+    "contentId": "EP9000-CUSA00002_00-KZ4RELEASE000041",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00002_00_A3767EECD8B204226876BB62172E570941F51B35/CUSA00002_00.json"
+  },
+  "CUSA06291": {
+    "titleId": "CUSA06291",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA06291_00/4/i_1f386497f4e8a7d434b0ac33cf620d0edb4533de0794ad05d5d2ad3ec4f83455/i/icon0.png",
+    "name": "NARUTO SHIPPUDEN: Ultimate Ninja STORM TRILOGY",
+    "contentId": "EP0700-CUSA06291_00-NARUTOUNST000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA06291_00_FA9BE60DF2AA69C1E029584524CDF6BF58F90A34/CUSA06291_00.json"
+  },
+  "CUSA00642": {
+    "titleId": "CUSA00642",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00642_00/1/i_7e6035fe8bde201d711e0a5090ebe1ad5e5607cf2b4499b870c3204fc04e082f/i/icon0.png",
+    "name": "Transistor",
+    "contentId": "EP4484-CUSA00642_00-TRANSISTORGAME00",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00642_00_4AB53B9667A5D6D3BB24247076670D3E63FDF3FF/CUSA00642_00.json"
+  },
+  "CUSA03980": {
+    "titleId": "CUSA03980",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA03980_00/2/i_02f3ad1e60736ece01adb4bb37d389c4677af74cef5de2ca0ed5cff915bb5663/i/icon0.png",
+    "name": "Bioshock Infinite: The Complete Edition",
+    "contentId": "UP1001-CUSA03980_00-BIOSHOCKCOMPLETE",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA03980_00_9FBCF80505A60EF90D1EB16D5DE133A5C47F545D/CUSA03980_00.json"
+  },
+  "CUSA04301": {
+    "titleId": "CUSA04301",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA04301_00/3/i_b9034427c0efc5d83521b3e95de7d0c0478b27e760c9b99cfef078e5319e1f99/i/icon0.png",
+    "name": "Dreams™",
+    "contentId": "EP9000-CUSA04301_00-DREAMS0000000000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA04301_00_A5C38D43A5358992FDDAA427C9742B2C68CF1C7D/CUSA04301_00.json"
+  },
+  "CUSA41300": {
+    "titleId": "CUSA41300",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA41300_00/5/i_7b7829dd20407926887fbfc75fb16c564f353bede5e4ae42a216d8c94101db5d/i/icon0.png",
+    "name": "METAL GEAR SOLID - Master Collection Version",
+    "contentId": "EP0101-CUSA41300_00-METALGEARSOLID01",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA41300_00_38FEE8BF34E8FF84CB465EC7DF88CA32E3574B46/CUSA41300_00.json"
+  },
+  "CUSA41303": {
+    "titleId": "CUSA41303",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA41303_00/5/i_8c4374924e4be4012b306d157f3a2c5f18c4f347678d2882837dd866fdfd4172/i/icon0.png",
+    "name": "METAL GEAR SOLID 2: Sons of Liberty - Master Collection Version",
+    "contentId": "EP0101-CUSA41303_00-METALGEARSOLID02",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA41303_00_508CB3FD66BBCBD01D1E412FE9AB11BE1D85BB13/CUSA41303_00.json"
+  },
+  "CUSA41305": {
+    "titleId": "CUSA41305",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA41305_00/4/i_5e0e9d11bd7bd33cccc05afdbfba023c2126b114aaf7a2d53836e9eebfc05eab/i/icon0.png",
+    "name": "METAL GEAR SOLID 3: Snake Eater - Master Collection Version",
+    "contentId": "EP0101-CUSA41305_00-METALGEARSOLID03",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA41305_00_CC83D7D35589A22BAD842900B209D60A5E3881FA/CUSA41305_00.json"
+  },
+  "CUSA41307": {
+    "titleId": "CUSA41307",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA41307_00/5/i_298fb93aee2fb7ffe54968cbd17c6c6de7345c40be88a7a696deb4a0ce007c4e/i/icon0.png",
+    "name": "Metal Gear & Metal Gear 2: Solid Snake",
+    "contentId": "EP0101-CUSA41307_00-METALGEAR1AND2PS",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA41307_00_C08121002A615A82EE3D6541911B0D6BBA56F81E/CUSA41307_00.json"
+  },
+  "CUSA02974": {
+    "titleId": "CUSA02974",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA02974_00/1/i_1504a1f3f77498945a6e2aa28edcb04d71825f866f9c3fd87acb23df67be8746/i/icon0.png",
+    "name": "HELLDIVERS™",
+    "contentId": "EP9000-CUSA02974_00-HELLDIVERSSCEE00",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA02974_00_07FB7A94B5CA3B8A049DF1EB751D5D23FCABD0C3/CUSA02974_00.json"
+  },
+  "CUSA10123": {
+    "titleId": "CUSA10123",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA10123_00/3/i_80ff04b481efdfa0e3614377de51a80034d740bdb420cb28d32c324a4ee78bd3/i/icon0.png",
+    "name": "Assassin's Creed® Rogue Remastered",
+    "contentId": "EP0001-CUSA10123_00-ACRGAMEPS4000001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA10123_00_157B72390F983F6E91D4479600EF988FAA444EA4/CUSA10123_00.json"
+  },
+  "CUSA05625": {
+    "titleId": "CUSA05625",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA05625_00/3/i_1918d4f78a3ed7521b7936984d525927a03a03e241bdd3d748bfd23c104d45db/i/icon0.png",
+    "name": "Assassin's Creed® Origins",
+    "contentId": "EP0001-CUSA05625_00-GAMEACEMPIRE0000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA05625_00_069F4865ABE81B54B5108962943E1DFAE73DBE89/CUSA05625_00.json"
+  },
+  "CUSA07995": {
+    "titleId": "CUSA07995",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA07995_00/2/i_bf9451994583c160b23f72d11b5c28cdf341e271b35509d51696c3d833fb650b/i/icon0.png",
+    "name": "A Way Out",
+    "contentId": "UP0006-CUSA07995_00-AWAYOUTUS0000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA07995_00_19A38E389E155E223352C01B39D54B063CFA0292/CUSA07995_00.json"
+  },
+  "CUSA27387": {
+    "titleId": "CUSA27387",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA27387_00/4/i_7e410f059181c2aec01500824dcd244caf0bac1deb56a20d8c1ab231f5acf9e5/i/icon0.png",
+    "name": "Hades",
+    "contentId": "UP2125-CUSA27387_00-HADESGAME0038047",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA27387_00_96A5F7C6FBAED082A8D939C4EA2D720DCF8AAC60/CUSA27387_00.json"
+  },
+  "CUSA20311": {
+    "titleId": "CUSA20311",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA20311_00/6/i_94365d92c7eb119f95a851a8fd97ded2293fb9dde7d303a9d536a16a3232a8a2/i/icon0.png",
+    "name": "Praey For the Gods",
+    "contentId": "UP1880-CUSA20311_00-PRAEYFORTHEGODS1",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA20311_00_B6EA6475FB17640C8068814D616A450BE838F912/CUSA20311_00.json"
+  },
+  "CUSA23369": {
+    "titleId": "CUSA23369",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA23369_00/5/i_17e921c24c822bc579deda3e979712e15556bb53db9c1eb3060ccc4b8b945e8f/i/icon0.png",
+    "name": "Call Of The Sea",
+    "contentId": "UP2320-CUSA23369_00-CALLOFTHESEA0000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA23369_00_9AC8C38F625BE556CEBBE16BBF5A54420A928AFD/CUSA23369_00.json"
+  },
+  "CUSA16206": {
+    "titleId": "CUSA16206",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA16206_00/2/i_f6a4da5c2fb52c81e9fa39977d84dd2b18d751cdf9beac49cfa4fd2509b38e9d/i/icon0.png",
+    "name": "Marvel's Iron Man VR",
+    "contentId": "EP9000-CUSA16206_00-MIMVRGAME0000001",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA16206_00_ACCD9DA3AEC6E9A176AB6C830127061AAB9BC9D3/CUSA16206_00.json"
+  },
+  "CUSA12392": {
+    "titleId": "CUSA12392",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA12392_00/2/i_818579af055d4af04f9b4de5bd132cedcb840acf63c0da0834c10f1220827f08/i/icon0.png",
+    "name": "ASTRO BOT Rescue Mission",
+    "contentId": "EP9000-CUSA12392_00-PLATFORMERVR00EU",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA12392_00_B95398990BA54F28E3CEB85132300A4DFDC79351/CUSA12392_00.json"
+  },
+  "CUSA15089": {
+    "titleId": "CUSA15089",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA15089_00/3/i_d4f81c9cf20ed6c7fa1183932180361cb620a7dc45d9916fc35f5a3296f059da/i/icon0.png",
+    "name": "STAR WARS™: Squadrons",
+    "contentId": "EP0006-CUSA15089_00-MAVERICK00000000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA15089_00_D9554FADDBF8BF214E922B1EEA96A6C93A2797DD/CUSA15089_00.json"
+  },
+  "CUSA06561": {
+    "titleId": "CUSA06561",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA06561_00/5/i_5d5ca08f3467d3631513d206fd97623818997f85dc8d6233d7ab10c1c104567b/i/icon0.png",
+    "name": "Keep Talking and Nobody Explodes",
+    "contentId": "EP0633-CUSA06561_00-KTANEBOMBGAME001",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA06561_00_93215D8B3C82623D0B67C0C260C46ADA9F503721/CUSA06561_00.json"
+  },
+  "CUSA08165": {
+    "titleId": "CUSA08165",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA08165_00/11/i_6f7f3a611b01b0632357853248bc350daf8f58c760b20d91c48e481d9401bb33/i/icon0.png",
+    "name": "SUPERHOT VR",
+    "contentId": "EP2477-CUSA08165_00-EUSUPERHOTVRGAME",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA08165_00_BA40EB9464AA59E2473CD1E3AE3BF2080E3E9A52/CUSA08165_00.json"
+  },
+  "CUSA05761": {
+    "titleId": "CUSA05761",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA05761_00/4/i_f32effd1248cce45a393b93630cb707b0d2b5af8607bc3a2e15f5b8efb4f07ee/i/icon0.png",
+    "name": "Star Trek™: Bridge Crew",
+    "contentId": "EP0001-CUSA05761_00-STARTREKBRGCRW01",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA05761_00_528BA6AEE163F0BA7549A6A0C0A7050A70A0944D/CUSA05761_00.json"
+  },
+  "CUSA01015": {
+    "titleId": "CUSA01015",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA01015_00/3/i_46a63e02581b254dbaa76d990ac4c680f6b0e7aa8cedac83c486da87e59c6da1/i/icon0.png",
+    "name": "YouTube",
+    "contentId": "UP4381-CUSA01015_00-YOUTUBESCEA00000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA01015_00_410C06035DC20D21E2F3435E5E310C42F4C1C50A/CUSA01015_00.json"
+  },
+  "CUSA09760": {
+    "titleId": "CUSA09760",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA09760_00/7/i_338a259cb826132ea2f81c8fc6658ccbff7769e8273e80718e8b523a75ebb1ac/i/icon0.png",
+    "name": "Moss",
+    "contentId": "EP1966-CUSA09760_00-MOSSGAME00000000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA09760_00_18985735A70601FDBBF7D4C7F3EFD97726D941EC/CUSA09760_00.json"
+  },
+  "CUSA07814": {
+    "titleId": "CUSA07814",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA07814_00/9/i_a4cd04375be75eb6e2d56f3ec80ddee6066637669bd3afc36db2584a75969491/i/icon0.png",
+    "name": "The Persistence",
+    "contentId": "EP3393-CUSA07814_00-FRONTIER25202048",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA07814_00_5E7574884FFB7865245000C3EE98DFB622A5DE84/CUSA07814_00.json"
+  },
+  "CUSA18723": {
+    "titleId": "CUSA18723",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA18723_00/2/i_f124f803d998f5ca64d0c849cb9963b1f5943fff89e037aeb6404569b2e35cc2/i/icon0.png",
+    "name": "ELDEN RING™",
+    "contentId": "EP0700-CUSA18723_00-ELDENRING0000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA18723_00_872A24C8AE7FC3564364223FB74861735812C6BF/CUSA18723_00.json"
+  },
+  "CUSA27601": {
+    "titleId": "CUSA27601",
+    "ok": false,
+    "icon": "",
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA27601_00_873B05BDDEB75177EDACC3523AEF731E390B2C1D/CUSA27601_00.json"
+  },
+  "CUSA28394": {
+    "titleId": "CUSA28394",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA28394_00/1/i_6f080febe7af8bf2c8f8eed1c452ec10e254a3282cd12c1e4fcf7c8b8486fdeb/i/icon0.png",
+    "name": "RetroMania Wrestling",
+    "contentId": "EP8053-CUSA28394_00-APP0990000000022",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA28394_00_7B80F711C1EF4873278D2FB64132A07A798615BD/CUSA28394_00.json"
+  },
+  "CUSA05344": {
+    "titleId": "CUSA05344",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA05344_00/1/i_b400cc69efbff507fac4cd8c3e25b9ee606bb0f059eefbfa50f447197ca1bdc1/i/icon0.png",
+    "name": "Here They Lie",
+    "contentId": "EP9000-CUSA05344_00-DANA000PS4000123",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA05344_00_AC5E8435D29C7589980D6931F061C5C4741B791C/CUSA05344_00.json"
+  },
+  "CUSA41367": {
+    "titleId": "CUSA41367",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA41367_00/7/i_a3b8771d7073453143901a228a64a6f79e914e86142ac5c77b3338dbb47c84ab/i/icon0.png",
+    "name": "Star Trek: Resurgence",
+    "contentId": "EP5376-CUSA41367_00-0239678238229431",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA41367_00_8FBB8BA6A9BF486A899DBD1CCC43EDF8D4BFB6C2/CUSA41367_00.json"
+  },
+  "CUSA23767": {
+    "titleId": "CUSA23767",
+    "ok": false,
+    "icon": "",
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA23767_00_452CD3474D0268EE95E998A58AFC664AECFAC603/CUSA23767_00.json"
+  },
+  "CUSA03200": {
+    "titleId": "CUSA03200",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA03200_00/2/i_273b41692c98f1804daf6b9b7ab672a1632ded741b8d43bfa6a36c2ae797046f/i/icon0.png",
+    "name": "SOMA",
+    "contentId": "EP1188-CUSA03200_00-HPL3SOMAGAME2015",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA03200_00_5CC5E391FBFB3FC1457E4C57EFE3BE3B3C8AAC64/CUSA03200_00.json"
+  },
+  "CUSA04179": {
+    "titleId": "CUSA04179",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA04179_00/7/i_a242418f98e198bf2e1204131a3f304ae02b49191c2d69af8bf536275af3b60a/i/icon0.png",
+    "name": "Farpoint",
+    "contentId": "UP9000-CUSA04179_00-0000000000000000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA04179_00_3873FF4B2ED18B56F13090F9C51B73BE87965A17/CUSA04179_00.json"
+  },
+  "CUSA18828": {
+    "titleId": "CUSA18828",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA18828_00/6/i_26b598885c119c4e36893751c11ccc918247a5f18527acaf92a593c414ac1495/i/icon0.png",
+    "name": "Crisis Brigade 2 reloaded",
+    "contentId": "EP4826-CUSA18828_00-0000000000000001",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA18828_00_C34BAFD62088EC788C4C6FAE9AC4DDD74AC2BDC3/CUSA18828_00.json"
+  },
+  "CUSA28037": {
+    "titleId": "CUSA28037",
+    "ok": false,
+    "icon": "",
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA28037_00_138CE9EFA81240F0FCB4EBD0E946BEDB0852B2B7/CUSA28037_00.json"
+  },
+  "CUSA06212": {
+    "titleId": "CUSA06212",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA06212_00/3/i_5c40c16831bf372318270df308be9323f27a9190542c8f5da4f18d0c0cc58cfb/i/icon0.png",
+    "name": "RESIDENT EVIL REVELATIONS",
+    "contentId": "EP0102-CUSA06212_00-RERHDPS400000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA06212_00_13F26E254798255BF054D24441F7919E1E7C315E/CUSA06212_00.json"
+  },
+  "CUSA02902": {
+    "titleId": "CUSA02902",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA02902_00/2/i_17fc0a03a947fbd492cec4f25edcf0c32fdefb225b7cccc0ca7a87db210814e5/i/icon0.png",
+    "name": "Tom Clancy's Ghost Recon® Wildlands",
+    "contentId": "UP0001-CUSA02902_00-GRWNCSANORMAL000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA02902_00_2F427224AB15BCB457F8A4652DE9CB059EA3A605/CUSA02902_00.json"
+  },
+  "CUSA00223": {
+    "titleId": "CUSA00223",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00223_00/1/i_24084e44dd3655bb21a6f6b0296b16fc96037790973cc52b3459336bde8869c7/i/icon0.png",
+    "name": "inFAMOUS Second Son™",
+    "contentId": "UP9000-CUSA00223_00-SECONDSONSHIP000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00223_00_1F138415827E64B10BF4C6D21F41E100FBA891A1/CUSA00223_00.json"
+  },
+  "CUSA03648": {
+    "titleId": "CUSA03648",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA03648_00/8/i_c6484f1a0491f91cf16fa80aa684387f389190783ed32ee2ec24b1d8c437a0ff/i/icon0.png",
+    "name": "DiRT Rally",
+    "contentId": "EP4001-CUSA03648_00-DIRTRALLYLABELNA",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA03648_00_ED5859ADA3A84CAEA5977546B633DFD472EFD22B/CUSA03648_00.json"
+  },
+  "CUSA06297": {
+    "titleId": "CUSA06297",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA06297_00/5/i_ff6fe45cd6e57b5d1439c22b9c877e3553c8de3ce82cb18dc0c993cf2e839d37/i/icon0.png",
+    "name": "Headmaster",
+    "contentId": "EP0944-CUSA06297_00-HEADMASTER100000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA06297_00_F86F557DB608C76F388978FCEC292659501244D8/CUSA06297_00.json"
+  },
+  "CUSA07210": {
+    "titleId": "CUSA07210",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA07210_00/5/i_0410805db9373cc705488a123ff237278bd1720830f7204d0df9465f99bbb2c7/i/icon0.png",
+    "name": "EVEREST VR",
+    "contentId": "EP3085-CUSA07210_00-EVERESTVRREL1001",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA07210_00_64AFD682E52EBC4B77FECAC836F4FE7393012992/CUSA07210_00.json"
+  },
+  "CUSA01623": {
+    "titleId": "CUSA01623",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA01623_00/3/i_4235c8b4ed044602c9aa3eb7c9d6de5b7bf78e16692636bb7c548b45d60e1705/i/icon0.png",
+    "name": "God of War® III Remastered",
+    "contentId": "UP9000-CUSA01623_00-0000GODOFWAR3PS4",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA01623_00_0AB054EFEA3CEAA65D56BB77DA439309FF1F99C7/CUSA01623_00.json"
+  },
+  "CUSA04841": {
+    "titleId": "CUSA04841",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA04841_00/2/i_97f6e7571212e107b69cc96ba0517213941f97e3d54d9e7b9ff660e5ba1cd94b/i/icon0.png",
+    "name": "No Man's Sky",
+    "contentId": "UP2034-CUSA04841_00-NOMANSSKYHG00001",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA04841_00_FDA5467C41C948A625F7D01766C51161CA084F6C/CUSA04841_00.json"
+  },
+  "CUSA43172": {
+    "titleId": "CUSA43172",
+    "ok": false,
+    "icon": "",
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA43172_00_5CFD4CACBE539E88A331EC8700F23EBB49DA7597/CUSA43172_00.json"
+  },
+  "CUSA00552": {
+    "titleId": "CUSA00552",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00552_00/10/i_3a8109a7e1cd48c2be2d516eaafde9be30d63416b51a720f65af871bc536e541/i/icon0.png",
+    "name": "The Last of Us™ Remastered",
+    "contentId": "UP9000-CUSA00552_00-THELASTOFUS00000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00552_00_E7BAFAAE7C1EA90646909FAFE7BB99D753A5A966/CUSA00552_00.json"
+  },
+  "CUSA28551": {
+    "titleId": "CUSA28551",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA28551_00/16/i_d5b44b80f09b25299fa4f11aab5f0e551d3bc75929b1aec3338fd37b43ea3fb6/i/icon0.png",
+    "name": "Wanderer",
+    "contentId": "EP5977-CUSA28551_00-4146881205642323",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA28551_00_CBF5889EFCAA0EFD7180B9709A1D60438CFE2CF3/CUSA28551_00.json"
+  },
+  "CUSA05670": {
+    "titleId": "CUSA05670",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA05670_00/4/i_beffa79c56bc9363b7049df6a2006892d8f2507db27f7abc79c452486f2f2c18/i/icon0.png",
+    "name": "WIPEOUT™ OMEGA COLLECTION",
+    "contentId": "EP9000-CUSA05670_00-WIPEOUTOMEGA00EU",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA05670_00_0F496506D3D69D607CB946CBFDC477C73F56AC2D/CUSA05670_00.json"
+  },
+  "CUSA00960": {
+    "titleId": "CUSA00960",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00960_00/2/i_d1c766202f90d7749a1dfeaf434d327c1d66531aafaf3e266f2ff514585b8c43/i/icon0.png",
+    "name": "PlayStation™Vue",
+    "contentId": "UT0016-CUSA00960_00-COBRAPCKGE000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00960_00_17690432BE4B9D3B0D786FFF32FB6200BDACE88D/CUSA00960_00.json"
+  },
+  "CUSA11407": {
+    "titleId": "CUSA11407",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA11407_00/2/i_e46ce2ddd1957c71c5e0a8a2a6e6aa00e4c211d0ccdf50a2cc901e0234214fc1/i/icon0.png",
+    "name": "Metro Exodus",
+    "contentId": "EP4062-CUSA11407_00-METROEXODUS00000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA11407_00_B5F2E3C8FCBF5E983DD26044233B95F0C688833D/CUSA11407_00.json"
+  },
+  "CUSA05202": {
+    "titleId": "CUSA05202",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA05202_00/4/i_bfad7ef1a38846ae5ff98b6fcd5b5604cab1c50e61dbcda78122bf4a6c323457/i/icon0.png",
+    "name": "PlayStation® VR WORLDS",
+    "contentId": "UP9000-CUSA05202_00-EVT1100000000000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA05202_00_A8691630FA4A2D41A0C559F108572762DC5F3E75/CUSA05202_00.json"
+  },
+  "CUSA02172": {
+    "titleId": "CUSA02172",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA02172_00/1/i_b7b3266a0603dbcbe52afc358de6b4117ba9d9ad8f8b4dab7ecb2e8ee5ec3f12/i/icon0.png",
+    "name": "Journey™ Collector’s Edition",
+    "contentId": "EP9000-CUSA02172_00-JOURNEYCOLHD0001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA02172_00_74C6A6AA95AD5EA20FB5185D804657CD35007049/CUSA02172_00.json"
+  },
+  "CUSA04107": {
+    "titleId": "CUSA04107",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA04107_00/4/i_75d5aafdd98caa72ef6816e88e2e6e766c50b4c6158ff8f48cc5d15f8e3a9126/i/icon0.png",
+    "name": "Firewatch",
+    "contentId": "UP0146-CUSA04107_00-FIREWATCH0000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA04107_00_166C60AD4D790FB6A360E958A925A59F89793D94/CUSA04107_00.json"
+  },
+  "CUSA00640": {
+    "titleId": "CUSA00640",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA00640_00/4/i_cbcd9a19c4e7d9e3857d882cc37ba7950ff0d508c4d10f4a076c16a048c27af6/i/icon0.png",
+    "name": "STAR WARS™ Battlefront™",
+    "contentId": "UP0006-CUSA00640_00-BATTLEFRONT00000",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA00640_00_B8C993A99FC37BA2CD49CBD57255FED1222B039E/CUSA00640_00.json"
+  },
+  "CUSA03694": {
+    "titleId": "CUSA03694",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA03694_00/3/i_c146c98e3e07f65b4e270f311db9363290b602023c3e7c8aa7ac7017642504fb/i/icon0.png",
+    "name": "GRAVITY RUSH™ 2",
+    "contentId": "UP9000-CUSA03694_00-GRAVITYRUSH20000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA03694_00_70604246D4126A4645F16AC33BC74008C6C3B96A/CUSA03694_00.json"
+  },
+  "CUSA04027": {
+    "titleId": "CUSA04027",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA04027_00/4/i_c611079e35d7539fb5ef53921d491eca232755e4240fc152eabd6e74e4353276/i/icon0.png",
+    "name": "Titanfall™ 2",
+    "contentId": "UP0006-CUSA04027_00-TITANFALL2RSPWN1",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA04027_00_EEB41A71CA00590B15A5B5805419788DF8FFC4AE/CUSA04027_00.json"
+  },
+  "CUSA06380": {
+    "titleId": "CUSA06380",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA06380_00/3/i_51cca8b4a2f04589e3e7e8232deda3c00659f95877a1ce7eb8566ea51a28bc91/i/icon0.png",
+    "name": "MARVEL VS. CAPCOM: INFINITE",
+    "contentId": "EP0102-CUSA06380_00-DUCK000000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA06380_00_2E1CBE0051D96A472929E8528502C3530FD76CF1/CUSA06380_00.json"
+  },
+  "CUSA07651": {
+    "titleId": "CUSA07651",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA07651_00/2/i_88c7596fa3f9231dbfcc6e82c5cdd9b2f4f103ceac42b8f0b967bb7b119ef883/i/icon0.png",
+    "name": "GUNDAM BREAKER 3 BREAK EDITION",
+    "contentId": "HP0700-CUSA07651_00-GUNDAMBREAKER3PM",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA07651_00_6B995F060482A4EB6777A689353079C2E09898AE/CUSA07651_00.json"
+  },
+  "CUSA09220": {
+    "titleId": "CUSA09220",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA09220_00/2/i_51301389578412618335fec68c02ece9391ad9e767df0f8bfa4636fbba3032b0/i/icon0.png",
+    "name": "Archangel",
+    "contentId": "EP2397-CUSA09220_00-ARCHANGELVR00001",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA09220_00_98EC13A7031A88F16B9C88CDEF086815759A3DC3/CUSA09220_00.json"
+  },
+  "CUSA09759": {
+    "titleId": "CUSA09759",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA09759_00/3/i_21e21fcce81e7b25e30a41c8f96750b200fa4261c83529481de379a1680b8ab0/i/icon0.png",
+    "name": "Raw Data",
+    "contentId": "EP2147-CUSA09759_00-RD1RELEASE000001",
+    "psVr": true,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA09759_00_62179F7D54A8B212B769CD4C31D243B688104A37/CUSA09759_00.json"
+  },
+  "CUSA11711": {
+    "titleId": "CUSA11711",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA11711_00/2/i_5abe621b69a826d0d92ee57625ec82a6d8d55a1713c63d9a16cc5f995971b0e3/i/icon0.png",
+    "name": "Assassin's Creed® III Remastered",
+    "contentId": "UP0001-CUSA11711_00-AC3GAMEPS4000001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA11711_00_5BDA143BD29235436D9157B7360BF817824C8F91/CUSA11711_00.json"
+  },
+  "CUSA12529": {
+    "titleId": "CUSA12529",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA12529_00/3/i_96b1b0bd9d807fc9be61784475c00806e8c505ebd4b938acdf2b4f97a304cdde/i/icon0.png",
+    "name": "STAR WARS Jedi: Fallen Order™",
+    "contentId": "EP0006-CUSA12529_00-RESPAWNSWBIRDDOG",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA12529_00_6023A7242633A6BF6E09B8BCD8BD05D4805E5C22/CUSA12529_00.json"
+  },
+  "CUSA14637": {
+    "titleId": "CUSA14637",
+    "ok": false,
+    "icon": "",
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA14637_00_A078B353F24CDB75382C0F27804739DE6AC7ADF1/CUSA14637_00.json"
+  },
+  "CUSA15094": {
+    "titleId": "CUSA15094",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA15094_00/13/i_54690a239845e68104e32991032217a1c1c136d4e02498feaaaab425a0c2c07f/i/icon0.png",
+    "name": "Deep Rock Galactic",
+    "contentId": "EP4837-CUSA15094_00-DRGFULLGAME00000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA15094_00_389B22E8D6A8B1D567D0B556FBE9A8C685F12586/CUSA15094_00.json"
+  },
+  "CUSA17050": {
+    "titleId": "CUSA17050",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA17050_00/2/i_0827f028b1fbdb49803cb9812d743be2f015c3ff860efe03d30b962886e4a6ef/i/icon0.png",
+    "name": "Trials of Mana",
+    "contentId": "UP0082-CUSA17050_00-TOMPS4APPNA00001",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA17050_00_77E4AE3AF0659CEA52C434C5633F1C9B155B9E51/CUSA17050_00.json"
+  },
+  "CUSA19302": {
+    "titleId": "CUSA19302",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA19302_00/1/i_99f2044ae0da3778e8a3c803fe7779ddb6c01fd093a060335eb6d75bd63b09fb/i/icon0.png",
+    "name": "Star Wars: Republic Commando",
+    "contentId": "UP1032-CUSA19302_00-STARWARSCOMMANDO",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA19302_00_BFE9C0679C0C6A8824FA3AC82AD7793384A10170/CUSA19302_00.json"
+  },
+  "CUSA25325": {
+    "titleId": "CUSA25325",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA25325_00/3/i_bc0d40f8ca9d82be11f706f1cd0a79b45baa7a1053ea4acb115b0b3a76f3152c/i/icon0.png",
+    "name": "Guilty Gear -Strive-",
+    "contentId": "EP0700-CUSA25325_00-000000000GG4GAME",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA25325_00_80BFB7CFDBD7D27B8C958DA710506376511362E9/CUSA25325_00.json"
+  },
+  "CUSA27372": {
+    "titleId": "CUSA27372",
+    "ok": false,
+    "icon": "",
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA27372_00_AA75D4D658109E30738FBB4476BE3CF11D072E73/CUSA27372_00.json"
+  },
+  "CUSA28640": {
+    "titleId": "CUSA28640",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA28640_00/2/i_000ccf0cfd7903c228adbbf8ec1c6aca29140f19a37dcb1cdb7ae9772b1dc197/i/icon0.png",
+    "name": "The Lonely Assassins",
+    "contentId": "EP8035-CUSA28640_00-7229943451226655",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA28640_00_E214DC5170BFB12A6A2122CCCCA8D258EA0EA39F/CUSA28640_00.json"
+  },
+  "CUSA29579": {
+    "titleId": "CUSA29579",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA29579_00/2/i_3df6cedcd21165e37ed39d304641ca2fa2403d80ce13c79809b8be2fa3b81ca9/i/icon0.png",
+    "name": "STRANGER OF PARADISE FINAL FANTASY ORIGIN",
+    "contentId": "EP0082-CUSA29579_00-SOPFFORIGIN00000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA29579_00_1B45DBE181693AB1F230A90E2BD9AC4D0F014BA9/CUSA29579_00.json"
+  },
+  "CUSA30423": {
+    "titleId": "CUSA30423",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA30423_00/2/i_0f75f5cf63e5c21657a5a228c7f50774ff3b5d78d29ddea8a7bba6598faf604a/i/icon0.png",
+    "name": "Death's Door",
+    "contentId": "UP3643-CUSA30423_00-0000000000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA30423_00_2EDA83C9946CD7CA2E5186425A0E5EFA3E416CA5/CUSA30423_00.json"
+  },
+  "CUSA30548": {
+    "titleId": "CUSA30548",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA30548_00/2/i_02c5effd7cf126a191858a9b20e9bcd54f351c76ed7ea28eed2bbdf936ce2de0/i/icon0.png",
+    "name": "Kona II: Brume",
+    "contentId": "UP6714-CUSA30548_00-KONA2KOCHPS4US00",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA30548_00_B5F247C9321FB473DB6EBA562D957BF833515B11/CUSA30548_00.json"
+  },
+  "CUSA33151": {
+    "titleId": "CUSA33151",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA33151_00/4/i_cf93eb08445648801628c6c458c966e2e6ca3c0b524666c8b308f514d59bb541/i/icon0.png",
+    "name": "Assassin's Creed® Mirage",
+    "contentId": "EP0001-CUSA33151_00-GAME000000000000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA33151_00_7BEE26A0E70668B2EDAC049F3BA9332FC41F2B3B/CUSA33151_00.json"
+  },
+  "CUSA34254": {
+    "titleId": "CUSA34254",
+    "ok": true,
+    "icon": "https://gs2-sec.ww.prod.dl.playstation.net/gs2-sec/appkgo/prod/CUSA34254_00/1/i_8b7605a62d39ebf2a8110279134b80e2d1082fb3a58b2dc86e43113048f2aaca/i/icon0.png",
+    "name": "ROLLERDROME",
+    "contentId": "EP4829-CUSA34254_00-ROLLERDROME00000",
+    "psVr": false,
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA34254_00_91005D41009A4E0D470B086E4DF5B71A4052B72B/CUSA34254_00.json"
+  },
+  "CUSA35761": {
+    "titleId": "CUSA35761",
+    "ok": false,
+    "icon": "",
+    "tmdb": "https://tmdb.np.dl.playstation.net/tmdb2/CUSA35761_00_9638F22A592C2ACA9E6E7AD99FAAE324986146B3/CUSA35761_00.json"
+  }
+}

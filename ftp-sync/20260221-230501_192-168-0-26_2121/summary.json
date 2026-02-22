@@ -1,0 +1,12 @@
+{
+  "host": "192.168.0.26",
+  "port": 2121,
+  "captured_at": "2026-02-21T23:05:08.952135",
+  "output_dir": "/Users/bretlindquist/git/PS4/ftp-sync/20260221-230501_192-168-0-26_2121",
+  "counts": {
+    "db": 2,
+    "appmeta_icons": 74,
+    "appmeta_shareparam": 58,
+    "patch_json": 45
+  }
+}

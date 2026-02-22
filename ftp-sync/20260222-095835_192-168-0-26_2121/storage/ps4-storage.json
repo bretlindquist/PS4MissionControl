@@ -1,0 +1,8 @@
+{
+  "status": "ready",
+  "generated_at": "runtime",
+  "storage": {
+    "internal": {"mount": "/user", "total_bytes": 1920734322688, "free_bytes": 300158537728, "used_bytes": 1620575784960},
+    "external": {"mount": "/mnt/ext0", "total_bytes": 1996411314176, "free_bytes": 32045965312, "used_bytes": 1964365348864}
+  }
+}

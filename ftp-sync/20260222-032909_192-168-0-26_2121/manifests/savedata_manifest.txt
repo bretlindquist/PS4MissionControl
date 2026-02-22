@@ -1,0 +1,30 @@
+[/user/home/1e421112/savedata] 19 entries
+  APOL00004
+  CUSA00917
+  CUSA00960
+  CUSA01015
+  CUSA03952
+  CUSA05987
+  CUSA06291
+  CUSA10484
+  CUSA11253
+  CUSA11638
+  CUSA18201
+  CUSA18581
+  GOLD00777
+  LAPY20001
+  SAAT29385
+  SCES51719
+  SCUS97101
+  sce_backup
+  sce_backup2
+[/user/home/1e421113/savedata] 5 entries
+  CUSA02974
+  CUSA04301
+  CUSA07995
+  CUSA11456
+  CUSA16742
+[/system_data/savedata/1e421112] 1 entries
+  db
+[/system_data/savedata/1e421113] 1 entries
+  db

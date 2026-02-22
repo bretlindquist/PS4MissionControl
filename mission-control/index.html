@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PS4 Mission Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.20260221.css" />
+  </head>
+  <body>
+    <header class="topbar glass">
+      <div class="topbar__left">
+        <h1>PS4 Mission Control</h1>
+        <p>Installed, external, uninstalled targets, and watch list</p>
+      </div>
+      <div class="topbar__right">
+        <button id="refreshBtn" class="btn">Refresh Data</button>
+        <button id="refreshStorageBtn" class="btn ghost">Refresh Storage</button>
+        <a class="btn ghost" href="/mission-control/ps4-view/">PS4 View</a>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <section class="card hero">
+        <div class="hero__head">
+          <p class="label">Collection State</p>
+          <div class="hero__actions">
+            <button id="cmdBtn" class="btn ghost" title="Command palette (Cmd/Ctrl+K)">⌘K</button>
+            <button id="themeBtn" class="btn">Theme</button>
+          </div>
+        </div>
+        <div class="hero__numbers">
+          <div><span id="kpiInstalled" class="kpi">0</span><small>Installed on PS4</small></div>
+          <div><span id="kpiExternal" class="kpi">0</span><small>Game PKGs on externals</small></div>
+          <div><span id="kpiUninstalled" class="kpi">0</span><small>Uninstalled candidates</small></div>
+          <div><span id="kpiWatch" class="kpi">0</span><small>Watch list</small></div>
+          <div><span id="kpiPs4Online" class="kpi kpi-status offline">Offline</span><small>PS4 Online</small></div>
+          <div><span id="kpiRpiOnline" class="kpi kpi-status offline">Offline</span><small>RPI 12800</small></div>
+          <div><span id="kpiInternalFree" class="kpi kpi-storage">--</span><small>Internal Free</small></div>
+          <div><span id="kpiExternalFree" class="kpi kpi-storage">--</span><small>External Free</small></div>
+        </div>
+      </section>
+
+      <section class="card controls glass">
+        <p class="label">Saved Views</p>
+        <div class="chips" id="viewChips">
+          <button class="chip active" data-view="external_uninstalled">Drive Scan Uninstalled</button>
+          <button class="chip" data-view="external">External Games</button>
+          <button class="chip" data-view="installed_dlc">Installed DLC</button>
+          <button class="chip" data-view="updates_pending">Updates Pending</button>
+          <button class="chip" data-view="dlc">DLC</button>
+          <button class="chip" data-view="themes">Themes</button>
+          <button class="chip" data-view="installed">Installed</button>
+          <button class="chip" data-view="archives">Archives</button>
+          <button class="chip" data-view="cleanup">Archive Cleanup</button>
+          <button class="chip" data-view="nongames">Non-Games</button>
+        </div>
+        <p class="label" style="margin-top: 0.8rem">Workflow Filters</p>
+        <div class="chips" id="filterChips">
+          <button class="chip" data-filter="baseOnly">Base Only</button>
+          <button class="chip" data-filter="needsExtraction">Needs Extraction</button>
+          <button class="chip" data-filter="installedMismatch">Installed Mismatch</button>
+          <button class="chip" data-filter="vr">VR</button>
+          <button class="chip" data-filter="hugeOnly">Huge (&gt;20GB)</button>
+          <button class="chip" id="clearFiltersChip">Clear Filters</button>
+        </div>
+      </section>
+
+      <section class="card watch-card">
+        <div class="card-head">
+          <p class="label">Watch List</p>
+          <div class="inline-tools">
+            <button id="clearWatchBtn" class="btn danger">Clear Watch</button>
+            <button id="clearIgnoreBtn" class="btn ghost">Clear Ignore</button>
+            <button id="clearHideBtn" class="btn ghost">Clear Hidden</button>
+          </div>
+        </div>
+        <form id="watchForm" class="watch-form">
+          <input id="watchTitle" placeholder="Game title" required />
+          <input id="watchCusa" placeholder="CUSA (optional)" />
+          <input id="watchNote" placeholder="Note (source/version/etc)" />
+          <button class="btn" type="submit">Add</button>
+        </form>
+        <ul id="watchItems" class="watch-items"></ul>
+        <small id="listCounts"></small>
+      </section>
+
+      <section class="card ext-uninstalled-card">
+        <div class="card-head">
+          <p class="label">Drive Scan Uninstalled</p>
+          <div class="inline-tools">
+            <small id="extUninstalledSummary"></small>
+            <button id="extSendToPs4Btn" class="btn ghost" title="Send selected drive-scan row to PS4 RPI">Send to PS4</button>
+          </div>
+        </div>
+        <div class="table-wrap compact">
+          <table id="extUninstalledTable">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card uninstalled-card" id="uninstalledTableCard">
+        <div class="card-head">
+          <p class="label" id="uninstalledTableLabel">Uninstalled Games</p>
+          <div class="inline-tools">
+            <input id="uninstalledInlineFilter" type="search" placeholder="Filter uninstalled..." aria-label="Filter uninstalled" autocomplete="off" />
+            <button id="sendToPs4Btn" class="btn ghost" title="Send selected uninstalled row to PS4 RPI">Send to PS4</button>
+            <button id="uninstalledExportBtn" class="btn">Export CSV</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="uninstalledTable">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card tasks-card" id="rpiTasksCard">
+        <div class="card-head">
+          <p class="label" id="rpiTasksLabel">RPI Tasks</p>
+          <div class="inline-tools">
+            <button id="refreshTasksBtn" class="btn ghost">Refresh Tasks</button>
+            <button id="clearTasksBtn" class="btn ghost">Clear Finished</button>
+          </div>
+        </div>
+        <div class="table-wrap compact">
+          <table id="rpiTasksTable">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card visual-uninstalled-card" id="visualUninstalledCard">
+        <div class="card-head">
+          <p class="label" id="visualUninstalledLabel">Drive Scan Uninstalled (Visual)</p>
+          <div class="inline-tools">
+            <small id="visualUninstalledSummary"></small>
+            <button id="visualSendToPs4Btn" class="btn ghost" title="Send selected visual row to PS4 RPI">Send to PS4</button>
+          </div>
+        </div>
+        <div id="visualUninstalledGrid" class="visual-grid"></div>
+      </section>
+
+      <section class="card table-card" id="mainTableCard">
+        <div class="card-head">
+          <p class="label" id="mainTableLabel">Uninstalled Games</p>
+          <div class="inline-tools">
+            <input id="inlineFilter" type="search" placeholder="Search title, CUSA, path..." aria-label="Search title, CUSA, path" autocomplete="off" />
+            <button id="exportBtn" class="btn">Export CSV</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="mainTable">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card trace-card">
+        <p class="label">Data Sources</p>
+        <ul id="sources" class="sources"></ul>
+      </section>
+    </main>
+
+    <aside id="inspector" class="inspector glass" aria-hidden="true">
+      <div class="inspector__head">
+        <p class="label">Inspector</p>
+        <button id="closeInspector" class="btn ghost">Close</button>
+      </div>
+      <div id="inspectorBody" class="inspector__body"></div>
+    </aside>
+
+    <div id="palette" class="palette" aria-hidden="true">
+      <div class="palette__panel glass">
+        <input id="paletteInput" type="search" placeholder="Type a command..." aria-label="Command palette" />
+        <ul id="paletteList"></ul>
+      </div>
+    </div>
+
+    <script src="app.20260221.js"></script>
+  </body>
+</html>

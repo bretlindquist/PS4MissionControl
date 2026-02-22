@@ -1,0 +1,23 @@
+{
+  "host": "192.168.0.26",
+  "port": 2121,
+  "captured_at": "2026-02-22T09:58:06.642252",
+  "output_dir": "/Users/bretlindquist/git/PS4/ftp-sync/20260222-095754_192-168-0-26_2121",
+  "counts": {
+    "db": 2,
+    "appmeta_icons": 75,
+    "appmeta_external_icons": 55,
+    "system_appmeta_icons": 0,
+    "system_appmeta_external_icons": 0,
+    "merged_icons": 130,
+    "appmeta_shareparam": 58,
+    "patch_json": 45,
+    "storage_json": 1
+  },
+  "icon_precedence": [
+    "user_appmeta",
+    "user_appmeta_external",
+    "system_appmeta",
+    "system_appmeta_external"
+  ]
+}
