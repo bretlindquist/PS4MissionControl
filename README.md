@@ -150,6 +150,45 @@ Behavior:
   - PS4 online status
   - internal/external free space (GB + %)
 
+### Settings Drawer (Gear)
+
+Settings are local-browser persisted and now include:
+
+- Connection:
+  - PS4 IP
+  - FTP port
+  - RPI port
+  - Binloader port
+- Paths & Scan:
+  - watch roots (path-prefix filter for UI datasets)
+  - max path-depth filter
+  - include archives toggle
+- Send Defaults:
+  - preflight requirement (PS4/RPI online)
+  - retry count
+  - retry backoff (ms)
+- Classification Rules:
+  - ambiguous package policy (`unknown` / force `game` / force `non_game`)
+- UI Defaults:
+  - default saved view
+  - default sort key + direction
+  - density (`comfortable`/`compact`)
+  - sticky visual details pane toggle
+- Behavior & Safety:
+  - auto refresh on load
+  - confirm before send
+  - auto extract missing icons
+  - enable/disable Finder reveal on double-click
+  - confirm bulk clear actions
+- Data & Cache:
+  - thumb-cache clear (via `/api/thumb-cache-clear`)
+  - force reindex (runs Refresh Data)
+- Integrations:
+  - open `README.md`
+  - open `PS4MISSIONCONTROL_INSTALLER_SPEC.md`
+- Export:
+  - CSV profile (`full` / `minimal`)
+
 ## PS4 View Behavior
 
 - Uses effective snapshot `app.db` first, local root DB as fallback.
