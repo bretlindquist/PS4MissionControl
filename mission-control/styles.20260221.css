@@ -105,6 +105,13 @@ input::placeholder { color: var(--muted); }
 .btn:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 65%, var(--border)); }
 .btn.ghost { background: transparent; }
 .btn.danger { border-color: color-mix(in srgb, var(--bad) 55%, var(--border)); }
+.icon-btn {
+  width: 40px;
+  min-width: 40px;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+}
 .btn.is-busy {
   display: inline-flex;
   align-items: center;
@@ -580,6 +587,37 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.65rem;
+}
+
+.settings-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(420px, 92vw);
+  height: 100vh;
+  border-left: 1px solid var(--border);
+  transform: translateX(100%);
+  transition: transform 160ms ease;
+  z-index: 35;
+  padding: 1rem;
+}
+.settings-panel.open { transform: translateX(0); }
+.settings-panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.settings-panel__body {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: color-mix(in srgb, var(--bg-soft) 75%, transparent);
+}
+.settings-muted {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .palette {

@@ -26,6 +26,7 @@
         </div>
       </div>
       <div class="topbar__right">
+        <button id="settingsBtn" class="btn ghost icon-btn" title="Settings" aria-label="Settings">⚙</button>
         <button id="refreshBtn" class="btn">Refresh Data</button>
         <button id="refreshStorageBtn" class="btn ghost">Refresh Storage</button>
         <a class="btn ghost" href="/mission-control/ps4-view/">PS4 View</a>
@@ -178,6 +179,16 @@
         <button id="closeInspector" class="btn ghost">Close</button>
       </div>
       <div id="inspectorBody" class="inspector__body"></div>
+    </aside>
+
+    <aside id="settingsPanel" class="settings-panel glass" aria-hidden="true">
+      <div class="settings-panel__head">
+        <p class="label">Settings</p>
+        <button id="closeSettingsBtn" class="btn ghost">Close</button>
+      </div>
+      <div class="settings-panel__body">
+        <p class="settings-muted">Settings UI scaffold ready. Wiring comes in next chunk.</p>
+      </div>
     </aside>
 
     <div id="palette" class="palette" aria-hidden="true">

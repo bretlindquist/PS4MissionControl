@@ -126,6 +126,9 @@ const el = {
   inspector: document.getElementById("inspector"),
   inspectorBody: document.getElementById("inspectorBody"),
   closeInspector: document.getElementById("closeInspector"),
+  settingsPanel: document.getElementById("settingsPanel"),
+  settingsBtn: document.getElementById("settingsBtn"),
+  closeSettingsBtn: document.getElementById("closeSettingsBtn"),
   palette: document.getElementById("palette"),
   paletteInput: document.getElementById("paletteInput"),
   paletteList: document.getElementById("paletteList"),
@@ -397,6 +400,8 @@ function bindEvents() {
   el.refreshStorageBtn?.addEventListener("click", refreshStorageData);
 
   el.closeInspector.addEventListener("click", closeInspector);
+  el.settingsBtn?.addEventListener("click", openSettings);
+  el.closeSettingsBtn?.addEventListener("click", closeSettings);
   el.cmdBtn.addEventListener("click", openPalette);
   el.themeBtn.addEventListener("click", toggleTheme);
 
@@ -411,6 +416,7 @@ function bindEvents() {
     if (e.key === "Escape") {
       closePalette();
       closeInspector();
+      closeSettings();
     }
   });
 
@@ -1679,6 +1685,18 @@ function openInspector(row) {
 function closeInspector() {
   el.inspector.classList.remove("open");
   el.inspector.setAttribute("aria-hidden", "true");
+}
+
+function openSettings() {
+  if (!el.settingsPanel) return;
+  el.settingsPanel.classList.add("open");
+  el.settingsPanel.setAttribute("aria-hidden", "false");
+}
+
+function closeSettings() {
+  if (!el.settingsPanel) return;
+  el.settingsPanel.classList.remove("open");
+  el.settingsPanel.setAttribute("aria-hidden", "true");
 }
 
 function renderWatchList() {
