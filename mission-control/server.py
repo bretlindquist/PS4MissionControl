@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 import uuid
 import time
 
@@ -289,8 +289,8 @@ def _build_ps4_layout():
     }
 
 
-def _probe_ps4_status(ip: str) -> dict:
-    status_url = f"http://{ip}:9090/status"
+def _probe_ps4_status(ip: str, status_port: int = DEFAULT_BINLOADER_PORT) -> dict:
+    status_url = f"http://{ip}:{int(status_port)}/status"
     out = {
         "ip": ip,
         "online": False,
@@ -310,6 +310,41 @@ def _probe_ps4_status(ip: str) -> dict:
     except Exception:
         pass
     return out
+
+
+def _coerce_port(value, default: int) -> int:
+    try:
+        n = int(str(value).strip())
+        if 1 <= n <= 65535:
+            return n
+    except Exception:
+        pass
+    return int(default)
+
+
+def _resolve_runtime_config(payload: dict | None = None, query: dict | None = None) -> dict:
+    payload = payload or {}
+    query = query or {}
+
+    def _pick(name: str):
+        if name in payload:
+            return payload.get(name)
+        raw = query.get(name)
+        if isinstance(raw, list):
+            return raw[0] if raw else None
+        return raw
+
+    ip_raw = _pick("ps4_ip")
+    if not ip_raw and "ip" in payload:
+        ip_raw = payload.get("ip")
+    ip = str(ip_raw or DEFAULT_PS4_IP).strip() or DEFAULT_PS4_IP
+
+    return {
+        "ps4_ip": ip,
+        "ftp_port": _coerce_port(_pick("ftp_port"), DEFAULT_FTP_PORT),
+        "rpi_port": _coerce_port(_pick("rpi_port"), DEFAULT_RPI_PORT),
+        "binloader_port": _coerce_port(_pick("binloader_port"), DEFAULT_BINLOADER_PORT),
+    }
 
 
 def _probe_rpi_status(ip: str, port: int = DEFAULT_RPI_PORT) -> dict:
@@ -389,7 +424,7 @@ def _send_storage_payload(ip: str, port: int) -> dict:
     return out
 
 
-def _run_ftp_snapshot() -> dict:
+def _run_ftp_snapshot(ip: str = DEFAULT_PS4_IP, port: int = DEFAULT_FTP_PORT) -> dict:
     out = {
         "cmd": "",
         "ok": False,
@@ -404,6 +439,10 @@ def _run_ftp_snapshot() -> dict:
         "python3",
         str(FTP_SNAPSHOT_SCRIPT),
         "--non-interactive",
+        "--ip",
+        str(ip),
+        "--port",
+        str(int(port)),
     ]
     out["cmd"] = " ".join(snap_cmd)
     try:
@@ -492,11 +531,11 @@ def _create_pkg_token(pkg_path: Path) -> str:
     return token
 
 
-def _rpi_install_via_url(ps4_ip: str, pkg_url: str) -> dict:
+def _rpi_install_via_url(ps4_ip: str, pkg_url: str, rpi_port: int = DEFAULT_RPI_PORT) -> dict:
     out = {
         "ok": False,
         "ip": ps4_ip,
-        "endpoint": f"http://{ps4_ip}:{DEFAULT_RPI_PORT}/api/install",
+        "endpoint": f"http://{ps4_ip}:{int(rpi_port)}/api/install",
         "streamUrl": pkg_url,
         "status": 0,
         "body": "",
@@ -530,11 +569,11 @@ def _rpi_install_via_url(ps4_ip: str, pkg_url: str) -> dict:
     return out
 
 
-def _rpi_upload_via_url(ps4_ip: str, pkg_url: str) -> dict:
+def _rpi_upload_via_url(ps4_ip: str, pkg_url: str, rpi_port: int = DEFAULT_RPI_PORT) -> dict:
     out = {
         "ok": False,
         "ip": ps4_ip,
-        "endpoint": f"http://{ps4_ip}:{DEFAULT_RPI_PORT}/upload",
+        "endpoint": f"http://{ps4_ip}:{int(rpi_port)}/upload",
         "streamUrl": pkg_url,
         "status": 0,
         "body": "",
@@ -625,8 +664,8 @@ def _extract_task_id(raw_body: str) -> int | None:
     return None
 
 
-def _rpi_get_task_progress(ps4_ip: str, task_id: int) -> dict:
-    endpoint = f"http://{ps4_ip}:{DEFAULT_RPI_PORT}/api/get_task_progress"
+def _rpi_get_task_progress(ps4_ip: str, task_id: int, rpi_port: int = DEFAULT_RPI_PORT) -> dict:
+    endpoint = f"http://{ps4_ip}:{int(rpi_port)}/api/get_task_progress"
     out = _http_post_json(endpoint, {"task_id": int(task_id)}, timeout=20)
     result = {
         "ok": False,
@@ -657,24 +696,24 @@ def _rpi_reachable(ps4_ip: str, port: int = DEFAULT_RPI_PORT, timeout_sec: float
         return (False, str(exc))
 
 
-def _run_send_job(job_id: str, ip: str, stream_url: str):
-    ok_conn, conn_err = _rpi_reachable(ip, DEFAULT_RPI_PORT, 2.2)
+def _run_send_job(job_id: str, ip: str, stream_url: str, rpi_port: int = DEFAULT_RPI_PORT):
+    ok_conn, conn_err = _rpi_reachable(ip, int(rpi_port), 2.2)
     if not ok_conn:
         _set_send_job(job_id, {
             "state": "failed",
             "ok": False,
             "phase": "preflight",
             "status": 0,
-            "error": f"RPI endpoint unreachable on {ip}:{DEFAULT_RPI_PORT} ({conn_err})",
+            "error": f"RPI endpoint unreachable on {ip}:{int(rpi_port)} ({conn_err})",
             "taskId": 0,
         })
         return
     _set_send_job(job_id, {"state": "sending", "phase": "api/install", "ok": None})
-    result = _rpi_install_via_url(ip, stream_url)
+    result = _rpi_install_via_url(ip, stream_url, int(rpi_port))
     method = "api/install"
     if not result.get("ok"):
         _set_send_job(job_id, {"phase": "upload"})
-        alt = _rpi_upload_via_url(ip, stream_url)
+        alt = _rpi_upload_via_url(ip, stream_url, int(rpi_port))
         if alt.get("ok"):
             result = alt
             method = "upload"
@@ -762,7 +801,9 @@ class Handler(SimpleHTTPRequestHandler):
             return
 
     def do_GET(self):
-        p = urlparse(self.path).path
+        parsed = urlparse(self.path)
+        p = parsed.path
+        query = parse_qs(parsed.query or "", keep_blank_values=False)
         if p == "/api/send-jobs":
             jobs = _list_send_jobs(limit=80)
             return self._json(200, {"ok": True, "jobs": jobs, "count": len(jobs)})
@@ -777,8 +818,9 @@ class Handler(SimpleHTTPRequestHandler):
             pkg_path = Path(item.get("path", ""))
             return self._serve_pkg(pkg_path)
         if p == "/api/state":
-            ps4_status = _probe_ps4_status(DEFAULT_PS4_IP)
-            rpi_status = _probe_rpi_status(DEFAULT_PS4_IP, DEFAULT_RPI_PORT)
+            cfg = _resolve_runtime_config(query=query)
+            ps4_status = _probe_ps4_status(cfg["ps4_ip"], cfg["binloader_port"])
+            rpi_status = _probe_rpi_status(cfg["ps4_ip"], cfg["rpi_port"])
             storage = _read_storage_snapshot()
             return self._json(200, {
                 "watch": _read_json(DATA["watch"]),
@@ -786,9 +828,11 @@ class Handler(SimpleHTTPRequestHandler):
                 "hide": _read_json(DATA["hide"]),
                 "localIcons": _local_icon_map(),
                 "ftpConfig": {
-                    "host": DEFAULT_PS4_IP,
-                    "port": DEFAULT_FTP_PORT,
+                    "host": cfg["ps4_ip"],
+                    "port": cfg["ftp_port"],
                 },
+                "binloaderConfig": {"port": cfg["binloader_port"]},
+                "rpiConfig": {"port": cfg["rpi_port"]},
                 "ps4Status": ps4_status,
                 "rpiStatus": rpi_status,
                 "ps4Storage": storage,
@@ -802,13 +846,16 @@ class Handler(SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):
-        p = urlparse(self.path).path
+        parsed = urlparse(self.path)
+        p = parsed.path
+        query = parse_qs(parsed.query or "", keep_blank_values=False)
         length = int(self.headers.get("Content-Length", "0"))
         raw = self.rfile.read(length) if length > 0 else b"{}"
         try:
             payload = json.loads(raw.decode("utf-8"))
         except Exception:
             payload = {}
+        cfg = _resolve_runtime_config(payload=payload, query=query)
 
         if p in ("/api/watch", "/api/ignore", "/api/hide"):
             key = p.split("/")[-1]
@@ -909,7 +956,8 @@ class Handler(SimpleHTTPRequestHandler):
 
         if p == "/api/send-to-ps4":
             raw_path = str(payload.get("path", "")).strip()
-            ip = str(payload.get("ip") or DEFAULT_PS4_IP).strip()
+            ip = str(payload.get("ip") or cfg["ps4_ip"]).strip()
+            rpi_port = _coerce_port(payload.get("rpi_port"), cfg["rpi_port"])
             if not raw_path:
                 return self._json(400, {"ok": False, "error": "missing path"})
             try:
@@ -930,19 +978,21 @@ class Handler(SimpleHTTPRequestHandler):
                     "state": "queued",
                     "ok": None,
                     "ip": ip,
+                    "rpiPort": int(rpi_port),
                     "path": str(pkg_path),
                     "bytes": int(pkg_path.stat().st_size),
                     "token": token,
                     "streamUrl": stream_url,
                     "taskId": 0,
                 })
-                t = threading.Thread(target=_run_send_job, args=(job_id, ip, stream_url), daemon=True)
+                t = threading.Thread(target=_run_send_job, args=(job_id, ip, stream_url, int(rpi_port)), daemon=True)
                 t.start()
                 return self._json(200, {
                     "ok": True,
                     "queued": True,
                     "jobId": job_id,
                     "ip": ip,
+                    "rpiPort": int(rpi_port),
                     "path": str(pkg_path),
                     "bytes": int(pkg_path.stat().st_size),
                     "token": token,
@@ -953,7 +1003,8 @@ class Handler(SimpleHTTPRequestHandler):
                 return self._json(500, {"ok": False, "error": str(exc)})
 
         if p == "/api/rpi-task-progress":
-            ip = str(payload.get("ip") or DEFAULT_PS4_IP).strip()
+            ip = str(payload.get("ip") or cfg["ps4_ip"]).strip()
+            rpi_port = _coerce_port(payload.get("rpi_port"), cfg["rpi_port"])
             task_ids = payload.get("task_ids")
             if not isinstance(task_ids, list):
                 single = payload.get("task_id")
@@ -966,17 +1017,18 @@ class Handler(SimpleHTTPRequestHandler):
                     continue
             if not ids:
                 return self._json(400, {"ok": False, "error": "missing task_id(s)"})
-            progresses = [_rpi_get_task_progress(ip, tid) for tid in ids]
+            progresses = [_rpi_get_task_progress(ip, tid, int(rpi_port)) for tid in ids]
             ok = any(p.get("ok") for p in progresses)
             return self._json(200 if ok else 500, {
                 "ok": ok,
                 "ip": ip,
+                "rpiPort": int(rpi_port),
                 "tasks": progresses,
                 "checkedAt": datetime.now().isoformat(),
             })
 
         if p == "/api/refresh":
-            snapshot_run = _run_ftp_snapshot()
+            snapshot_run = _run_ftp_snapshot(cfg["ps4_ip"], cfg["ftp_port"])
 
             cmds = [
                 [str(ROOT / "generate_installed_lists.sh")],
@@ -999,18 +1051,20 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json(200 if ok else 500, {
                 "ok": ok,
                 "snapshot": snapshot_run,
+                "config": cfg,
                 "warning": "" if snapshot_run.get("ok") else "PS4 FTP snapshot failed; lists were rebuilt from existing local data.",
                 "runs": outputs,
                 "ranAt": datetime.now().isoformat(),
             })
 
         if p == "/api/refresh-storage":
-            send_run = _send_storage_payload(DEFAULT_PS4_IP, DEFAULT_BINLOADER_PORT)
-            snapshot_run = _run_ftp_snapshot()
+            send_run = _send_storage_payload(cfg["ps4_ip"], cfg["binloader_port"])
+            snapshot_run = _run_ftp_snapshot(cfg["ps4_ip"], cfg["ftp_port"])
             storage = _read_storage_snapshot()
             ok = bool(send_run.get("ok") and snapshot_run.get("ok") and storage.get("available"))
             return self._json(200 if ok else 500, {
                 "ok": ok,
+                "config": cfg,
                 "send": send_run,
                 "snapshot": snapshot_run,
                 "storage": storage,
