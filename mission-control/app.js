@@ -113,6 +113,15 @@ const el = {
   kpiPs4Online: document.getElementById("kpiPs4Online"),
   kpiRpiOnline: document.getElementById("kpiRpiOnline"),
   headerFtpInfo: document.getElementById("headerFtpInfo"),
+  railPs4Online: document.getElementById("railPs4Online"),
+  railRpiOnline: document.getElementById("railRpiOnline"),
+  railFtpInfo: document.getElementById("railFtpInfo"),
+  railRpiInfo: document.getElementById("railRpiInfo"),
+  railSettingsBtn: document.getElementById("railSettingsBtn"),
+  railVisualBtn: document.getElementById("railVisualBtn"),
+  railVisualLabel: document.getElementById("railVisualLabel"),
+  railVisualBadge: document.getElementById("railVisualBadge"),
+  railBtns: [...document.querySelectorAll("[data-rail-target]")],
   kpiInternalFree: document.getElementById("kpiInternalFree"),
   kpiExternalFree: document.getElementById("kpiExternalFree"),
   chips: [...document.querySelectorAll("#viewChips .chip")],
@@ -232,6 +241,7 @@ async function init() {
   el.chips.forEach((c) => c.classList.toggle("active", c.dataset.view === state.view));
   renderPalette();
   startRpiPolling();
+  syncRailActiveFromViewport();
   if (state.settings.autoRefreshOnLoad && state.apiEnabled) {
     refreshData().catch(() => {});
   }
@@ -720,7 +730,15 @@ function bindEvents() {
 
   el.closeInspector.addEventListener("click", closeInspector);
   el.settingsBtn?.addEventListener("click", openSettings);
+  el.railSettingsBtn?.addEventListener("click", openSettings);
   el.closeSettingsBtn?.addEventListener("click", closeSettings);
+  el.railBtns?.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = String(btn.dataset.railTarget || "");
+      if (!target) return;
+      scrollToRailTarget(target);
+    });
+  });
   el.settingsSaveBtn?.addEventListener("click", async () => {
     applySettingsFromForm();
     await loadServerState();
@@ -806,6 +824,8 @@ function bindEvents() {
       closeSettings();
     }
   });
+  window.addEventListener("scroll", onRailViewportChange, { passive: true });
+  window.addEventListener("resize", onRailViewportChange, { passive: true });
 
   el.palette.addEventListener("click", (e) => {
     if (e.target === el.palette) closePalette();
@@ -1228,9 +1248,15 @@ function renderKpis() {
     el.kpiPs4Online.title = `GoldHEN status${ip}`;
   }
   if (el.headerFtpInfo) {
-    const host = String(state.ftpConfig?.host || state.ps4Status?.ip || "").trim();
     const port = Number(state.ftpConfig?.port) || 2121;
-    el.headerFtpInfo.textContent = host ? `FTP ${host}:${port}` : `FTP :${port}`;
+    el.headerFtpInfo.textContent = `FTP :${port}`;
+    if (el.railFtpInfo) el.railFtpInfo.textContent = `:${port}`;
+    if (el.railPs4Online) {
+      const online = !!state.ps4Status?.online;
+      el.railPs4Online.textContent = "FTP";
+      el.railPs4Online.classList.toggle("online", online);
+      el.railPs4Online.classList.toggle("offline", !online);
+    }
   }
   if (el.kpiRpiOnline) {
     const online = !!state.rpiStatus?.online;
@@ -1241,6 +1267,14 @@ function renderKpis() {
     const ip = state.rpiStatus?.ip ? ` (${state.rpiStatus.ip}:${port})` : "";
     const err = state.rpiStatus?.error ? `\n${state.rpiStatus.error}` : "";
     el.kpiRpiOnline.title = `RPI endpoint${ip}${err}`;
+    if (el.railRpiOnline) {
+      el.railRpiOnline.textContent = "RPI";
+      el.railRpiOnline.classList.toggle("online", online);
+      el.railRpiOnline.classList.toggle("offline", !online);
+    }
+    if (el.railRpiInfo) {
+      el.railRpiInfo.textContent = `:${port}`;
+    }
   }
   const internalFree = formatStorageFree(state.ps4Storage?.internal);
   const externalFree = formatStorageFree(state.ps4Storage?.external);
@@ -1553,6 +1587,11 @@ function renderVisualUninstalledCard() {
       return 0;
     });
   if (el.visualUninstalledLabel) el.visualUninstalledLabel.textContent = `Drive Scan Uninstalled (Visual) (${rows.length})`;
+  if (el.railVisualLabel) el.railVisualLabel.textContent = "Visual";
+  if (el.railVisualBadge) {
+    el.railVisualBadge.textContent = String(rows.length);
+    el.railVisualBadge.hidden = rows.length <= 0;
+  }
   if (el.visualUninstalledSummary) el.visualUninstalledSummary.textContent = `${rows.length} candidates`;
   if (el.visualSortBtn) {
     el.visualSortBtn.textContent = state.visualUninstalledCard.sortAsc ? "A-Z" : "Z-A";
@@ -1654,6 +1693,51 @@ function renderVisualUninstalledCard() {
       state.visualUninstalledCard.menuRowKey = "";
       renderVisualUninstalledCard();
     });
+  });
+}
+
+function scrollToRailTarget(targetId) {
+  const node = document.getElementById(targetId);
+  if (!node) return;
+  const y = node.getBoundingClientRect().top + window.scrollY - 92;
+  window.scrollTo({ top: y, behavior: "smooth" });
+  el.railBtns?.forEach((btn) => {
+    const on = String(btn.dataset.railTarget || "") === targetId;
+    btn.classList.toggle("active", on);
+  });
+}
+
+let railViewportTimer = null;
+function onRailViewportChange() {
+  if (railViewportTimer) return;
+  railViewportTimer = setTimeout(() => {
+    railViewportTimer = null;
+    syncRailActiveFromViewport();
+  }, 80);
+}
+
+function syncRailActiveFromViewport() {
+  if (!el.railBtns?.length) return;
+  const targets = el.railBtns
+    .map((btn) => ({ btn, id: String(btn.dataset.railTarget || "") }))
+    .filter((x) => x.id)
+    .map((x) => ({ ...x, node: document.getElementById(x.id) }))
+    .filter((x) => x.node);
+  if (!targets.length) return;
+
+  const topOffset = 128;
+  let best = targets[0];
+  let bestDist = Number.POSITIVE_INFINITY;
+  for (const t of targets) {
+    const rect = t.node.getBoundingClientRect();
+    const d = Math.abs(rect.top - topOffset);
+    if (d < bestDist) {
+      bestDist = d;
+      best = t;
+    }
+  }
+  el.railBtns.forEach((btn) => {
+    btn.classList.toggle("active", btn === best.btn);
   });
 }
 

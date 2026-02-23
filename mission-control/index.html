@@ -10,6 +10,58 @@
     <link rel="stylesheet" href="styles.20260221.css" />
   </head>
   <body>
+    <aside class="mc-rail glass" aria-label="Mission rail">
+      <div class="mc-rail__group mc-rail__group--top">
+        <button class="mc-rail__btn active" type="button" data-rail-target="mainTableCard" title="Main Table">
+          <svg class="mc-rail__svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5L12 4l9 7.5"/><path d="M6.5 10.5V20h11V10.5"/></svg>
+          <span class="mc-rail__label">Home</span>
+        </button>
+        <a class="mc-rail__btn" href="/mission-control/ps4-view/" title="PS4 View" aria-label="PS4 View">
+          <svg class="mc-rail__svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5v-6.8c0-1.8 1.3-3.2 3-3.2 1.8 0 3 1.3 3 3.2 0 1.8-1.2 3.2-3 3.2h-1.2"/><path d="M15.5 8.6l3.6 2.1-3.6 2.1"/><path d="M4.5 17.5h15"/></svg>
+          <span class="mc-rail__label">PS4 View</span>
+        </a>
+        <button id="railVisualBtn" class="mc-rail__btn" type="button" data-rail-target="visualUninstalledCard" title="Drive Scan Uninstalled (Visual)">
+          <svg class="mc-rail__svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5"/><rect x="13.5" y="4" width="6.5" height="6.5"/><rect x="4" y="13.5" width="6.5" height="6.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5"/></svg>
+          <span class="mc-rail__label" id="railVisualLabel">Visual</span>
+          <span id="railVisualBadge" class="mc-rail__badge" hidden>0</span>
+        </button>
+        <button class="mc-rail__btn" type="button" data-rail-target="uninstalledTableCard" title="Uninstalled Packages">
+          <svg class="mc-rail__svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5l8-4 8 4-8 4-8-4z"/><path d="M4 11.8l8 4 8-4"/><path d="M4 16.1l8 4 8-4"/></svg>
+          <span class="mc-rail__label">PKGs</span>
+        </button>
+      </div>
+      <div class="mc-rail__group mc-rail__group--mid">
+        <button class="mc-rail__btn" type="button" data-rail-target="watchCard" title="Watch List">
+          <svg class="mc-rail__svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.7 5.5 6.1.9-4.4 4.3 1 6-5.4-2.9-5.4 2.9 1-6L3.2 9.9l6.1-.9L12 3.5z"/></svg>
+          <span class="mc-rail__label">Watch</span>
+        </button>
+        <button class="mc-rail__btn" type="button" data-rail-target="traceCard" title="Data Sources">
+          <svg class="mc-rail__svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 10.5v6"/><path d="M12 7.3h.01"/></svg>
+          <span class="mc-rail__label">Sources</span>
+        </button>
+      </div>
+      <div class="mc-rail__group mc-rail__group--status">
+        <div class="mc-rail__status-row">
+          <div class="mc-rail__status-meta">
+            <strong id="railPs4Online" class="offline">FTP</strong>
+            <small id="railFtpInfo">:2121</small>
+          </div>
+        </div>
+        <div class="mc-rail__status-row">
+          <div class="mc-rail__status-meta">
+            <strong id="railRpiOnline" class="offline">RPI</strong>
+            <small id="railRpiInfo">:12800</small>
+          </div>
+        </div>
+      </div>
+      <div class="mc-rail__group mc-rail__group--bottom">
+        <button id="railSettingsBtn" class="mc-rail__btn" type="button" title="Settings" aria-label="Settings">
+          <svg class="mc-rail__svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/><path d="M4.5 12l1.8-.4.7-1.7-1-1.6 1.8-1.8 1.6 1 1.7-.7.4-1.8h2.6l.4 1.8 1.7.7 1.6-1 1.8 1.8-1 1.6.7 1.7 1.8.4v2.6l-1.8.4-.7 1.7 1 1.6-1.8 1.8-1.6-1-1.7.7-.4 1.8h-2.6l-.4-1.8-1.7-.7-1.6 1-1.8-1.8 1-1.6-.7-1.7-1.8-.4z"/></svg>
+          <span class="mc-rail__label">Settings</span>
+        </button>
+      </div>
+    </aside>
+
     <header class="topbar glass">
       <div class="topbar__left">
         <h1>PS4 Mission Control</h1>
@@ -26,10 +78,8 @@
         </div>
       </div>
       <div class="topbar__right">
-        <button id="settingsBtn" class="btn ghost icon-btn" title="Settings" aria-label="Settings">⚙</button>
         <button id="refreshBtn" class="btn">Refresh Data</button>
         <button id="refreshStorageBtn" class="btn ghost">Refresh Storage</button>
-        <a class="btn ghost" href="/mission-control/ps4-view/">PS4 View</a>
       </div>
     </header>
 
@@ -90,7 +140,7 @@
         </div>
       </section>
 
-      <section class="card watch-card">
+      <section class="card watch-card" id="watchCard">
         <div class="card-head">
           <p class="label">Watch List</p>
           <div class="inline-tools">
@@ -180,7 +230,7 @@
         </div>
       </section>
 
-      <section class="card trace-card">
+      <section class="card trace-card" id="traceCard">
         <p class="label">Data Sources</p>
         <div class="trace-grid">
           <div class="trace-col">
