@@ -7,7 +7,7 @@ const DEFAULT_SETTINGS = Object.freeze({
   ftpPort: 2121,
   rpiPort: 12800,
   binloaderPort: 9090,
-  watchRoots: "/Volumes/PS4,/Volumes/MagicLantern",
+  watchRoots: "",
   maxDepth: 12,
   includeArchives: false,
   sendRetries: 1,
@@ -291,15 +291,9 @@ function loadSettings() {
     };
     state.settings = next;
     state.settingsWatchRootsDraft = parseWatchRoots(next.watchRoots);
-    if (!state.settingsWatchRootsDraft.length) {
-      state.settingsWatchRootsDraft = parseWatchRoots(DEFAULT_SETTINGS.watchRoots);
-      state.settings.watchRoots = state.settingsWatchRootsDraft.join(",");
-      saveSettings();
-    }
   } catch {
     state.settings = { ...DEFAULT_SETTINGS };
     state.settingsWatchRootsDraft = parseWatchRoots(DEFAULT_SETTINGS.watchRoots);
-    saveSettings();
   }
 }
 
