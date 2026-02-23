@@ -1993,14 +1993,20 @@ function closeInspector() {
 function openSettings() {
   if (!el.settingsPanel) return;
   renderSettingsForm();
+  document.body.classList.add("settings-open");
   el.settingsPanel.classList.add("open");
   el.settingsPanel.setAttribute("aria-hidden", "false");
+  window.setTimeout(() => {
+    const firstInput = el.settingsPanel.querySelector("input, select, button");
+    if (firstInput && typeof firstInput.focus === "function") firstInput.focus();
+  }, 0);
 }
 
 function closeSettings() {
   if (!el.settingsPanel) return;
   el.settingsPanel.classList.remove("open");
   el.settingsPanel.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("settings-open");
 }
 
 function renderWatchList() {

@@ -106,11 +106,15 @@ input::placeholder { color: var(--muted); }
 .btn.ghost { background: transparent; }
 .btn.danger { border-color: color-mix(in srgb, var(--bad) 55%, var(--border)); }
 .icon-btn {
-  width: 40px;
-  min-width: 40px;
+  width: 48px;
+  min-width: 48px;
+  height: 40px;
   padding: 0;
-  font-size: 1rem;
+  font-size: 1.2rem;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .btn.is-busy {
   display: inline-flex;
@@ -593,22 +597,25 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
   position: fixed;
   top: 0;
   right: 0;
-  width: min(420px, 92vw);
+  width: min(560px, 96vw);
   height: 100vh;
   border-left: 1px solid var(--border);
   transform: translateX(100%);
   transition: transform 160ms ease;
   z-index: 35;
-  padding: 1rem;
+  padding: 1.2rem;
 }
 .settings-panel.open { transform: translateX(0); }
 .settings-panel__head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 .settings-panel__body {
+  flex: 1;
+  min-height: 0;
+  padding-right: 0.25rem;
   overflow-y: auto;
 }
 .settings-panel__foot {
@@ -627,27 +634,27 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
 }
 .settings-group {
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 0.75rem;
+  border-radius: 14px;
+  padding: 0.95rem;
   background: color-mix(in srgb, var(--bg-soft) 75%, transparent);
 }
 .settings-group + .settings-group {
-  margin-top: 0.6rem;
+  margin-top: 0.75rem;
 }
 .settings-grid {
-  margin-top: 0.45rem;
+  margin-top: 0.6rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.55rem;
+  gap: 0.75rem;
 }
 .settings-field {
   display: flex;
   flex-direction: column;
-  gap: 0.32rem;
+  gap: 0.4rem;
 }
 .settings-field span {
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 700;
 }
 .settings-field input {
@@ -656,7 +663,7 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
   border: 1px solid var(--border);
   background: var(--bg-soft);
   color: var(--text);
-  padding: 0.45rem 0.55rem;
+  padding: 0.55rem 0.65rem;
   font: inherit;
 }
 .settings-field select {
@@ -665,17 +672,17 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
   border: 1px solid var(--border);
   background: var(--bg-soft);
   color: var(--text);
-  padding: 0.45rem 0.55rem;
+  padding: 0.55rem 0.65rem;
   font: inherit;
 }
 .settings-field--full {
   grid-column: 1 / -1;
 }
 .settings-check {
-  margin-top: 0.45rem;
+  margin-top: 0.55rem;
   display: flex;
   align-items: center;
-  gap: 0.42rem;
+  gap: 0.5rem;
 }
 .settings-check input {
   accent-color: var(--accent);
@@ -686,8 +693,12 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
 .settings-inline-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-top: 0.45rem;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+body.settings-open {
+  overflow: hidden;
 }
 
 body.density-compact .table-wrap table th,
