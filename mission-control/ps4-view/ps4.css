@@ -479,6 +479,27 @@ main { max-width: 1880px; margin: 0 auto; }
     scroll-padding-inline: 10px 22px;
   }
 
+  /* iPhone fluid swipe tuning */
+  .category-lane,
+  .category-lane.scroller,
+  .category-lane.fit-all.scroller {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: auto;
+    will-change: auto;
+  }
+
+  .category-lane:not(.fit-all)::after {
+    display: none;
+  }
+
+  .cat-tile {
+    transition: none;
+    transform: none;
+    filter: none;
+  }
+
   /* iPhone fix: prevent title/count overlap in category tiles */
   .cat-tile .meta {
     padding-top: 6px;
