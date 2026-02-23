@@ -141,6 +141,8 @@ main { max-width: 1880px; margin: 0 auto; }
   scroll-snap-type: x proximity;
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
   position: relative;
 }
 .category-lane::-webkit-scrollbar { display: none; }

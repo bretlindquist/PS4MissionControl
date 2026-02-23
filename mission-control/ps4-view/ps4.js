@@ -8,6 +8,10 @@ const el = {
   iTitle: document.getElementById('iTitle'),
   iMeta: document.getElementById('iMeta'),
   closeInspector: document.getElementById('closeInspector'),
+  cmdBtn: document.getElementById('cmdBtn'),
+  palette: document.getElementById('palette'),
+  paletteInput: document.getElementById('paletteInput'),
+  paletteList: document.getElementById('paletteList'),
 };
 
 const state = {
@@ -17,6 +21,10 @@ const state = {
   gameCursor: 0,
   focusRow: 'categories',
 };
+
+let laneSwapTimer = null;
+let paletteActions = [];
+let paletteCursor = 0;
 
 async function loadLayout() {
   const res = await fetch('/api/ps4-layout');
@@ -28,6 +36,21 @@ async function loadLayout() {
   state.gameCursor = 0;
   state.focusRow = 'categories';
   render();
+}
+
+function updateTopbar(activeCat) {
+  if (!state.layout) return;
+  const cat = activeCat || categories().find((c) => c.id === state.activeCategory) || categories()[0];
+  if (cat) {
+    el.counts.textContent = `${state.layout.counts.games} games · ${state.layout.counts.folders} folders · Viewing ${cat.title}`;
+  }
+  if (el.freshness) {
+    const dt = state.layout.generatedAt ? new Date(state.layout.generatedAt) : null;
+    const stamp = dt && !Number.isNaN(dt.getTime())
+      ? dt.toLocaleString()
+      : 'Unknown';
+    el.freshness.textContent = `Data freshness: ${stamp}`;
+  }
 }
 
 function categories() {
@@ -59,14 +82,7 @@ function render() {
   if (state.gameCursor >= games.length) state.gameCursor = Math.max(0, games.length - 1);
 
   const activeCat = cats.find((c) => c.id === state.activeCategory) || cats[0];
-  el.counts.textContent = `${state.layout.counts.games} games · ${state.layout.counts.folders} folders · Viewing ${activeCat.title}`;
-  if (el.freshness) {
-    const dt = state.layout.generatedAt ? new Date(state.layout.generatedAt) : null;
-    const stamp = dt && !Number.isNaN(dt.getTime())
-      ? dt.toLocaleString()
-      : 'Unknown';
-    el.freshness.textContent = `Data freshness: ${stamp}`;
-  }
+  updateTopbar(activeCat);
 
   el.rows.innerHTML = `
     <section class="shell-head">
@@ -76,13 +92,13 @@ function render() {
 
     <section class="lane-row">
       <h3>Categories</h3>
-      <div class="scroller category-lane" id="categoryLane">
+      <div class="scroller category-lane ${cats.length <= 8 ? "fit-all" : ""}" id="categoryLane" style="--cat-count:${cats.length}">
         ${cats.map((c, idx) => categoryTile(c, idx)).join('')}
       </div>
     </section>
 
     <section class="lane-row">
-      <h3>${escapeHtml(activeCat.title)} (${games.length})</h3>
+      <h3 id="gameLaneTitle">${escapeHtml(activeCat.title)} (${games.length})</h3>
       <div class="grid-lane" id="gameLane">
         ${games.map((g, idx) => gameTile(g, idx)).join('')}
       </div>
@@ -145,25 +161,99 @@ function wireCategoryClicks(cats) {
 function wireGameClicks(games) {
   document.querySelectorAll('.tile').forEach((tile) => {
     tile.addEventListener('click', () => {
-      state.focusRow = 'games';
-      state.gameCursor = Number(tile.dataset.idx || 0);
-      document.querySelectorAll('.tile').forEach((t, idx) => {
-        t.classList.toggle('active', idx === state.gameCursor);
-        t.classList.toggle('focused', idx === state.gameCursor);
-      });
-      updateInspector(games[state.gameCursor]);
-      const lane = document.getElementById('gameLane');
-      if (lane) scrollHorizIntoView(lane, tile);
+      setGameFocus(Number(tile.dataset.idx || 0), true);
     });
   });
 }
 
+function refreshCategoryClasses() {
+  document.querySelectorAll('.cat-tile').forEach((tile) => {
+    const idx = Number(tile.dataset.idx || 0);
+    const id = String(tile.dataset.id || '');
+    tile.classList.toggle('active', id === state.activeCategory);
+    tile.classList.toggle('focused', state.focusRow === 'categories' && idx === state.categoryCursor);
+  });
+}
+
+function refreshGameClasses() {
+  document.querySelectorAll('.tile').forEach((tile, idx) => {
+    const on = state.focusRow === 'games' && idx === state.gameCursor;
+    tile.classList.toggle('active', on);
+    tile.classList.toggle('focused', on);
+  });
+}
+
+function setGameFocus(idx, reveal) {
+  const games = activeGames();
+  if (!games.length) return;
+  state.focusRow = 'games';
+  state.gameCursor = Math.max(0, Math.min(games.length - 1, idx));
+  refreshGameClasses();
+  updateInspector(games[state.gameCursor]);
+  if (reveal) {
+    const lane = document.getElementById('gameLane');
+    const tile = lane?.querySelectorAll('.tile')[state.gameCursor];
+    if (lane && tile) scrollHorizIntoView(lane, tile);
+  }
+}
+
+function renderGamesLane(animate = true) {
+  const cats = categories();
+  const activeCat = cats.find((c) => c.id === state.activeCategory) || cats[0];
+  const games = activeGames();
+  if (state.gameCursor >= games.length) state.gameCursor = Math.max(0, games.length - 1);
+
+  const titleEl = document.getElementById('gameLaneTitle');
+  const lane = document.getElementById('gameLane');
+  if (!titleEl || !lane) return;
+
+  titleEl.textContent = `${activeCat.title} (${games.length})`;
+  const nextHtml = games.map((g, idx) => gameTile(g, idx)).join('');
+
+  const swap = () => {
+    lane.innerHTML = nextHtml;
+    wireGameClicks(games);
+    refreshGameClasses();
+    ensureVisible();
+    if (games.length) updateInspector(games[state.gameCursor]);
+  };
+
+  if (!animate) {
+    swap();
+    return;
+  }
+
+  if (laneSwapTimer) {
+    clearTimeout(laneSwapTimer);
+    laneSwapTimer = null;
+  }
+  lane.classList.remove('lane-enter');
+  lane.classList.add('lane-leave');
+  laneSwapTimer = setTimeout(() => {
+    swap();
+    lane.classList.remove('lane-leave');
+    lane.classList.add('lane-enter');
+    setTimeout(() => lane.classList.remove('lane-enter'), 190);
+    laneSwapTimer = null;
+  }, 90);
+}
+
 function selectCategory(id, idx, moveFocusToGames) {
+  if (id === state.activeCategory && idx === state.categoryCursor) {
+    if (moveFocusToGames) {
+      state.focusRow = 'games';
+      refreshCategoryClasses();
+      refreshGameClasses();
+    }
+    return;
+  }
   state.activeCategory = id;
   state.categoryCursor = idx;
   state.gameCursor = 0;
   state.focusRow = moveFocusToGames ? 'games' : 'categories';
-  render();
+  updateTopbar(categories()[idx]);
+  refreshCategoryClasses();
+  renderGamesLane(true);
 }
 
 function updateInspector(g) {
@@ -184,6 +274,11 @@ function updateInspector(g) {
 
   el.inspector.classList.add('open');
   el.inspector.setAttribute('aria-hidden', 'false');
+}
+
+function closeInspector() {
+  el.inspector.classList.remove('open');
+  el.inspector.setAttribute('aria-hidden', 'true');
 }
 
 function ensureVisible() {
@@ -257,48 +352,88 @@ function enableDragScroll(elm) {
     window.addEventListener('mousemove', onMove, { passive: false });
     window.addEventListener('mouseup', onUp);
   });
+
+  elm.addEventListener('touchstart', (e) => {
+    const t = e.touches && e.touches[0];
+    if (!t) return;
+    touchStartX = t.clientX;
+    touchStartScrollLeft = elm.scrollLeft;
+  }, { passive: true });
+
+  elm.addEventListener('touchmove', (e) => {
+    const t = e.touches && e.touches[0];
+    if (!t) return;
+    const dx = t.clientX - touchStartX;
+    elm.scrollLeft = touchStartScrollLeft - dx;
+  }, { passive: true });
+
+  elm.addEventListener('wheel', (e) => {
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (Math.abs(delta) < 1) return;
+    e.preventDefault();
+    elm.scrollBy({ left: delta, behavior: 'smooth' });
+  }, { passive: false });
 }
 
 function onKey(e) {
+  if (el.palette.classList.contains('open')) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closePalette();
+    }
+    return;
+  }
   const cats = categories();
   const games = activeGames();
 
   if (e.key === 'ArrowDown') {
     e.preventDefault();
     state.focusRow = 'games';
-    render();
+    refreshCategoryClasses();
+    refreshGameClasses();
     return;
   }
   if (e.key === 'ArrowUp') {
     e.preventDefault();
     state.focusRow = 'categories';
-    render();
+    refreshCategoryClasses();
+    refreshGameClasses();
     return;
   }
 
   if (e.key === 'ArrowRight') {
     e.preventDefault();
     if (state.focusRow === 'categories') {
-      state.categoryCursor = Math.min(cats.length - 1, state.categoryCursor + 1);
-      state.activeCategory = cats[state.categoryCursor]?.id || 'home';
-      state.gameCursor = 0;
+      const nextIdx = Math.min(cats.length - 1, state.categoryCursor + 1);
+      if (nextIdx !== state.categoryCursor) {
+        state.categoryCursor = nextIdx;
+        state.activeCategory = cats[state.categoryCursor]?.id || 'home';
+        state.gameCursor = 0;
+        updateTopbar(cats[state.categoryCursor]);
+        refreshCategoryClasses();
+        renderGamesLane(true);
+      }
     } else {
-      state.gameCursor = Math.min(games.length - 1, state.gameCursor + 1);
+      setGameFocus(Math.min(games.length - 1, state.gameCursor + 1), true);
     }
-    render();
     return;
   }
 
   if (e.key === 'ArrowLeft') {
     e.preventDefault();
     if (state.focusRow === 'categories') {
-      state.categoryCursor = Math.max(0, state.categoryCursor - 1);
-      state.activeCategory = cats[state.categoryCursor]?.id || 'home';
-      state.gameCursor = 0;
+      const nextIdx = Math.max(0, state.categoryCursor - 1);
+      if (nextIdx !== state.categoryCursor) {
+        state.categoryCursor = nextIdx;
+        state.activeCategory = cats[state.categoryCursor]?.id || 'home';
+        state.gameCursor = 0;
+        updateTopbar(cats[state.categoryCursor]);
+        refreshCategoryClasses();
+        renderGamesLane(true);
+      }
     } else {
-      state.gameCursor = Math.max(0, state.gameCursor - 1);
+      setGameFocus(Math.max(0, state.gameCursor - 1), true);
     }
-    render();
     return;
   }
 
@@ -314,15 +449,93 @@ function onKey(e) {
   }
 
   if (e.key === 'Escape' || e.key === 'Backspace') {
+    if (el.inspector.classList.contains('open')) {
+      e.preventDefault();
+      closeInspector();
+      return;
+    }
     if (state.activeCategory !== 'home') {
       e.preventDefault();
       state.activeCategory = 'home';
       state.categoryCursor = 0;
       state.gameCursor = 0;
       state.focusRow = 'categories';
-      render();
+      updateTopbar(cats[0]);
+      refreshCategoryClasses();
+      renderGamesLane(true);
     }
   }
+}
+
+function buildPaletteActions(query) {
+  if (!state.layout) return [];
+  const q = String(query || '').toLowerCase().trim();
+  const actions = [];
+  const seen = new Set();
+
+  const addFromGames = (games, catId, catLabel) => {
+    games.forEach((g, idx) => {
+      const title = String(g.title || '').trim();
+      if (!title) return;
+      const cusa = String(g.titleId || '').trim();
+      const hay = `${title} ${cusa} ${catLabel}`.toLowerCase();
+      if (q && !hay.includes(q)) return;
+      const key = `${title.toLowerCase()}|${cusa}|${catId}|${idx}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      actions.push({
+        label: title,
+        meta: `${catLabel}${cusa ? ` • ${cusa}` : ''}`,
+        run: () => jumpToGame(catId, idx),
+      });
+    });
+  };
+
+  addFromGames(state.layout.rootGames || [], 'home', 'Home');
+  (state.layout.folders || []).forEach((f) => addFromGames(f.games || [], f.id, f.name || 'Folder'));
+
+  actions.sort((a, b) => a.label.localeCompare(b.label));
+  return actions.slice(0, 60);
+}
+
+function jumpToGame(catId, gameIdx) {
+  const cats = categories();
+  const catIdx = Math.max(0, cats.findIndex((c) => c.id === catId));
+  selectCategory(catId, catIdx, true);
+  setTimeout(() => setGameFocus(gameIdx, true), 120);
+}
+
+function renderPalette() {
+  const q = (el.paletteInput.value || '').trim();
+  paletteActions = buildPaletteActions(q);
+  if (paletteCursor >= paletteActions.length) paletteCursor = 0;
+  el.paletteList.innerHTML = paletteActions.map((a, idx) => {
+    const active = idx === paletteCursor ? 'active' : '';
+    return `<li class="${active}" data-idx="${idx}"><span>${escapeHtml(a.label)}</span><small>${escapeHtml(a.meta || '')}</small></li>`;
+  }).join('');
+  el.paletteList.querySelectorAll('li').forEach((item) => {
+    item.addEventListener('click', () => {
+      const idx = Number(item.dataset.idx || 0);
+      const act = paletteActions[idx];
+      if (!act) return;
+      act.run();
+      closePalette();
+    });
+  });
+}
+
+function openPalette() {
+  el.palette.classList.add('open');
+  el.palette.setAttribute('aria-hidden', 'false');
+  el.paletteInput.value = '';
+  paletteCursor = 0;
+  renderPalette();
+  el.paletteInput.focus();
+}
+
+function closePalette() {
+  el.palette.classList.remove('open');
+  el.palette.setAttribute('aria-hidden', 'true');
 }
 
 function escapeHtml(v) {
@@ -408,9 +621,47 @@ el.refreshBtn.addEventListener('click', async () => {
   }
 });
 el.exportCategoriesBtn?.addEventListener('click', exportCategoriesCsv);
-el.closeInspector.addEventListener('click', () => {
-  el.inspector.classList.remove('open');
-  el.inspector.setAttribute('aria-hidden', 'true');
+el.cmdBtn?.addEventListener('click', openPalette);
+el.closeInspector.addEventListener('click', closeInspector);
+document.addEventListener('click', (e) => {
+  if (!el.inspector.classList.contains('open')) return;
+  const t = e.target;
+  if (!(t instanceof Element)) return;
+  if (el.inspector.contains(t)) return;
+  if (t.closest('.tile')) return;
+  closeInspector();
+});
+el.palette?.addEventListener('click', (e) => {
+  if (e.target === el.palette) closePalette();
+});
+el.paletteInput?.addEventListener('input', renderPalette);
+el.paletteInput?.addEventListener('keydown', (e) => {
+  if (!paletteActions.length) return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    paletteCursor = (paletteCursor + 1) % paletteActions.length;
+    renderPalette();
+    return;
+  }
+  if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    paletteCursor = (paletteCursor - 1 + paletteActions.length) % paletteActions.length;
+    renderPalette();
+    return;
+  }
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const action = paletteActions[paletteCursor];
+    if (!action) return;
+    action.run();
+    closePalette();
+  }
+});
+document.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && String(e.key || '').toLowerCase() === 'k') {
+    e.preventDefault();
+    openPalette();
+  }
 });
 document.addEventListener('keydown', onKey);
 
