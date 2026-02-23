@@ -55,8 +55,9 @@
       <section class="card controls glass">
         <p class="label">Saved Views</p>
         <div class="chips" id="viewChips">
-          <button class="chip active" data-view="external_uninstalled">Drive Scan Uninstalled</button>
-          <button class="chip" data-view="external">External Games</button>
+          <button class="chip active" data-view="uninstalled_games">Uninstalled Games</button>
+          <button class="chip" data-view="uninstalled_packages">Uninstalled Packages</button>
+          <button class="chip" data-view="all_packages">All Packages</button>
           <button class="chip" data-view="installed_dlc">Installed DLC</button>
           <button class="chip" data-view="updates_pending">Updates Pending</button>
           <button class="chip" data-view="dlc">DLC</button>
@@ -79,12 +80,12 @@
         <div class="selection-actions" id="selectionActionsBar">
           <div class="selection-meta">
             <strong id="selectionTitle">No selection</strong>
-            <small id="selectionSub">Select a row or tile in an uninstalled view.</small>
+            <small id="selectionSub">Select a row or tile in an uninstalled package view.</small>
           </div>
           <div class="selection-tools">
             <button id="selectionCopyBtn" class="btn ghost" type="button">Copy ID</button>
             <button id="selectionOpenBtn" class="btn ghost" type="button">Open Path</button>
-            <button id="selectionSendBtn" class="btn" type="button">Send to PS4</button>
+            <button id="selectionSendBtn" class="btn" type="button">Send to PS4 (Beta)</button>
           </div>
         </div>
       </section>
@@ -110,10 +111,10 @@
 
       <section class="card uninstalled-card" id="uninstalledTableCard">
         <div class="card-head">
-          <p class="label" id="uninstalledTableLabel">Uninstalled Games</p>
+          <p class="label" id="uninstalledTableLabel">Uninstalled Packages</p>
           <div class="inline-tools">
-            <input id="uninstalledInlineFilter" type="search" placeholder="Filter uninstalled..." aria-label="Filter uninstalled" autocomplete="off" />
-            <button id="sendToPs4Btn" class="btn ghost" title="Send selected uninstalled row to PS4 RPI">Send to PS4</button>
+            <input id="uninstalledInlineFilter" type="search" placeholder="Filter uninstalled packages..." aria-label="Filter uninstalled packages" autocomplete="off" />
+            <button id="sendToPs4Btn" class="btn ghost" title="Send selected uninstalled package row to PS4 RPI (beta)">Send to PS4 (Beta)</button>
             <button id="uninstalledExportBtn" class="btn">Export CSV</button>
           </div>
         </div>
@@ -149,7 +150,7 @@
           </div>
           <div class="inline-tools">
             <small id="visualUninstalledSummary"></small>
-            <button id="visualSendToPs4Btn" class="btn ghost" title="Send selected visual row to PS4 RPI">Send to PS4</button>
+            <button id="visualSendToPs4Btn" class="btn ghost" title="Send selected visual row to PS4 RPI (beta)">Send to PS4 (Beta)</button>
           </div>
         </div>
         <div class="visual-layout">
@@ -181,7 +182,16 @@
 
       <section class="card trace-card">
         <p class="label">Data Sources</p>
-        <ul id="sources" class="sources"></ul>
+        <div class="trace-grid">
+          <div class="trace-col">
+            <p class="trace-subhead">Active Sources</p>
+            <ul id="sources" class="sources"></ul>
+          </div>
+          <div class="trace-col">
+            <p class="trace-subhead">Naming Conventions Used</p>
+            <div id="namingConventions" class="naming-conventions"></div>
+          </div>
+        </div>
       </section>
     </main>
 
@@ -286,8 +296,9 @@
             <label class="settings-field">
               <span>Default View</span>
               <select id="settingsDefaultView">
-                <option value="external_uninstalled">Drive Scan Uninstalled</option>
-                <option value="external">External Games</option>
+                <option value="uninstalled_games">Uninstalled Games</option>
+                <option value="uninstalled_packages">Uninstalled Packages</option>
+                <option value="all_packages">All Packages</option>
                 <option value="installed">Installed</option>
                 <option value="installed_dlc">Installed DLC</option>
                 <option value="updates_pending">Updates Pending</option>
@@ -340,7 +351,7 @@
           </label>
           <label class="settings-check">
             <input id="settingsConfirmSend" type="checkbox" />
-            <span>Confirm before "Send to PS4"</span>
+            <span>Confirm before "Send to PS4 (Beta)"</span>
           </label>
           <label class="settings-check">
             <input id="settingsAutoExtractMissingIcons" type="checkbox" />

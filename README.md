@@ -2,6 +2,17 @@
 
 Handoff-ready documentation for the PS4 inventory + dashboard stack in `~/git/PS4`.
 
+## Release Status
+
+- Core inventory/visualization/export features: **Stable**
+- Remote send/install path (`Send to PS4` via RPI): **Beta**
+
+Beta send/install notes:
+
+- Depends on PS4 payload/RPI state, network pathing, and package compatibility.
+- Failure/retry behavior is improving but not fully deterministic yet.
+- Keep expectations clear in public release notes.
+
 ## Overview
 This project does four things:
 
@@ -9,6 +20,64 @@ This project does four things:
 2. Generates markdown inventories for installed/external/update/DLC/theme/archive views.
 3. Serves a local Mission Control web app and PS4-style category view.
 4. Optionally refreshes PS4 storage KPIs using a one-shot payload (`/data/ps4-storage.json`).
+
+## What This Is / Isn't
+
+This is:
+
+- A local-first PS4 library operations dashboard.
+- A read-only metadata aggregator (FTP snapshot + local scans).
+- A workflow tool for inventory, classification, category planning, and optional beta remote send.
+
+This is not:
+
+- A piracy/downloader platform.
+- A jailbreak exploit delivery tool.
+- A guarantee that remote send/install will always succeed in every environment.
+
+## 60-Second Quick Start
+
+1. Start server:
+
+```bash
+python3 ~/git/PS4/mission-control/server.py
+```
+
+2. Open app:
+
+```bash
+open http://localhost:8787/mission-control/
+```
+
+3. Open `Settings` (gear):
+   - set `PS4 IP`
+   - set `FTP Port` (default `2121`)
+   - set `RPI Port` (default `12800`)
+   - set watch roots if needed
+
+4. Click `Refresh Data`.
+
+5. Use:
+   - `Uninstalled Games` for deduped install targets
+   - `Uninstalled Packages` for raw package-level actions
+   - `All Packages` for full inventory/audit
+
+## Known Limitations
+
+- Classification is filename/path heuristic-based and can be wrong on edge naming.
+- `CUSA` extraction strongly improves matching; files without CUSA degrade confidence.
+- Remote send/install remains **Beta** and may fail depending on RPI/server state.
+- Visual metadata completeness depends on available icon/title cache + naming quality.
+- UI relies on local browser storage for some settings/state.
+
+## Screenshot Checklist (For Release Post)
+
+- Mission Control overview (KPIs + Saved Views).
+- Uninstalled Games table (deduped targets).
+- Uninstalled Packages table (raw package entries).
+- Drive Scan Uninstalled (Visual) + Selection Details.
+- Settings drawer (connection + safety + defaults).
+- Optional: RPI Tasks card with a successful queued/send example.
 
 ## Repository Layout
 
@@ -18,6 +87,7 @@ This project does four things:
 - Snapshot root: `~/git/PS4/ftp-sync`
 - Snapshot pointer: `~/git/PS4/ftp-sync/latest/last_snapshot_path.txt`
 - Payload project: `~/git/PS4/payloads/storage-snapshot`
+- Installer roadmap: `~/git/PS4/INSTALLER_IMPLEMENTATION_CHECKLIST.md`
 - Knowledge notes: `~/git/PS4/PS4_DATA_HARDENING_NOTES.md`
 - UI design brief: `~/git/PS4/COOL-SITE-INSTRUCTIONS-2026.md`
 

@@ -2,6 +2,7 @@ const DATA_VERSION = "20260222-1";
 const AUTO_EXTRACT_SEEN_KEY = "ps4mc_auto_extract_seen_cusas_v1";
 const AUTO_EXTRACT_MAX_PER_REFRESH = 3;
 const SETTINGS_KEY = "ps4mc_settings_v1";
+const SEND_BUTTON_LABEL = "Send to PS4 (Beta)";
 const DEFAULT_SETTINGS = Object.freeze({
   ps4Ip: "192.168.0.26",
   ftpPort: 2121,
@@ -14,7 +15,7 @@ const DEFAULT_SETTINGS = Object.freeze({
   sendBackoffMs: 900,
   requireOnlinePreflight: true,
   ambiguousPolicy: "unknown",
-  defaultView: "external_uninstalled",
+  defaultView: "uninstalled_games",
   defaultSortKey: "",
   defaultSortAsc: true,
   density: "comfortable",
@@ -52,7 +53,7 @@ const state = {
     nonGames: [],
     archiveCleanup: [],
   },
-  view: "external_uninstalled",
+  view: "uninstalled_games",
   sort: { key: null, asc: true },
   search: "",
   filters: new Set(),
@@ -197,6 +198,7 @@ const el = {
   cmdBtn: document.getElementById("cmdBtn"),
   themeBtn: document.getElementById("themeBtn"),
   sources: document.getElementById("sources"),
+  namingConventions: document.getElementById("namingConventions"),
   selectionTitle: document.getElementById("selectionTitle"),
   selectionSub: document.getElementById("selectionSub"),
   selectionCopyBtn: document.getElementById("selectionCopyBtn"),
@@ -213,7 +215,7 @@ init().catch((err) => {
 async function init() {
   loadSettings();
   applyUiSettings();
-  state.view = state.settings.defaultView || state.view;
+  state.view = normalizeViewId(state.settings.defaultView || state.view);
   state.sort.key = state.settings.defaultSortKey || null;
   state.sort.asc = !!state.settings.defaultSortAsc;
   loadAutoExtractSeen();
@@ -248,6 +250,30 @@ function normalizeInt(value, fallback, min = 0, max = 999999) {
   const i = Math.trunc(n);
   if (i < min || i > max) return fallback;
   return i;
+}
+
+function normalizeViewId(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return DEFAULT_SETTINGS.defaultView;
+  const legacy = {
+    external_uninstalled: "uninstalled_games",
+    external: "all_packages",
+  };
+  const mapped = legacy[raw] || raw;
+  const allowed = new Set([
+    "uninstalled_games",
+    "uninstalled_packages",
+    "all_packages",
+    "installed",
+    "installed_dlc",
+    "updates_pending",
+    "dlc",
+    "themes",
+    "archives",
+    "cleanup",
+    "nongames",
+  ]);
+  return allowed.has(mapped) ? mapped : DEFAULT_SETTINGS.defaultView;
 }
 
 function normalizeRootPath(value) {
@@ -288,7 +314,7 @@ function loadSettings() {
       sendBackoffMs: normalizeInt(parsed?.sendBackoffMs, DEFAULT_SETTINGS.sendBackoffMs, 100, 20000),
       requireOnlinePreflight: parsed?.requireOnlinePreflight !== false,
       ambiguousPolicy: ["unknown", "game", "non_game"].includes(String(parsed?.ambiguousPolicy || "")) ? String(parsed.ambiguousPolicy) : DEFAULT_SETTINGS.ambiguousPolicy,
-      defaultView: String(parsed?.defaultView || DEFAULT_SETTINGS.defaultView),
+      defaultView: normalizeViewId(parsed?.defaultView || DEFAULT_SETTINGS.defaultView),
       defaultSortKey: String(parsed?.defaultSortKey || DEFAULT_SETTINGS.defaultSortKey),
       defaultSortAsc: parsed?.defaultSortAsc !== false,
       density: String(parsed?.density || DEFAULT_SETTINGS.density) === "compact" ? "compact" : "comfortable",
@@ -326,7 +352,7 @@ function applySettingsFromForm() {
     sendBackoffMs: normalizeInt(el.settingsSendBackoffMs?.value, DEFAULT_SETTINGS.sendBackoffMs, 100, 20000),
     requireOnlinePreflight: !!el.settingsRequireOnlinePreflight?.checked,
     ambiguousPolicy: String(el.settingsAmbiguousPolicy?.value || DEFAULT_SETTINGS.ambiguousPolicy),
-    defaultView: String(el.settingsDefaultView?.value || DEFAULT_SETTINGS.defaultView),
+    defaultView: normalizeViewId(el.settingsDefaultView?.value || DEFAULT_SETTINGS.defaultView),
     defaultSortKey: String(el.settingsDefaultSortKey?.value || DEFAULT_SETTINGS.defaultSortKey),
     defaultSortAsc: String(el.settingsDefaultSortAsc?.value || "asc") !== "desc",
     density: String(el.settingsDensity?.value || DEFAULT_SETTINGS.density) === "compact" ? "compact" : "comfortable",
@@ -953,6 +979,7 @@ function getUnifiedSelectedUninstalledRow() {
   const pools = [
     ...(state.data.externalUninstalled || []),
     ...(state.data.externalGames || []),
+    ...getAllPackageRows(),
   ];
   return pools.find((r, idx) => (makeRule(r).key || String(idx)) === key) || null;
 }
@@ -963,7 +990,7 @@ function renderSelectionActions() {
   const path = row ? extractRowPath(row) : "";
   const canSend = !!(path && path.toLowerCase().endsWith(".pkg") && state.apiEnabled);
   if (el.selectionTitle) el.selectionTitle.textContent = row ? (row.Title || row.File || "Selected item") : "No selection";
-  if (el.selectionSub) el.selectionSub.textContent = row ? `${id || "-"} ${path ? "· " + path : ""}` : "Select a row or tile in an uninstalled view.";
+  if (el.selectionSub) el.selectionSub.textContent = row ? `${id || "-"} ${path ? "· " + path : ""}` : "Select a row or tile in an uninstalled package view.";
   if (el.selectionCopyBtn) {
     el.selectionCopyBtn.disabled = !id;
     el.selectionCopyBtn.title = id ? `Copy ${id}` : "No ID available";
@@ -1008,14 +1035,55 @@ function uninstalledCardRows() {
   return rows;
 }
 
+function mapPkgClassRows(rows, pkgClass) {
+  return (rows || []).map((row) => {
+    const path = String(row.Path || row["Example Path"] || "").trim();
+    const file = String(row.File || "").trim();
+    const check = String(row["Installed Check"] || "").trim();
+    let status = "Unknown";
+    if (/verified installed/i.test(check)) status = "Installed";
+    else if (/not installed/i.test(check)) status = "Uninstalled";
+    else if (/mismatch|likely installed/i.test(check)) status = "Mismatch";
+    return {
+      "Package Class": pkgClass,
+      Title: String(row.Title || deriveTitleFromPathOrName(path, file)).trim(),
+      Drive: row.Drive || "",
+      File: file,
+      CUSA: row.CUSA || row["Title ID"] || "",
+      "Title ID": row["Title ID"] || row.CUSA || "",
+      "Size (GB)": row["Size (GB)"] || "",
+      Date: row.Date || "",
+      Path: path,
+      Status: status,
+      "Installed Check": check || "-",
+      Confidence: row.Confidence || "",
+      "Matched Installed": row["Matched Installed"] || row["Matched Installed Title"] || "-",
+    };
+  });
+}
+
+function getAllPackageRows() {
+  return [
+    ...mapPkgClassRows(state.data.externalGames || [], "Game"),
+    ...mapPkgClassRows(state.data.dlc || [], "DLC"),
+    ...mapPkgClassRows(state.data.themes || [], "Theme"),
+    ...mapPkgClassRows(state.data.nonGames || [], "Non-Game"),
+  ];
+}
+
 function currentDatasetRaw() {
   if (state.view === "installed") return state.data.installed;
   if (state.view === "installed_dlc") return state.data.installedDlc;
   if (state.view === "updates_pending") return state.data.updatesPending;
+  if (state.view === "uninstalled_games") {
+    return state.data.externalUninstalled.filter((r) => (r.Installed || "").toLowerCase() !== "installed");
+  }
+  if (state.view === "uninstalled_packages") return getUninstalledRows();
+  if (state.view === "all_packages") return getAllPackageRows();
   if (state.view === "external_uninstalled") {
     return state.data.externalUninstalled.filter((r) => (r.Installed || "").toLowerCase() !== "installed");
   }
-  if (state.view === "external") return state.data.externalGames;
+  if (state.view === "external") return getAllPackageRows();
   if (state.view === "dlc") return state.data.dlc;
   if (state.view === "themes") return state.data.themes;
   if (state.view === "archives") return state.settings.includeArchives ? state.data.archives : [];
@@ -1130,11 +1198,14 @@ function currentDataset() {
 function currentLabel() {
   return {
     uninstalled: "Uninstalled Games",
-    external_uninstalled: "Drive Scan Uninstalled Games",
+    uninstalled_games: "Uninstalled Games",
+    uninstalled_packages: "Uninstalled Packages",
+    all_packages: "All Packages",
+    external_uninstalled: "Uninstalled Games",
     installed: "Installed on PS4",
     installed_dlc: "Installed DLC on PS4",
     updates_pending: "Updates Pending",
-    external: "External Game PKGs",
+    external: "All Packages",
     dlc: "DLC PKGs",
     themes: "Themes",
     archives: "Game Archives",
@@ -1298,7 +1369,7 @@ function inferPackageType(file, path) {
   const s = `${file || ""} ${path || ""}`.toLowerCase();
   if (/(theme|dynamic[_\s-]?theme)/.test(s)) return "theme";
   if (/(dlc|addon|add[-\s]?on|ulc|season\s*pass|expansion|costume|pack)/.test(s)) return "dlc";
-  if (/(backport|cyb1k|fix(?:ed)?)/.test(s)) return "backport";
+  if (/(backport|fix(?:ed)?)/.test(s)) return "backport";
   if (/(\[upd\]|_upd_|\.upd\.|\bupdate\b|patch|v\d+\.\d+)/.test(s)) return "update";
   if (/(\[base\]|fullgame|\bgame\b|a0100-v0100)/.test(s)) return "base";
   return "unknown";
@@ -1358,6 +1429,8 @@ function buildVisualDetailsHtml(row) {
   const drives = String(row["Drive(s)"] || row.Drive || "-");
   const examplePath = String(row["Example Path"] || row.Path || "-");
   const title = String(row.Title || row.File || "Unknown");
+  const cusa = String(row.CUSA || row["Title ID"] || "").toUpperCase().trim();
+  const thumb = thumbForRow(row);
   const typeSummary = String(row["Package Types Found"] || "-");
   const biggest = packages.length ? Math.max(...packages.map((p) => Number(p.sizeGb) || 0)) : 0;
   const hints = [...new Set(packages.flatMap((p) => (p.versionHint && p.versionHint !== "-" ? p.versionHint.split(", ").map((x) => x.trim()) : [])))];
@@ -1371,7 +1444,7 @@ function buildVisualDetailsHtml(row) {
   }
   const sortedPkgs = [...packages].sort((a, b) => (b.sizeGb - a.sizeGb) || a.file.localeCompare(b.file));
   const pkgRows = sortedPkgs.length
-    ? sortedPkgs.map((p) => `<tr>
+    ? sortedPkgs.map((p) => `<tr class="visual-pkg-row" data-path="${encodeURIComponent(p.path || "")}" title="Open in Finder">
         <td>${escapeHtml(p.type)}</td>
         <td class="cell-num">${Number(p.sizeGb).toFixed(2)}</td>
         <td title="${escapeHtml(p.file)}">${escapeHtml(p.file)}</td>
@@ -1379,9 +1452,16 @@ function buildVisualDetailsHtml(row) {
         <td>${escapeHtml(p.versionHint)}</td>
       </tr>`).join("")
     : `<tr><td colspan="5">No package rows found for this title in external scan.</td></tr>`;
+  const miniThumbHtml = (thumb.primary || thumb.secondary)
+    ? `<img class="visual-details-thumb-img" src="${escapeHtml(thumb.primary || thumb.secondary)}" data-fallback="${escapeHtml(thumb.secondary || "")}" alt="${escapeHtml(title)}" loading="lazy" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback='';}else{this.onerror=null;this.style.display='none';this.parentElement.querySelector('.visual-details-thumb-fallback').style.display='flex';}" />
+       <div class="visual-details-thumb-fallback" style="display:none">${escapeHtml(cusa || "CUSA")}</div>`
+    : `<div class="visual-details-thumb-fallback">${escapeHtml(cusa || "CUSA")}</div>`;
   return `<div class="visual-details">
+    <div class="visual-details-top">
+      <strong class="visual-details-title">${escapeHtml(title)}</strong>
+      <div class="visual-details-thumb">${miniThumbHtml}</div>
+    </div>
     <div class="visual-details-grid">
-      <div><span>Title</span><strong>${escapeHtml(title)}</strong></div>
       <div><span>Drive</span><strong>${escapeHtml(drives)}</strong></div>
       <div><span>Path</span><code title="${escapeHtml(examplePath)}">${escapeHtml(examplePath)}</code></div>
       <div><span>Size (GB)</span><strong>${biggest > 0 ? biggest.toFixed(2) : "-"}</strong></div>
@@ -1408,6 +1488,14 @@ function renderVisualDetailsPanel(row) {
     return;
   }
   el.visualDetailsBody.innerHTML = buildVisualDetailsHtml(row);
+  el.visualDetailsBody.querySelectorAll("tr.visual-pkg-row").forEach((tr) => {
+    tr.addEventListener("click", async () => {
+      const raw = String(tr.dataset.path || "");
+      const path = raw ? decodeURIComponent(raw) : "";
+      if (!path) return;
+      await openRowInFinder({ Path: path });
+    });
+  });
 }
 
 async function autoExtractMissingIcons() {
@@ -1626,7 +1714,9 @@ function renderUninstalledCard() {
   el.uninstalledTbody.innerHTML = rows
     .map((row, idx) => {
       const rowKey = makeRule(row).key || String(idx);
-      const cells = keys.map((k) => `<td class="${isNumericCol(k) ? "cell-num" : ""}">${renderCell(k, row[k])}</td>`).join("");
+      const cells = keys
+        .map((k) => `<td class="${cellClassesForKey(k)}">${renderCell(k, row[k])}</td>`)
+        .join("");
       const selectedClass = state.uninstalledCard.selectedRowKey === rowKey ? "row-selected" : "";
       return `<tr class="row-clickable ${selectedClass}" data-idx="${idx}" data-key="${escapeHtml(rowKey)}">${cells}</tr>`;
     })
@@ -1719,7 +1809,7 @@ async function sendSelectedUninstalledToPs4() {
     if (!ok) return;
   }
   const btn = el.sendToPs4Btn;
-  const prev = btn?.textContent || "Send to PS4";
+  const prev = btn?.textContent || SEND_BUTTON_LABEL;
   if (btn) {
     btn.disabled = true;
     btn.textContent = "Sending...";
@@ -1728,7 +1818,7 @@ async function sendSelectedUninstalledToPs4() {
     const payload = await sendToPs4WithRetry(path);
     if (payload.queued) {
       await refreshSendJobs();
-      notify(`Queued sender job ${payload.jobId} for PS4.`, "success");
+      notify(`Queued sender job ${payload.jobId} for PS4 (beta send path).`, "success");
       return;
     }
     const taskId = Number(payload.taskId || 0);
@@ -1747,9 +1837,9 @@ async function sendSelectedUninstalledToPs4() {
       await refreshRpiTasks();
     }
     const bodyInfo = payload.body ? `\n${payload.body}` : "";
-    notify(`Sent to PS4 (${payload.bytes || 0} bytes).${bodyInfo}`, "success", 3800);
+    notify(`Sent to PS4 (Beta) (${payload.bytes || 0} bytes).${bodyInfo}`, "success", 3800);
   } catch (err) {
-    notify(`Send to PS4 failed: ${err.message}`, "error", 4500);
+    notify(`Send to PS4 (Beta) failed: ${err.message}`, "error", 4500);
   } finally {
     if (btn) {
       btn.textContent = prev;
@@ -1780,7 +1870,7 @@ async function sendSelectedExtUninstalledToPs4() {
     if (!ok) return;
   }
   const btn = el.extSendToPs4Btn;
-  const prev = btn?.textContent || "Send to PS4";
+  const prev = btn?.textContent || SEND_BUTTON_LABEL;
   if (btn) {
     btn.disabled = true;
     btn.textContent = "Sending...";
@@ -1789,7 +1879,7 @@ async function sendSelectedExtUninstalledToPs4() {
     const payload = await sendToPs4WithRetry(path);
     if (payload.queued) {
       await refreshSendJobs();
-      notify(`Queued sender job ${payload.jobId} for PS4.`, "success");
+      notify(`Queued sender job ${payload.jobId} for PS4 (beta send path).`, "success");
       return;
     }
     const taskId = Number(payload.taskId || 0);
@@ -1808,9 +1898,9 @@ async function sendSelectedExtUninstalledToPs4() {
       await refreshRpiTasks();
     }
     const bodyInfo = payload.body ? `\n${payload.body}` : "";
-    notify(`Sent to PS4 (${payload.bytes || 0} bytes).${bodyInfo}`, "success", 3800);
+    notify(`Sent to PS4 (Beta) (${payload.bytes || 0} bytes).${bodyInfo}`, "success", 3800);
   } catch (err) {
-    notify(`Send to PS4 failed: ${err.message}`, "error", 4500);
+    notify(`Send to PS4 (Beta) failed: ${err.message}`, "error", 4500);
   } finally {
     if (btn) {
       btn.textContent = prev;
@@ -1841,7 +1931,7 @@ async function sendSelectedVisualUninstalledToPs4() {
     if (!ok) return;
   }
   const btn = el.visualSendToPs4Btn;
-  const prev = btn?.textContent || "Send to PS4";
+  const prev = btn?.textContent || SEND_BUTTON_LABEL;
   if (btn) {
     btn.disabled = true;
     btn.textContent = "Sending...";
@@ -1850,7 +1940,7 @@ async function sendSelectedVisualUninstalledToPs4() {
     const payload = await sendToPs4WithRetry(path);
     if (payload.queued) {
       await refreshSendJobs();
-      notify(`Queued sender job ${payload.jobId} for PS4.`, "success");
+      notify(`Queued sender job ${payload.jobId} for PS4 (beta send path).`, "success");
       return;
     }
     const taskId = Number(payload.taskId || 0);
@@ -1869,9 +1959,9 @@ async function sendSelectedVisualUninstalledToPs4() {
       await refreshRpiTasks();
     }
     const bodyInfo = payload.body ? `\n${payload.body}` : "";
-    notify(`Sent to PS4 (${payload.bytes || 0} bytes).${bodyInfo}`, "success", 3800);
+    notify(`Sent to PS4 (Beta) (${payload.bytes || 0} bytes).${bodyInfo}`, "success", 3800);
   } catch (err) {
-    notify(`Send to PS4 failed: ${err.message}`, "error", 4500);
+    notify(`Send to PS4 (Beta) failed: ${err.message}`, "error", 4500);
   } finally {
     if (btn) {
       btn.textContent = prev;
@@ -2167,7 +2257,9 @@ function renderMainTable() {
   el.mainTbody.innerHTML = rows
     .map((row, idx) => {
       const rowKey = makeRule(row).key || String(idx);
-      const cells = keys.map((k) => `<td class="${isNumericCol(k) ? "cell-num" : ""}">${renderCell(k, row[k])}</td>`).join("");
+      const cells = keys
+        .map((k) => `<td class="${cellClassesForKey(k)}">${renderCell(k, row[k])}</td>`)
+        .join("");
       const selectedClass = state.selectedRowKey === rowKey ? "row-selected" : "";
       return `<tr class="row-clickable ${selectedClass}" data-idx="${idx}" data-key="${escapeHtml(rowKey)}">${cells}</tr>`;
     })
@@ -2177,6 +2269,9 @@ function renderMainTable() {
     tr.addEventListener("click", async () => {
       const row = rows[Number(tr.dataset.idx)];
       state.selectedRowKey = tr.dataset.key || "";
+      if (["uninstalled_games", "uninstalled_packages", "all_packages", "external_uninstalled", "external"].includes(state.view)) {
+        setUnifiedUninstalledSelection(row, tr.dataset.key || "");
+      }
       const id = extractRowId(row);
       if (id) {
         try {
@@ -2185,6 +2280,7 @@ function renderMainTable() {
       }
       closeInspector();
       renderMainTable();
+      renderSelectionActions();
     });
     tr.addEventListener("dblclick", async () => {
       const row = rows[Number(tr.dataset.idx)];
@@ -2229,6 +2325,16 @@ function sortIndicatorFor(sortState, key) {
 
 function isNumericCol(name) {
   return /size|count|confidence|gb/i.test(name);
+}
+
+function cellClassesForKey(key) {
+  const classes = [];
+  if (isNumericCol(key)) classes.push("cell-num");
+  const lower = String(key || "").toLowerCase();
+  if (lower.includes("path")) classes.push("cell-path");
+  if (lower === "file") classes.push("cell-file");
+  if (lower.includes("installed check")) classes.push("cell-installed-check");
+  return classes.join(" ");
 }
 
 function openInspector(row) {
@@ -2467,13 +2573,33 @@ function renderSourceList() {
     `Lists backend: <code>${state.apiEnabled ? "file-backed via /api" : "localStorage fallback"}</code>`,
   ];
   el.sources.innerHTML = items.map((i) => `<li>${i}</li>`).join("");
+  if (!el.namingConventions) return;
+  const conventions = [
+    { type: "Base Game", hint: "a0100-v0100, [BASE], fullgame, game" },
+    { type: "Update/Patch", hint: "update, patch, [UPD], _upd_, .upd., v1.xx" },
+    { type: "Backport/Fix", hint: "backport, fix, fixed" },
+    { type: "DLC/Add-on", hint: "dlc, addon/add-on, ulc, expansion, season pass, costume, pack" },
+    { type: "Theme", hint: "theme, dynamic_theme, dynamic theme" },
+    { type: "CUSA Match", hint: "CUSA##### in filename/path is strongest ID signal" },
+    { type: "VR Signal", hint: "PSVR/VR/title hints are used for VR tagging (plus title DB hints)" },
+    { type: "Unknown", hint: "If no strong signals: stays unknown or ? based on policy" },
+  ];
+  el.namingConventions.innerHTML = `
+    <table class="naming-table">
+      <thead><tr><th>Type</th><th>Filename Signals</th></tr></thead>
+      <tbody>
+        ${conventions.map((r) => `<tr><td>${escapeHtml(r.type)}</td><td><code>${escapeHtml(r.hint)}</code></td></tr>`).join("")}
+      </tbody>
+    </table>
+  `;
 }
 
 function renderPalette() {
   const q = (el.paletteInput.value || "").toLowerCase().trim();
   const actions = [
-    { label: "View Drive Scan Uninstalled", run: () => setView("external_uninstalled") },
-    { label: "View External Games", run: () => setView("external") },
+    { label: "View Uninstalled Games", run: () => setView("uninstalled_games") },
+    { label: "View Uninstalled Packages", run: () => setView("uninstalled_packages") },
+    { label: "View All Packages", run: () => setView("all_packages") },
     { label: "View Installed DLC", run: () => setView("installed_dlc") },
     { label: "View Updates Pending", run: () => setView("updates_pending") },
     { label: "View DLC", run: () => setView("dlc") },
@@ -2498,8 +2624,8 @@ function renderPalette() {
 }
 
 function setView(v) {
-  state.view = v;
-  el.chips.forEach((c) => c.classList.toggle("active", c.dataset.view === v));
+  state.view = normalizeViewId(v);
+  el.chips.forEach((c) => c.classList.toggle("active", c.dataset.view === state.view));
   renderMainTable();
 }
 
