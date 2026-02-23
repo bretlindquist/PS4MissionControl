@@ -291,9 +291,15 @@ function loadSettings() {
     };
     state.settings = next;
     state.settingsWatchRootsDraft = parseWatchRoots(next.watchRoots);
+    if (!state.settingsWatchRootsDraft.length) {
+      state.settingsWatchRootsDraft = parseWatchRoots(DEFAULT_SETTINGS.watchRoots);
+      state.settings.watchRoots = state.settingsWatchRootsDraft.join(",");
+      saveSettings();
+    }
   } catch {
     state.settings = { ...DEFAULT_SETTINGS };
     state.settingsWatchRootsDraft = parseWatchRoots(DEFAULT_SETTINGS.watchRoots);
+    saveSettings();
   }
 }
 
