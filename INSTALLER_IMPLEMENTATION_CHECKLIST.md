@@ -47,11 +47,11 @@ Chunked implementation plan for a terminal-based installer/bootstrap flow.
 
 ## Chunk 4: Data Bootstrap
 
-- [ ] Run FTP snapshot fetch script once
-- [ ] Generate all markdown lists
-- [ ] Warm title/icon caches where possible
-- [ ] Validate outputs exist and are non-empty where expected
-- [ ] Print summary of generated artifacts
+- [x] Run FTP snapshot fetch script once
+- [x] Generate all markdown lists
+- [x] Warm title/icon caches where possible
+- [x] Validate outputs exist and are non-empty where expected
+- [x] Print summary of generated artifacts
 
 ## Chunk 5: Storage Payload Integration
 

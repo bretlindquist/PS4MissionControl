@@ -148,6 +148,9 @@ Use the new terminal setup scripts:
 # installer non-interactive (use existing config/defaults)
 ~/git/PS4/scripts/install_mission_control.sh --non-interactive
 
+# installer with bootstrap (initial snapshot + list generation)
+~/git/PS4/scripts/install_mission_control.sh --bootstrap
+
 # installer actual run
 ~/git/PS4/scripts/install_mission_control.sh
 ```

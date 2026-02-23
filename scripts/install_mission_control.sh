@@ -5,6 +5,7 @@ DRY_RUN=0
 SKIP_DOCTOR=0
 RUN_DOCTOR_JSON=0
 NON_INTERACTIVE=0
+BOOTSTRAP_MODE="ask"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CONFIG_DIR="$ROOT_DIR/.ps4mc"
@@ -53,6 +54,8 @@ Usage: $(basename "$0") [options]
 Options:
   --dry-run        Print actions only; do not mutate files
   --non-interactive  Use defaults/current config and do not prompt
+  --bootstrap      Run initial FTP snapshot + list generation
+  --no-bootstrap   Skip bootstrap
   --skip-doctor    Skip doctor execution
   --doctor-json    Run doctor in JSON mode (still enforces exit code)
   -h, --help       Show help
@@ -72,6 +75,8 @@ parse_args() {
     case "$1" in
       --dry-run) DRY_RUN=1 ;;
       --non-interactive) NON_INTERACTIVE=1 ;;
+      --bootstrap) BOOTSTRAP_MODE="yes" ;;
+      --no-bootstrap) BOOTSTRAP_MODE="no" ;;
       --skip-doctor) SKIP_DOCTOR=1 ;;
       --doctor-json) RUN_DOCTOR_JSON=1 ;;
       -h|--help) usage; exit 0 ;;
@@ -351,6 +356,87 @@ run_doctor() {
   fi
 }
 
+bootstrap_enabled() {
+  if [[ "$BOOTSTRAP_MODE" == "yes" ]]; then
+    return 0
+  fi
+  if [[ "$BOOTSTRAP_MODE" == "no" ]]; then
+    return 1
+  fi
+  if [[ "$NON_INTERACTIVE" -eq 1 ]]; then
+    return 1
+  fi
+  local ans=""
+  read -r -p "Run initial data bootstrap now (FTP snapshot + list generation)? (y/n) [y]: " ans || true
+  ans="${ans:-y}"
+  ans="$(echo "$ans" | tr '[:upper:]' '[:lower:]')"
+  [[ "$ans" == "y" || "$ans" == "yes" || "$ans" == "1" ]]
+}
+
+validate_bootstrap_outputs() {
+  local files=(
+    "GAMES_LIST.md"
+    "INSTALLED_DLC_LIST.md"
+    "UPDATES_PENDING_LIST.md"
+    "EXTERNAL_GAMES_LIST.md"
+    "EXTERNAL_UNINSTALLED_GAMES.md"
+    "EXTERNAL_DLC_LIST.md"
+    "EXTERNAL_THEMES_LIST.md"
+    "EXTERNAL_NON_GAMES_LIST.md"
+    "EXTERNAL_ARCHIVES_REVIEW.md"
+  )
+  local f abs ok_count=0 warn_count=0
+  info "Validating generated artifacts..."
+  for f in "${files[@]}"; do
+    abs="$ROOT_DIR/$f"
+    if [[ -s "$abs" ]]; then
+      ok_count=$((ok_count + 1))
+      printf "  [ok]   %-34s %8s bytes\n" "$f" "$(wc -c < "$abs" | tr -d ' ')"
+    else
+      warn_count=$((warn_count + 1))
+      printf "  [warn] %-34s missing/empty\n" "$f"
+    fi
+  done
+  if [[ "$warn_count" -eq 0 ]]; then
+    ok "Bootstrap artifacts look good ($ok_count/${#files[@]})"
+  else
+    warn "Bootstrap finished with artifact gaps ($ok_count/${#files[@]} present)"
+  fi
+}
+
+run_data_bootstrap() {
+  if ! bootstrap_enabled; then
+    info "Skipping bootstrap"
+    return
+  fi
+
+  info "Running data bootstrap..."
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] python3 \"$ROOT_DIR/scripts/fetch_ps4_ftp_snapshot.py\" --non-interactive --ip \"$PS4_IP\" --port \"$FTP_PORT\""
+    echo "[dry-run] \"$ROOT_DIR/generate_installed_lists.sh\""
+    echo "[dry-run] \"$ROOT_DIR/generate_external_lists.sh\""
+    echo "[dry-run] \"$ROOT_DIR/generate_external_uninstalled.sh\""
+    echo "[dry-run] \"$ROOT_DIR/generate_updates_pending.sh\""
+    return
+  fi
+
+  local snapshot_rc=0
+  python3 "$ROOT_DIR/scripts/fetch_ps4_ftp_snapshot.py" --non-interactive --ip "$PS4_IP" --port "$FTP_PORT" || snapshot_rc=$?
+  if [[ "$snapshot_rc" -ne 0 ]]; then
+    warn "FTP snapshot step failed (rc=$snapshot_rc); continuing with local data."
+  else
+    ok "FTP snapshot completed"
+  fi
+
+  "$ROOT_DIR/generate_installed_lists.sh"
+  "$ROOT_DIR/generate_external_lists.sh"
+  "$ROOT_DIR/generate_external_uninstalled.sh"
+  "$ROOT_DIR/generate_updates_pending.sh"
+  ok "List generation scripts completed"
+
+  validate_bootstrap_outputs
+}
+
 print_next_steps() {
   echo
   ok "Installer foundation completed."
@@ -381,6 +467,7 @@ main() {
   fi
   write_config
   ensure_scripts_executable
+  run_data_bootstrap
   run_doctor
   print_next_steps
 }
