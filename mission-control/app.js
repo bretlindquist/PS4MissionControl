@@ -99,6 +99,7 @@ const state = {
   rpiTasks: [],
   sendJobs: [],
   rpiPollTimer: null,
+  settingsGroupFilter: "basic",
   settings: { ...DEFAULT_SETTINGS },
   settingsWatchRootsDraft: [],
 };
@@ -156,6 +157,9 @@ const el = {
   settingsPanel: document.getElementById("settingsPanel"),
   settingsBtn: document.getElementById("settingsBtn"),
   closeSettingsBtn: document.getElementById("closeSettingsBtn"),
+  settingsGroupSwitch: document.getElementById("settingsGroupSwitch"),
+  settingsGroupBtns: [...document.querySelectorAll("[data-settings-group-btn]")],
+  settingsSections: [...document.querySelectorAll("[data-settings-group]")],
   settingsPs4Ip: document.getElementById("settingsPs4Ip"),
   settingsFtpPort: document.getElementById("settingsFtpPort"),
   settingsRpiPort: document.getElementById("settingsRpiPort"),
@@ -356,6 +360,25 @@ function renderSettingsForm() {
   if (el.settingsEnableFinderDblClick) el.settingsEnableFinderDblClick.checked = !!state.settings.enableFinderDblClick;
   if (el.settingsConfirmBulkActions) el.settingsConfirmBulkActions.checked = !!state.settings.confirmBulkActions;
   if (el.settingsExportProfile) el.settingsExportProfile.value = state.settings.exportProfile || "full";
+  setSettingsGroupFilter(state.settingsGroupFilter || "basic");
+}
+
+function setSettingsGroupFilter(group) {
+  const allowed = new Set(["basic", "advanced", "tools", "all"]);
+  const next = allowed.has(group) ? group : "basic";
+  state.settingsGroupFilter = next;
+  if (el.settingsGroupBtns?.length) {
+    el.settingsGroupBtns.forEach((btn) => {
+      btn.classList.toggle("active", String(btn.dataset.settingsGroupBtn || "") === next);
+    });
+  }
+  if (el.settingsSections?.length) {
+    el.settingsSections.forEach((sec) => {
+      const secGroup = String(sec.dataset.settingsGroup || "");
+      const visible = next === "all" || secGroup === next;
+      sec.classList.toggle("is-hidden", !visible);
+    });
+  }
 }
 
 function renderWatchRootChips() {
@@ -671,6 +694,12 @@ function bindEvents() {
     renderKpis();
     renderAll();
     closeSettings();
+  });
+  el.settingsGroupBtns?.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const group = String(btn.dataset.settingsGroupBtn || "basic");
+      setSettingsGroupFilter(group);
+    });
   });
   el.settingsAddWatchRootBtn?.addEventListener("click", async () => {
     await pickWatchRootFromServer();
@@ -2088,6 +2117,7 @@ function closeInspector() {
 function openSettings() {
   if (!el.settingsPanel) return;
   renderSettingsForm();
+  setSettingsGroupFilter(state.settingsGroupFilter || "basic");
   document.body.classList.add("settings-open");
   el.settingsPanel.classList.add("open");
   el.settingsPanel.setAttribute("aria-hidden", "false");

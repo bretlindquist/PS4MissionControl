@@ -187,7 +187,14 @@
         <button id="closeSettingsBtn" class="btn ghost">Close</button>
       </div>
       <div class="settings-panel__body">
-        <section class="settings-group">
+        <div id="settingsGroupSwitch" class="settings-group-switch">
+          <button class="chip active" type="button" data-settings-group-btn="basic">Basic</button>
+          <button class="chip" type="button" data-settings-group-btn="advanced">Advanced</button>
+          <button class="chip" type="button" data-settings-group-btn="tools">Tools</button>
+          <button class="chip" type="button" data-settings-group-btn="all">All</button>
+        </div>
+
+        <section class="settings-group" data-settings-group="basic">
           <p class="label">Connection</p>
           <div class="settings-grid">
             <label class="settings-field">
@@ -209,7 +216,7 @@
           </div>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group" data-settings-group="basic">
           <p class="label">Paths & Scan</p>
           <label class="settings-field settings-field--full">
             <span>Watch Roots</span>
@@ -231,7 +238,7 @@
           </div>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group" data-settings-group="advanced">
           <p class="label">Send Defaults</p>
           <div class="settings-grid">
             <label class="settings-field">
@@ -249,7 +256,7 @@
           </label>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group" data-settings-group="advanced">
           <p class="label">Classification Rules</p>
           <label class="settings-field settings-field--full">
             <span>Ambiguous Package Policy</span>
@@ -261,7 +268,7 @@
           </label>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group" data-settings-group="advanced">
           <p class="label">UI Defaults</p>
           <div class="settings-grid">
             <label class="settings-field">
@@ -313,7 +320,7 @@
           </label>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group" data-settings-group="basic">
           <p class="label">Behavior & Safety</p>
           <label class="settings-check">
             <input id="settingsAutoRefreshOnLoad" type="checkbox" />
@@ -337,7 +344,7 @@
           </label>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group" data-settings-group="tools">
           <p class="label">Data & Cache</p>
           <div class="settings-inline-buttons">
             <button id="settingsClearThumbCacheBtn" class="btn ghost" type="button">Clear Thumb Cache</button>
@@ -345,7 +352,7 @@
           </div>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group" data-settings-group="tools">
           <p class="label">Integrations</p>
           <div class="settings-inline-buttons">
             <button id="settingsOpenReadmeBtn" class="btn ghost" type="button">Open README</button>
@@ -353,7 +360,7 @@
           </div>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group" data-settings-group="advanced">
           <p class="label">Export</p>
           <label class="settings-field settings-field--full">
             <span>CSV Profile</span>
@@ -364,7 +371,7 @@
           </label>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group" data-settings-group="tools">
           <p class="label">Notes</p>
           <p class="settings-muted">
             Settings are stored locally in your browser for this machine/profile.

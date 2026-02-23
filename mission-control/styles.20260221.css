@@ -646,6 +646,20 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
 .settings-group + .settings-group {
   margin-top: 0.75rem;
 }
+.settings-group-switch {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+  padding: 0.25rem 0;
+  background: linear-gradient(180deg, var(--card-solid), color-mix(in srgb, var(--card-solid) 25%, transparent));
+}
+.settings-group.is-hidden {
+  display: none;
+}
 .settings-grid {
   margin-top: 0.6rem;
   display: grid;
