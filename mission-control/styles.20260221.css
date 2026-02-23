@@ -605,10 +605,14 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
   width: min(560px, 96vw);
   height: 100vh;
   border-left: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card-solid) 88%, white 3%);
   transform: translateX(100%);
   transition: transform 160ms ease;
   z-index: 35;
   padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 56px rgba(3, 8, 18, 0.45);
 }
 .settings-panel.open { transform: translateX(0); }
 .settings-panel__head {
@@ -622,6 +626,7 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
   min-height: 0;
   padding-right: 0.25rem;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .settings-panel__foot {
   display: flex;
