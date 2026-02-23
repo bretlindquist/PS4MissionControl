@@ -10,20 +10,20 @@ Chunked implementation plan for a terminal-based installer/bootstrap flow.
 
 ## Chunk 0: Foundation
 
-- [ ] Create installer entry script (suggested: `scripts/install_mission_control.sh`)
-- [ ] Add strict shell flags and OS checks (`set -euo pipefail`, macOS guard)
-- [ ] Add common logging helpers (`info`, `warn`, `error`, `ok`)
-- [ ] Add dry-run mode
-- [ ] Add idempotent rerun behavior
+- [x] Create installer entry script (suggested: `scripts/install_mission_control.sh`)
+- [x] Add strict shell flags and OS checks (`set -euo pipefail`, macOS guard)
+- [x] Add common logging helpers (`info`, `warn`, `error`, `ok`)
+- [x] Add dry-run mode
+- [x] Add idempotent rerun behavior
 
 ## Chunk 1: Dependency + Environment Doctor
 
-- [ ] Add doctor script (suggested: `scripts/doctor_mission_control.sh`)
-- [ ] Check for required binaries (`python3`, `sqlite3`, `curl`, `open`)
-- [ ] Check optional binaries (`jq`, `docker`, `scp`, `ssh`)
-- [ ] Validate repository structure exists
-- [ ] Validate mounted watch volumes (if configured)
-- [ ] Output clear pass/fail matrix
+- [x] Add doctor script (suggested: `scripts/doctor_mission_control.sh`)
+- [x] Check for required binaries (`python3`, `sqlite3`, `curl`, `open`)
+- [x] Check optional binaries (`jq`, `docker`, `scp`, `ssh`)
+- [x] Validate repository structure exists
+- [x] Validate mounted watch volumes (if configured)
+- [x] Output clear pass/fail matrix
 
 ## Chunk 2: Interactive Config Wizard
 

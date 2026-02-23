@@ -131,6 +131,29 @@ pkill -f "mission-control/server.py"
 python3 ~/git/PS4/mission-control/server.py
 ```
 
+## Installer (Chunk 0/1)
+
+Use the new terminal setup scripts:
+
+```bash
+# health check (human-readable)
+~/git/PS4/scripts/doctor_mission_control.sh
+
+# health check (JSON)
+~/git/PS4/scripts/doctor_mission_control.sh --json
+
+# installer dry-run
+~/git/PS4/scripts/install_mission_control.sh --dry-run
+
+# installer actual run
+~/git/PS4/scripts/install_mission_control.sh
+```
+
+Notes:
+
+- Installer is idempotent and safe to rerun.
+- Remote send/install remains **Beta**.
+
 ## Data Model and Source-of-Truth
 
 Installed app data comes from `app.db` (latest snapshot copy preferred):
