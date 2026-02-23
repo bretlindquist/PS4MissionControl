@@ -697,6 +697,51 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
   margin-top: 0.6rem;
 }
 
+#settingsWatchRoots {
+  margin-top: 0.45rem;
+}
+
+.settings-root-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+}
+
+.settings-root-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.33rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg-soft));
+  color: var(--text);
+  font-size: 0.78rem;
+  max-width: 100%;
+}
+
+.settings-root-chip__text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 360px;
+}
+
+.settings-root-chip__remove {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.settings-root-empty {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
 body.settings-open {
   overflow: hidden;
 }

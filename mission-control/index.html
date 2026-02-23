@@ -212,9 +212,13 @@
         <section class="settings-group">
           <p class="label">Paths & Scan</p>
           <label class="settings-field settings-field--full">
-            <span>Watch Roots (comma-separated prefixes)</span>
-            <input id="settingsWatchRoots" type="text" placeholder="/Volumes/PS4,/Volumes/MagicLantern" />
+            <span>Watch Roots</span>
+            <div id="settingsWatchRootChips" class="settings-root-chips"></div>
+            <input id="settingsWatchRoots" type="text" placeholder="/Volumes/PS4,/Volumes/MagicLantern" readonly title="Managed by watch-root chips" />
           </label>
+          <div class="settings-inline-buttons">
+            <button id="settingsAddWatchRootBtn" class="btn ghost" type="button">Add Folder…</button>
+          </div>
           <div class="settings-grid">
             <label class="settings-field">
               <span>Max Path Depth Hint</span>

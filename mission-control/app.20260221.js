@@ -100,6 +100,7 @@ const state = {
   sendJobs: [],
   rpiPollTimer: null,
   settings: { ...DEFAULT_SETTINGS },
+  settingsWatchRootsDraft: [],
 };
 
 const el = {
@@ -160,6 +161,8 @@ const el = {
   settingsRpiPort: document.getElementById("settingsRpiPort"),
   settingsBinloaderPort: document.getElementById("settingsBinloaderPort"),
   settingsWatchRoots: document.getElementById("settingsWatchRoots"),
+  settingsWatchRootChips: document.getElementById("settingsWatchRootChips"),
+  settingsAddWatchRootBtn: document.getElementById("settingsAddWatchRootBtn"),
   settingsMaxDepth: document.getElementById("settingsMaxDepth"),
   settingsIncludeArchives: document.getElementById("settingsIncludeArchives"),
   settingsSendRetries: document.getElementById("settingsSendRetries"),
@@ -236,6 +239,28 @@ function normalizeInt(value, fallback, min = 0, max = 999999) {
   return i;
 }
 
+function normalizeRootPath(value) {
+  const s = String(value || "").trim();
+  if (!s) return "";
+  if (s === "/") return s;
+  return s.replace(/\/+$/, "");
+}
+
+function parseWatchRoots(value) {
+  const out = [];
+  const seen = new Set();
+  String(value || "")
+    .split(",")
+    .map((s) => normalizeRootPath(s))
+    .filter(Boolean)
+    .forEach((root) => {
+      if (seen.has(root)) return;
+      seen.add(root);
+      out.push(root);
+    });
+  return out;
+}
+
 function loadSettings() {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
@@ -265,8 +290,10 @@ function loadSettings() {
       exportProfile: String(parsed?.exportProfile || DEFAULT_SETTINGS.exportProfile) === "minimal" ? "minimal" : "full",
     };
     state.settings = next;
+    state.settingsWatchRootsDraft = parseWatchRoots(next.watchRoots);
   } catch {
     state.settings = { ...DEFAULT_SETTINGS };
+    state.settingsWatchRootsDraft = parseWatchRoots(DEFAULT_SETTINGS.watchRoots);
   }
 }
 
@@ -275,12 +302,13 @@ function saveSettings() {
 }
 
 function applySettingsFromForm() {
+  const roots = [...state.settingsWatchRootsDraft];
   state.settings = {
     ps4Ip: String(el.settingsPs4Ip?.value || DEFAULT_SETTINGS.ps4Ip).trim() || DEFAULT_SETTINGS.ps4Ip,
     ftpPort: normalizePort(el.settingsFtpPort?.value, DEFAULT_SETTINGS.ftpPort),
     rpiPort: normalizePort(el.settingsRpiPort?.value, DEFAULT_SETTINGS.rpiPort),
     binloaderPort: normalizePort(el.settingsBinloaderPort?.value, DEFAULT_SETTINGS.binloaderPort),
-    watchRoots: String(el.settingsWatchRoots?.value || DEFAULT_SETTINGS.watchRoots).trim() || DEFAULT_SETTINGS.watchRoots,
+    watchRoots: roots.join(",") || DEFAULT_SETTINGS.watchRoots,
     maxDepth: normalizeInt(el.settingsMaxDepth?.value, DEFAULT_SETTINGS.maxDepth, 1, 64),
     includeArchives: !!el.settingsIncludeArchives?.checked,
     sendRetries: normalizeInt(el.settingsSendRetries?.value, DEFAULT_SETTINGS.sendRetries, 0, 5),
@@ -308,7 +336,9 @@ function renderSettingsForm() {
   if (el.settingsFtpPort) el.settingsFtpPort.value = String(state.settings.ftpPort || DEFAULT_SETTINGS.ftpPort);
   if (el.settingsRpiPort) el.settingsRpiPort.value = String(state.settings.rpiPort || DEFAULT_SETTINGS.rpiPort);
   if (el.settingsBinloaderPort) el.settingsBinloaderPort.value = String(state.settings.binloaderPort || DEFAULT_SETTINGS.binloaderPort);
-  if (el.settingsWatchRoots) el.settingsWatchRoots.value = String(state.settings.watchRoots || DEFAULT_SETTINGS.watchRoots);
+  state.settingsWatchRootsDraft = parseWatchRoots(state.settings.watchRoots || DEFAULT_SETTINGS.watchRoots);
+  if (el.settingsWatchRoots) el.settingsWatchRoots.value = state.settingsWatchRootsDraft.join(",");
+  renderWatchRootChips();
   if (el.settingsMaxDepth) el.settingsMaxDepth.value = String(state.settings.maxDepth || DEFAULT_SETTINGS.maxDepth);
   if (el.settingsIncludeArchives) el.settingsIncludeArchives.checked = !!state.settings.includeArchives;
   if (el.settingsSendRetries) el.settingsSendRetries.value = String(state.settings.sendRetries ?? DEFAULT_SETTINGS.sendRetries);
@@ -326,6 +356,32 @@ function renderSettingsForm() {
   if (el.settingsEnableFinderDblClick) el.settingsEnableFinderDblClick.checked = !!state.settings.enableFinderDblClick;
   if (el.settingsConfirmBulkActions) el.settingsConfirmBulkActions.checked = !!state.settings.confirmBulkActions;
   if (el.settingsExportProfile) el.settingsExportProfile.value = state.settings.exportProfile || "full";
+}
+
+function renderWatchRootChips() {
+  if (!el.settingsWatchRootChips) return;
+  const roots = state.settingsWatchRootsDraft || [];
+  if (!roots.length) {
+    el.settingsWatchRootChips.innerHTML = `<span class="settings-root-empty">No watch roots configured.</span>`;
+    return;
+  }
+  el.settingsWatchRootChips.innerHTML = roots
+    .map(
+      (root, idx) => `<span class="settings-root-chip" title="${escapeHtml(root)}">
+        <span class="settings-root-chip__text">${escapeHtml(root)}</span>
+        <button class="settings-root-chip__remove" type="button" data-root-rm="${idx}" aria-label="Remove root">×</button>
+      </span>`
+    )
+    .join("");
+  el.settingsWatchRootChips.querySelectorAll("button[data-root-rm]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.dataset.rootRm);
+      if (!Number.isFinite(idx) || idx < 0) return;
+      state.settingsWatchRootsDraft.splice(idx, 1);
+      if (el.settingsWatchRoots) el.settingsWatchRoots.value = state.settingsWatchRootsDraft.join(",");
+      renderWatchRootChips();
+    });
+  });
 }
 
 function applyUiSettings() {
@@ -611,6 +667,9 @@ function bindEvents() {
     renderAll();
     closeSettings();
   });
+  el.settingsAddWatchRootBtn?.addEventListener("click", async () => {
+    await pickWatchRootFromServer();
+  });
   el.settingsResetBtn?.addEventListener("click", async () => {
     state.settings = { ...DEFAULT_SETTINGS };
     saveSettings();
@@ -756,6 +815,37 @@ async function clearThumbCacheNow() {
     renderVisualUninstalledCard();
   } catch (err) {
     alert(`Clear cache failed: ${err.message}`);
+  }
+}
+
+async function pickWatchRootFromServer() {
+  if (!state.apiEnabled) {
+    alert("Folder picker requires API mode (start mission-control/server.py).");
+    return;
+  }
+  const btn = el.settingsAddWatchRootBtn;
+  setButtonBusy(btn, true);
+  try {
+    const res = await fetch("/api/select-folder", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    });
+    const payload = await res.json();
+    if (payload?.cancelled) return;
+    if (!payload?.ok) throw new Error(payload?.error || "folder selection failed");
+    const root = normalizeRootPath(payload.path);
+    if (!root) return;
+    if (!state.settingsWatchRootsDraft.includes(root)) {
+      state.settingsWatchRootsDraft.push(root);
+      state.settingsWatchRootsDraft.sort((a, b) => a.localeCompare(b));
+    }
+    if (el.settingsWatchRoots) el.settingsWatchRoots.value = state.settingsWatchRootsDraft.join(",");
+    renderWatchRootChips();
+  } catch (err) {
+    alert(`Folder picker failed: ${err.message}`);
+  } finally {
+    setButtonBusy(btn, false);
   }
 }
 
