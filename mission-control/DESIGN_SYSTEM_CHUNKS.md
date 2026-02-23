@@ -20,3 +20,6 @@
 - [ ] Settings are easier to scan and use
 - [ ] Visual and table workflows are predictable
 - [x] Confirmations consistent for destructive actions
+
+## Known Bugs / Backlog
+- [ ] Folder picker failed: `unknown route` after clicking `Add Folder…`

@@ -732,6 +732,30 @@ def _run_send_job(job_id: str, ip: str, stream_url: str, rpi_port: int = DEFAULT
     })
 
 
+def _select_folder_dialog() -> tuple[int, dict]:
+    if os.uname().sysname != "Darwin":
+        return (400, {"ok": False, "error": "folder picker is macOS-only"})
+    try:
+        script = 'POSIX path of (choose folder with prompt "Select watch root folder for Mission Control")'
+        run = subprocess.run(["osascript", "-e", script], capture_output=True, text=True, timeout=120)
+        if run.returncode != 0:
+            err = (run.stderr or "").strip()
+            if "User canceled" in err or "cancelled" in err.lower():
+                return (200, {"ok": False, "cancelled": True})
+            return (500, {"ok": False, "error": err or "folder picker failed"})
+        picked = (run.stdout or "").strip()
+        if not picked:
+            return (200, {"ok": False, "cancelled": True})
+        pth = Path(picked).expanduser().resolve(strict=False)
+        if not pth.exists() or not pth.is_dir():
+            return (400, {"ok": False, "error": "selected path is not a directory"})
+        return (200, {"ok": True, "path": str(pth)})
+    except subprocess.TimeoutExpired:
+        return (500, {"ok": False, "error": "folder picker timeout"})
+    except Exception as exc:
+        return (500, {"ok": False, "error": str(exc)})
+
+
 class Handler(SimpleHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
 
@@ -838,6 +862,9 @@ class Handler(SimpleHTTPRequestHandler):
                 "ps4Storage": storage,
                 "lastRefresh": datetime.now().isoformat(),
             })
+        if p == "/api/select-folder":
+            code, payload = _select_folder_dialog()
+            return self._json(code, payload)
         if p == "/api/ps4-layout":
             try:
                 return self._json(200, {"ok": True, "layout": _build_ps4_layout()})
@@ -881,27 +908,8 @@ class Handler(SimpleHTTPRequestHandler):
                 return self._json(500, {"ok": False, "error": str(exc)})
 
         if p == "/api/select-folder":
-            if os.uname().sysname != "Darwin":
-                return self._json(400, {"ok": False, "error": "folder picker is macOS-only"})
-            try:
-                script = 'POSIX path of (choose folder with prompt "Select watch root folder for Mission Control")'
-                run = subprocess.run(["osascript", "-e", script], capture_output=True, text=True, timeout=120)
-                if run.returncode != 0:
-                    err = (run.stderr or "").strip()
-                    if "User canceled" in err or "cancelled" in err.lower():
-                        return self._json(200, {"ok": False, "cancelled": True})
-                    return self._json(500, {"ok": False, "error": err or "folder picker failed"})
-                picked = (run.stdout or "").strip()
-                if not picked:
-                    return self._json(200, {"ok": False, "cancelled": True})
-                pth = Path(picked).expanduser().resolve(strict=False)
-                if not pth.exists() or not pth.is_dir():
-                    return self._json(400, {"ok": False, "error": "selected path is not a directory"})
-                return self._json(200, {"ok": True, "path": str(pth)})
-            except subprocess.TimeoutExpired:
-                return self._json(500, {"ok": False, "error": "folder picker timeout"})
-            except Exception as exc:
-                return self._json(500, {"ok": False, "error": str(exc)})
+            code, resp = _select_folder_dialog()
+            return self._json(code, resp)
 
         if p == "/api/extract-icon":
             raw_path = str(payload.get("path", "")).strip()
