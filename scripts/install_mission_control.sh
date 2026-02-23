@@ -8,6 +8,8 @@ NON_INTERACTIVE=0
 BOOTSTRAP_MODE="ask"
 DEPLOY_PAYLOAD_MODE="ask"
 RPI_DIAG_MODE="ask"
+LAUNCH_MODE="ask"
+SMOKE_MODE="ask"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CONFIG_DIR="$ROOT_DIR/.ps4mc"
@@ -17,11 +19,14 @@ PAYLOAD_BIN="$ROOT_DIR/payloads/storage-snapshot/payload.bin"
 PAYLOAD_SEND_SCRIPT="$ROOT_DIR/payloads/storage-snapshot/send_payload.py"
 LATEST_SNAPSHOT_PTR="$ROOT_DIR/ftp-sync/latest/last_snapshot_path.txt"
 RPI_DIAG_LOG="$CONFIG_DIR/rpi-diagnostics.log"
+SERVER_PID_FILE="$CONFIG_DIR/server.pid"
+SERVER_LOG_FILE="$CONFIG_DIR/server.log"
 
 PS4_IP_DEFAULT="${PS4_IP_DEFAULT:-192.168.0.26}"
 FTP_PORT_DEFAULT="${FTP_PORT_DEFAULT:-2121}"
 RPI_PORT_DEFAULT="${RPI_PORT_DEFAULT:-12800}"
 BINLOADER_PORT_DEFAULT="${BINLOADER_PORT_DEFAULT:-9090}"
+MC_PORT_DEFAULT="${MC_PORT_DEFAULT:-8787}"
 WATCH_ROOTS_DEFAULT="${WATCH_ROOTS_DEFAULT:-/Volumes/PS4,/Volumes/MagicLantern}"
 MAX_DEPTH_DEFAULT="${MAX_DEPTH_DEFAULT:-12}"
 INCLUDE_ARCHIVES_DEFAULT="${INCLUDE_ARCHIVES_DEFAULT:-0}"
@@ -35,6 +40,7 @@ PS4_IP="$PS4_IP_DEFAULT"
 FTP_PORT="$FTP_PORT_DEFAULT"
 RPI_PORT="$RPI_PORT_DEFAULT"
 BINLOADER_PORT="$BINLOADER_PORT_DEFAULT"
+MC_PORT="$MC_PORT_DEFAULT"
 WATCH_ROOTS="$WATCH_ROOTS_DEFAULT"
 MAX_DEPTH="$MAX_DEPTH_DEFAULT"
 INCLUDE_ARCHIVES="$INCLUDE_ARCHIVES_DEFAULT"
@@ -66,6 +72,10 @@ Options:
   --no-deploy-payload   Skip payload deployment
   --rpi-diagnostics      Run RPI beta diagnostics
   --no-rpi-diagnostics   Skip RPI beta diagnostics
+  --start                Start Mission Control server after install
+  --no-start             Do not start server after install
+  --smoke-checks         Run API refresh smoke checks after start
+  --no-smoke-checks      Skip API refresh smoke checks
   --skip-doctor    Skip doctor execution
   --doctor-json    Run doctor in JSON mode (still enforces exit code)
   -h, --help       Show help
@@ -91,6 +101,10 @@ parse_args() {
       --no-deploy-payload) DEPLOY_PAYLOAD_MODE="no" ;;
       --rpi-diagnostics) RPI_DIAG_MODE="yes" ;;
       --no-rpi-diagnostics) RPI_DIAG_MODE="no" ;;
+      --start) LAUNCH_MODE="yes" ;;
+      --no-start) LAUNCH_MODE="no" ;;
+      --smoke-checks) SMOKE_MODE="yes" ;;
+      --no-smoke-checks) SMOKE_MODE="no" ;;
       --skip-doctor) SKIP_DOCTOR=1 ;;
       --doctor-json) RUN_DOCTOR_JSON=1 ;;
       -h|--help) usage; exit 0 ;;
@@ -128,6 +142,7 @@ load_existing_config() {
     FTP_PASSWORD="${FTP_PASSWORD:-}"
     RPI_PORT="${RPI_PORT:-$RPI_PORT_DEFAULT}"
     BINLOADER_PORT="${BINLOADER_PORT:-$BINLOADER_PORT_DEFAULT}"
+    MC_PORT="${PS4_MC_PORT:-$MC_PORT_DEFAULT}"
     WATCH_ROOTS="${WATCH_ROOTS:-$WATCH_ROOTS_DEFAULT}"
     MAX_DEPTH="${MAX_DEPTH:-$MAX_DEPTH_DEFAULT}"
     INCLUDE_ARCHIVES="${INCLUDE_ARCHIVES:-$INCLUDE_ARCHIVES_DEFAULT}"
@@ -162,6 +177,20 @@ prompt_yes_no() {
   else
     printf -v "$outvar" '%s' "0"
   fi
+}
+
+is_pid_running() {
+  local pid="$1"
+  [[ -n "$pid" && "$pid" =~ ^[0-9]+$ ]] || return 1
+  kill -0 "$pid" >/dev/null 2>&1
+}
+
+find_server_pid_on_port() {
+  local port="$1"
+  if ! command -v lsof >/dev/null 2>&1; then
+    return 1
+  fi
+  lsof -tiTCP:"$port" -sTCP:LISTEN 2>/dev/null | head -n 1
 }
 
 prompt_secret() {
@@ -307,6 +336,7 @@ FTP_PASSWORD_REF="$FTP_PASSWORD_REF"
 FTP_PASSWORD="$FTP_PASSWORD"
 RPI_PORT="$RPI_PORT"
 BINLOADER_PORT="$BINLOADER_PORT"
+PS4_MC_PORT="$MC_PORT"
 WATCH_ROOTS="$WATCH_ROOTS"
 MAX_DEPTH="$MAX_DEPTH"
 INCLUDE_ARCHIVES="$INCLUDE_ARCHIVES"
@@ -419,6 +449,171 @@ rpi_diagnostics_enabled() {
   ans="${ans:-y}"
   ans="$(echo "$ans" | tr '[:upper:]' '[:lower:]')"
   [[ "$ans" == "y" || "$ans" == "yes" || "$ans" == "1" ]]
+}
+
+launch_enabled() {
+  if [[ "$LAUNCH_MODE" == "yes" ]]; then
+    return 0
+  fi
+  if [[ "$LAUNCH_MODE" == "no" ]]; then
+    return 1
+  fi
+  if [[ "$NON_INTERACTIVE" -eq 1 ]]; then
+    return 0
+  fi
+  local ans=""
+  read -r -p "Start Mission Control server now? (y/n) [y]: " ans || true
+  ans="${ans:-y}"
+  ans="$(echo "$ans" | tr '[:upper:]' '[:lower:]')"
+  [[ "$ans" == "y" || "$ans" == "yes" || "$ans" == "1" ]]
+}
+
+smoke_checks_enabled() {
+  if [[ "$SMOKE_MODE" == "yes" ]]; then
+    return 0
+  fi
+  if [[ "$SMOKE_MODE" == "no" ]]; then
+    return 1
+  fi
+  if [[ "$NON_INTERACTIVE" -eq 1 ]]; then
+    return 1
+  fi
+  local ans=""
+  read -r -p "Run API smoke checks (Refresh Data + Refresh Storage)? (y/n) [n]: " ans || true
+  ans="${ans:-n}"
+  ans="$(echo "$ans" | tr '[:upper:]' '[:lower:]')"
+  [[ "$ans" == "y" || "$ans" == "yes" || "$ans" == "1" ]]
+}
+
+start_server_if_needed() {
+  local url="http://localhost:${MC_PORT}/mission-control/"
+  run_cmd "mkdir -p \"$CONFIG_DIR\""
+  local pid=""
+
+  if [[ -f "$SERVER_PID_FILE" ]]; then
+    pid="$(tr -d '\r\n' < "$SERVER_PID_FILE" || true)"
+    if is_pid_running "$pid"; then
+      ok "Mission Control already running (pid $pid)"
+      return 0
+    fi
+    warn "Removing stale PID file: $SERVER_PID_FILE"
+    run_cmd "rm -f \"$SERVER_PID_FILE\""
+  fi
+
+  local port_pid
+  port_pid="$(find_server_pid_on_port "$MC_PORT" || true)"
+  if [[ -n "$port_pid" ]]; then
+    warn "Port $MC_PORT already has a listener (pid $port_pid). Reusing existing process."
+    if [[ "$DRY_RUN" -eq 0 ]]; then
+      printf '%s\n' "$port_pid" > "$SERVER_PID_FILE"
+    else
+      echo "[dry-run] write pid $port_pid -> $SERVER_PID_FILE"
+    fi
+    return 0
+  fi
+
+  info "Starting Mission Control server on port $MC_PORT..."
+  local start_cmd="cd \"$ROOT_DIR\" && PS4_IP=\"$PS4_IP\" PS4_FTP_PORT=\"$FTP_PORT\" PS4_RPI_PORT=\"$RPI_PORT\" PS4_BINLOADER_PORT=\"$BINLOADER_PORT\" PS4_MC_PORT=\"$MC_PORT\" nohup python3 \"$ROOT_DIR/mission-control/server.py\" > \"$SERVER_LOG_FILE\" 2>&1 & echo \$! > \"$SERVER_PID_FILE\""
+  run_cmd "$start_cmd"
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    return 0
+  fi
+  sleep 1
+  pid="$(tr -d '\r\n' < "$SERVER_PID_FILE" || true)"
+  if ! is_pid_running "$pid"; then
+    error "Server failed to start. Check log: $SERVER_LOG_FILE"
+    return 1
+  fi
+  ok "Mission Control started (pid $pid): $url"
+}
+
+open_browser_if_possible() {
+  local url="http://localhost:${MC_PORT}/mission-control/"
+  if [[ "$OSTYPE" != darwin* ]]; then
+    info "Open this URL manually: $url"
+    return 0
+  fi
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] open \"$url\""
+    return 0
+  fi
+  open "$url" >/dev/null 2>&1 || warn "Could not auto-open browser; open manually: $url"
+}
+
+verify_api_state() {
+  local url="http://localhost:${MC_PORT}/api/state"
+  info "Verifying API state endpoint: $url"
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] verify $url returns 200 + JSON"
+    return 0
+  fi
+  python3 - "$url" <<'PY'
+import json, sys, urllib.request
+url = sys.argv[1]
+req = urllib.request.Request(url, headers={"User-Agent": "PS4-MissionControl-Installer/1.0"})
+with urllib.request.urlopen(req, timeout=8) as resp:
+    status = resp.status
+    body = resp.read().decode("utf-8", errors="ignore")
+if status != 200:
+    raise SystemExit(f"HTTP {status}")
+json.loads(body)
+print("ok")
+PY
+  ok "API health verified (/api/state)"
+}
+
+post_api_smoke() {
+  local endpoint="$1"
+  local url="http://localhost:${MC_PORT}${endpoint}"
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] POST $url"
+    return 0
+  fi
+  python3 - "$url" <<'PY'
+import json, sys, urllib.request
+url = sys.argv[1]
+req = urllib.request.Request(url, method="POST", data=b"{}", headers={"Content-Type":"application/json","User-Agent":"PS4-MissionControl-Installer/1.0"})
+with urllib.request.urlopen(req, timeout=180) as resp:
+    status = resp.status
+    body = resp.read().decode("utf-8", errors="ignore")
+if status != 200:
+    raise SystemExit(f"HTTP {status}")
+if body.strip():
+    try:
+        json.loads(body)
+    except Exception:
+        pass
+print("ok")
+PY
+}
+
+run_api_smoke_checks() {
+  if ! smoke_checks_enabled; then
+    info "Skipping API smoke checks"
+    return 0
+  fi
+  info "Running API smoke checks (this may take a while)..."
+  if post_api_smoke "/api/refresh"; then
+    ok "Smoke check passed: POST /api/refresh"
+  else
+    warn "Smoke check failed: POST /api/refresh"
+  fi
+  if post_api_smoke "/api/refresh-storage"; then
+    ok "Smoke check passed: POST /api/refresh-storage"
+  else
+    warn "Smoke check failed: POST /api/refresh-storage"
+  fi
+}
+
+run_launch_step() {
+  if ! launch_enabled; then
+    info "Skipping server launch"
+    return 0
+  fi
+  start_server_if_needed
+  verify_api_state
+  run_api_smoke_checks
+  open_browser_if_possible
 }
 
 probe_rpi_endpoint() {
@@ -727,7 +922,7 @@ print_next_steps() {
   ok "Installer foundation completed."
   echo "Next steps:"
   echo "  1) Start server: python3 \"$ROOT_DIR/mission-control/server.py\""
-  echo "  2) Open app:      http://localhost:8787/mission-control/"
+  echo "  2) Open app:      http://localhost:${MC_PORT}/mission-control/"
   echo "  3) Open Settings and confirm PS4 IP/ports/watch roots."
   if [[ "$FTP_CREDENTIAL_MODE" == "prompt" ]]; then
     echo
@@ -737,11 +932,13 @@ print_next_steps() {
   echo
   echo "Config file:"
   echo "  $CONFIG_FILE"
+  echo "Server log:"
+  echo "  $SERVER_LOG_FILE"
 }
 
 main() {
   parse_args "$@"
-  info "PS4 Mission Control installer (Chunk 0/1/2/3/4/5/6)"
+  info "PS4 Mission Control installer (Chunk 0/1/2/3/4/5/6/7)"
   info "Root: $ROOT_DIR"
   check_os
   ensure_repo
@@ -760,6 +957,7 @@ main() {
     info "Skipping RPI diagnostics"
   fi
   run_doctor
+  run_launch_step
   print_next_steps
 }
 

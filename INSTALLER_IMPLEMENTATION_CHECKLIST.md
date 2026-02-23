@@ -70,11 +70,11 @@ Chunked implementation plan for a terminal-based installer/bootstrap flow.
 
 ## Chunk 7: Mission Control Launch + Verification
 
-- [ ] Start server with resolved config
-- [ ] Open browser URL automatically
-- [ ] Verify `/api/state` returns 200
-- [ ] Verify `Refresh Data` works end-to-end
-- [ ] Verify `Refresh Storage` works when payload is available
+- [x] Start server with resolved config
+- [x] Open browser URL automatically
+- [x] Verify `/api/state` returns 200
+- [x] Verify `Refresh Data` works end-to-end (optional smoke check)
+- [x] Verify `Refresh Storage` works when payload is available (optional smoke check)
 
 ## Chunk 8: UX + Safety Hardening
 

@@ -157,6 +157,12 @@ Use the new terminal setup scripts:
 # installer with RPI beta diagnostics
 ~/git/PS4/scripts/install_mission_control.sh --rpi-diagnostics
 
+# installer with auto-start + API health verify
+~/git/PS4/scripts/install_mission_control.sh --start
+
+# optional smoke checks (POST /api/refresh + /api/refresh-storage)
+~/git/PS4/scripts/install_mission_control.sh --start --smoke-checks
+
 # installer actual run
 ~/git/PS4/scripts/install_mission_control.sh
 ```
@@ -165,6 +171,10 @@ Notes:
 
 - Installer is idempotent and safe to rerun.
 - Remote send/install remains **Beta**.
+- `--start` launches Mission Control in background and verifies `/api/state`.
+- Installer writes runtime files to `.ps4mc/`:
+  - `server.pid`
+  - `server.log`
 
 Credential mode behavior (installer config):
 
