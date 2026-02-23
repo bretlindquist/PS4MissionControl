@@ -531,6 +531,35 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
 .badge.warn { border-color: color-mix(in srgb, var(--warn) 60%, var(--border)); color: var(--warn); }
 .badge.bad { border-color: color-mix(in srgb, var(--bad) 60%, var(--border)); color: var(--bad); }
 
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.48rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+  max-width: 100%;
+}
+.status-chip.good {
+  border-color: color-mix(in srgb, var(--good) 60%, var(--border));
+  color: var(--good);
+  background: color-mix(in srgb, var(--good) 10%, transparent);
+}
+.status-chip.warn {
+  border-color: color-mix(in srgb, var(--warn) 60%, var(--border));
+  color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 10%, transparent);
+}
+.status-chip.bad {
+  border-color: color-mix(in srgb, var(--bad) 60%, var(--border));
+  color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 10%, transparent);
+}
+
 .watch-form {
   display: grid;
   grid-template-columns: 1fr 1fr;

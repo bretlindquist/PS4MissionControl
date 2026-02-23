@@ -2195,8 +2195,24 @@ function renderMainTable() {
 
 function renderCell(key, val) {
   if (key === "Installed Check") {
-    const cls = val.includes("Verified") ? "good" : val.includes("Mismatch") ? "bad" : "warn";
-    return `<span class="badge ${cls}">${escapeHtml(val)}</span>`;
+    const raw = String(val || "");
+    let cls = "warn";
+    let label = "Check";
+    const lower = raw.toLowerCase();
+    if (lower.includes("verified installed")) {
+      cls = "good";
+      label = "Installed";
+    } else if (lower.includes("likely installed")) {
+      cls = "warn";
+      label = "Likely Installed";
+    } else if (lower.includes("not installed")) {
+      cls = "bad";
+      label = "Not Installed";
+    } else if (lower.includes("mismatch")) {
+      cls = "bad";
+      label = "Mismatch";
+    }
+    return `<span class="status-chip ${cls}" title="${escapeHtml(raw)}">${escapeHtml(label)}</span>`;
   }
   return escapeHtml(val || "");
 }
