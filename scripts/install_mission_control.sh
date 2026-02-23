@@ -6,11 +6,15 @@ SKIP_DOCTOR=0
 RUN_DOCTOR_JSON=0
 NON_INTERACTIVE=0
 BOOTSTRAP_MODE="ask"
+DEPLOY_PAYLOAD_MODE="ask"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CONFIG_DIR="$ROOT_DIR/.ps4mc"
 CONFIG_FILE="$CONFIG_DIR/config.env"
 DOCTOR_SCRIPT="$ROOT_DIR/scripts/doctor_mission_control.sh"
+PAYLOAD_BIN="$ROOT_DIR/payloads/storage-snapshot/payload.bin"
+PAYLOAD_SEND_SCRIPT="$ROOT_DIR/payloads/storage-snapshot/send_payload.py"
+LATEST_SNAPSHOT_PTR="$ROOT_DIR/ftp-sync/latest/last_snapshot_path.txt"
 
 PS4_IP_DEFAULT="${PS4_IP_DEFAULT:-192.168.0.26}"
 FTP_PORT_DEFAULT="${FTP_PORT_DEFAULT:-2121}"
@@ -56,6 +60,8 @@ Options:
   --non-interactive  Use defaults/current config and do not prompt
   --bootstrap      Run initial FTP snapshot + list generation
   --no-bootstrap   Skip bootstrap
+  --deploy-payload      Deploy storage payload during install
+  --no-deploy-payload   Skip payload deployment
   --skip-doctor    Skip doctor execution
   --doctor-json    Run doctor in JSON mode (still enforces exit code)
   -h, --help       Show help
@@ -77,6 +83,8 @@ parse_args() {
       --non-interactive) NON_INTERACTIVE=1 ;;
       --bootstrap) BOOTSTRAP_MODE="yes" ;;
       --no-bootstrap) BOOTSTRAP_MODE="no" ;;
+      --deploy-payload) DEPLOY_PAYLOAD_MODE="yes" ;;
+      --no-deploy-payload) DEPLOY_PAYLOAD_MODE="no" ;;
       --skip-doctor) SKIP_DOCTOR=1 ;;
       --doctor-json) RUN_DOCTOR_JSON=1 ;;
       -h|--help) usage; exit 0 ;;
@@ -373,6 +381,103 @@ bootstrap_enabled() {
   [[ "$ans" == "y" || "$ans" == "yes" || "$ans" == "1" ]]
 }
 
+deploy_payload_enabled() {
+  if [[ "$DEPLOY_PAYLOAD_MODE" == "yes" ]]; then
+    return 0
+  fi
+  if [[ "$DEPLOY_PAYLOAD_MODE" == "no" ]]; then
+    return 1
+  fi
+  if [[ "$NON_INTERACTIVE" -eq 1 ]]; then
+    return 1
+  fi
+  local ans=""
+  read -r -p "Deploy storage payload now? (y/n) [n]: " ans || true
+  ans="${ans:-n}"
+  ans="$(echo "$ans" | tr '[:upper:]' '[:lower:]')"
+  [[ "$ans" == "y" || "$ans" == "yes" || "$ans" == "1" ]]
+}
+
+read_storage_snapshot_path() {
+  if [[ ! -f "$LATEST_SNAPSHOT_PTR" ]]; then
+    return 1
+  fi
+  local snap
+  snap="$(tr -d '\r\n' < "$LATEST_SNAPSHOT_PTR")"
+  [[ -n "$snap" && -d "$snap" ]] || return 1
+  local storage="$snap/storage/ps4-storage.json"
+  [[ -f "$storage" ]] || return 1
+  printf '%s\n' "$storage"
+}
+
+summarize_storage_json() {
+  local storage_json="$1"
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] summarize $storage_json"
+    return
+  fi
+  python3 - "$storage_json" <<'PY'
+import json, sys, os, time
+p = sys.argv[1]
+try:
+    with open(p, "r", encoding="utf-8") as f:
+        data = json.load(f)
+except Exception as exc:
+    print(f"[warn] Could not parse storage JSON: {exc}")
+    raise SystemExit(0)
+st = data.get("storage") if isinstance(data, dict) else {}
+def fmt(obj):
+    if not isinstance(obj, dict):
+        return "n/a"
+    free = obj.get("free_bytes")
+    total = obj.get("total_bytes")
+    pct = obj.get("free_percent")
+    if isinstance(free, int) and isinstance(total, int) and total > 0:
+        gb = free / (1024**3)
+        return f"{gb:.1f} GB free ({pct if isinstance(pct, (int,float)) else (free/total*100):.1f}%)"
+    return "n/a"
+print(f"[ok] Storage JSON: {p}")
+print(f"     Internal: {fmt(st.get('internal'))}")
+print(f"     External: {fmt(st.get('external'))}")
+age_sec = max(0, int(time.time() - os.path.getmtime(p)))
+print(f"     Freshness: {age_sec}s old")
+PY
+}
+
+run_payload_step() {
+  info "Storage payload step..."
+  if [[ ! -f "$PAYLOAD_BIN" ]]; then
+    warn "Missing payload binary: $PAYLOAD_BIN"
+    warn "Build it first (see payloads/storage-snapshot/README.md)."
+    return
+  fi
+  ok "Payload binary found: $PAYLOAD_BIN"
+
+  if deploy_payload_enabled; then
+    info "Deploying payload to ${PS4_IP}:${BINLOADER_PORT}..."
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      echo "[dry-run] python3 \"$PAYLOAD_SEND_SCRIPT\" --host \"$PS4_IP\" --port \"$BINLOADER_PORT\" --file \"$PAYLOAD_BIN\""
+    else
+      if [[ ! -f "$PAYLOAD_SEND_SCRIPT" ]]; then
+        warn "Missing sender script: $PAYLOAD_SEND_SCRIPT"
+      else
+        python3 "$PAYLOAD_SEND_SCRIPT" --host "$PS4_IP" --port "$BINLOADER_PORT" --file "$PAYLOAD_BIN" || warn "Payload send failed"
+      fi
+      info "Refreshing FTP snapshot to collect /data/ps4-storage.json..."
+      python3 "$ROOT_DIR/scripts/fetch_ps4_ftp_snapshot.py" --non-interactive --ip "$PS4_IP" --port "$FTP_PORT" || warn "Snapshot refresh failed after payload send"
+    fi
+  else
+    info "Skipping payload deployment"
+  fi
+
+  local storage_json
+  if storage_json="$(read_storage_snapshot_path)"; then
+    summarize_storage_json "$storage_json"
+  else
+    warn "Storage JSON not found yet. Re-send payload and run snapshot refresh."
+  fi
+}
+
 validate_bootstrap_outputs() {
   local files=(
     "GAMES_LIST.md"
@@ -468,6 +573,7 @@ main() {
   write_config
   ensure_scripts_executable
   run_data_bootstrap
+  run_payload_step
   run_doctor
   print_next_steps
 }

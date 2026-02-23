@@ -55,11 +55,11 @@ Chunked implementation plan for a terminal-based installer/bootstrap flow.
 
 ## Chunk 5: Storage Payload Integration
 
-- [ ] Verify payload binary exists (`payloads/storage-snapshot/payload.bin`)
-- [ ] If missing, print build instructions (NAS Docker path)
-- [ ] Optional prompt to send payload to binloader now
-- [ ] Validate storage JSON appears in latest snapshot
-- [ ] Print internal/external free space summary
+- [x] Verify payload binary exists (`payloads/storage-snapshot/payload.bin`)
+- [x] If missing, print build instructions (NAS Docker path)
+- [x] Optional prompt to send payload to binloader now
+- [x] Validate storage JSON appears in latest snapshot
+- [x] Print internal/external free space summary
 
 ## Chunk 6: RPI (Beta) Integration
 

@@ -151,6 +151,9 @@ Use the new terminal setup scripts:
 # installer with bootstrap (initial snapshot + list generation)
 ~/git/PS4/scripts/install_mission_control.sh --bootstrap
 
+# installer with payload deploy step
+~/git/PS4/scripts/install_mission_control.sh --deploy-payload
+
 # installer actual run
 ~/git/PS4/scripts/install_mission_control.sh
 ```
