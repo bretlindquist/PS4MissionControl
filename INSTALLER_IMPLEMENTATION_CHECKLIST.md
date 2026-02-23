@@ -63,10 +63,10 @@ Chunked implementation plan for a terminal-based installer/bootstrap flow.
 
 ## Chunk 6: RPI (Beta) Integration
 
-- [ ] Detect/report RPI endpoint health
-- [ ] Mark all RPI install/send flows as **Beta**
-- [ ] Add guarded test send workflow (small package, explicit confirmation)
-- [ ] Record send diagnostics path for troubleshooting
+- [x] Detect/report RPI endpoint health
+- [x] Mark all RPI install/send flows as **Beta**
+- [x] Add guarded test send workflow (small package, explicit confirmation)
+- [x] Record send diagnostics path for troubleshooting
 
 ## Chunk 7: Mission Control Launch + Verification
 

@@ -7,6 +7,7 @@ RUN_DOCTOR_JSON=0
 NON_INTERACTIVE=0
 BOOTSTRAP_MODE="ask"
 DEPLOY_PAYLOAD_MODE="ask"
+RPI_DIAG_MODE="ask"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CONFIG_DIR="$ROOT_DIR/.ps4mc"
@@ -15,6 +16,7 @@ DOCTOR_SCRIPT="$ROOT_DIR/scripts/doctor_mission_control.sh"
 PAYLOAD_BIN="$ROOT_DIR/payloads/storage-snapshot/payload.bin"
 PAYLOAD_SEND_SCRIPT="$ROOT_DIR/payloads/storage-snapshot/send_payload.py"
 LATEST_SNAPSHOT_PTR="$ROOT_DIR/ftp-sync/latest/last_snapshot_path.txt"
+RPI_DIAG_LOG="$CONFIG_DIR/rpi-diagnostics.log"
 
 PS4_IP_DEFAULT="${PS4_IP_DEFAULT:-192.168.0.26}"
 FTP_PORT_DEFAULT="${FTP_PORT_DEFAULT:-2121}"
@@ -62,6 +64,8 @@ Options:
   --no-bootstrap   Skip bootstrap
   --deploy-payload      Deploy storage payload during install
   --no-deploy-payload   Skip payload deployment
+  --rpi-diagnostics      Run RPI beta diagnostics
+  --no-rpi-diagnostics   Skip RPI beta diagnostics
   --skip-doctor    Skip doctor execution
   --doctor-json    Run doctor in JSON mode (still enforces exit code)
   -h, --help       Show help
@@ -85,6 +89,8 @@ parse_args() {
       --no-bootstrap) BOOTSTRAP_MODE="no" ;;
       --deploy-payload) DEPLOY_PAYLOAD_MODE="yes" ;;
       --no-deploy-payload) DEPLOY_PAYLOAD_MODE="no" ;;
+      --rpi-diagnostics) RPI_DIAG_MODE="yes" ;;
+      --no-rpi-diagnostics) RPI_DIAG_MODE="no" ;;
       --skip-doctor) SKIP_DOCTOR=1 ;;
       --doctor-json) RUN_DOCTOR_JSON=1 ;;
       -h|--help) usage; exit 0 ;;
@@ -398,6 +404,180 @@ deploy_payload_enabled() {
   [[ "$ans" == "y" || "$ans" == "yes" || "$ans" == "1" ]]
 }
 
+rpi_diagnostics_enabled() {
+  if [[ "$RPI_DIAG_MODE" == "yes" ]]; then
+    return 0
+  fi
+  if [[ "$RPI_DIAG_MODE" == "no" ]]; then
+    return 1
+  fi
+  if [[ "$NON_INTERACTIVE" -eq 1 ]]; then
+    return 1
+  fi
+  local ans=""
+  read -r -p "Run RPI beta diagnostics now? (y/n) [y]: " ans || true
+  ans="${ans:-y}"
+  ans="$(echo "$ans" | tr '[:upper:]' '[:lower:]')"
+  [[ "$ans" == "y" || "$ans" == "yes" || "$ans" == "1" ]]
+}
+
+probe_rpi_endpoint() {
+  python3 - "$PS4_IP" "$RPI_PORT" <<'PY'
+import socket, sys
+ip = sys.argv[1]
+port = int(sys.argv[2])
+try:
+    with socket.create_connection((ip, port), timeout=2.2):
+        print("online")
+except Exception as exc:
+    print(f"offline:{exc}")
+PY
+}
+
+find_smallest_pkg() {
+  python3 - "$WATCH_ROOTS" <<'PY'
+from pathlib import Path
+import sys
+
+roots = [r.strip() for r in sys.argv[1].split(",") if r.strip()]
+best = None
+for root in roots:
+    p = Path(root)
+    if not p.exists():
+        continue
+    for pkg in p.rglob("*.pkg"):
+        try:
+            sz = pkg.stat().st_size
+        except Exception:
+            continue
+        if best is None or sz < best[0]:
+            best = (sz, str(pkg.resolve()))
+if best:
+    print(best[1])
+PY
+}
+
+local_ip_for_ps4() {
+  python3 - "$PS4_IP" <<'PY'
+import socket, sys
+target = sys.argv[1]
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+try:
+    s.connect((target, 1))
+    print(s.getsockname()[0])
+finally:
+    s.close()
+PY
+}
+
+run_guarded_rpi_test_send() {
+  local pkg="$1"
+  local pkg_dir pkg_name local_ip stream_port stream_url
+  pkg_dir="$(dirname "$pkg")"
+  pkg_name="$(basename "$pkg")"
+  local_ip="$(local_ip_for_ps4)"
+  stream_port=8879
+  stream_url="http://${local_ip}:${stream_port}/${pkg_name}"
+
+  warn "RPI send/install is Beta and may fail depending on your setup."
+  warn "Test target: $pkg"
+  if [[ "$NON_INTERACTIVE" -eq 0 ]]; then
+    local ans=""
+    read -r -p "Proceed with guarded test send to RPI? (y/n) [n]: " ans || true
+    ans="${ans:-n}"
+    ans="$(echo "$ans" | tr '[:upper:]' '[:lower:]')"
+    if [[ ! "$ans" =~ ^(y|yes|1)$ ]]; then
+      info "Skipped guarded test send"
+      return
+    fi
+  else
+    info "Non-interactive mode: skipping guarded test send"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] (cd \"$pkg_dir\" && python3 -m http.server \"$stream_port\" --bind \"$local_ip\")"
+    echo "[dry-run] POST ${PS4_IP}:${RPI_PORT}/api/install url=$stream_url"
+    return
+  fi
+
+  (
+    cd "$pkg_dir"
+    python3 -m http.server "$stream_port" --bind "$local_ip" >/dev/null 2>&1
+  ) &
+  local http_pid=$!
+  sleep 1
+
+  local response
+  response="$(python3 - "$PS4_IP" "$RPI_PORT" "$stream_url" <<'PY'
+import json, urllib.request, sys
+ip = sys.argv[1]
+port = int(sys.argv[2])
+url = sys.argv[3]
+endpoint = f"http://{ip}:{port}/api/install"
+payload = json.dumps({"url": url}).encode("utf-8")
+req = urllib.request.Request(endpoint, data=payload, method="POST", headers={"Content-Type":"application/json"})
+try:
+    with urllib.request.urlopen(req, timeout=25) as resp:
+        body = resp.read().decode("utf-8", errors="ignore")
+        print(f"status={resp.status}")
+        print(body[:2000])
+except Exception as exc:
+    print(f"error={exc}")
+PY
+)"
+  kill "$http_pid" >/dev/null 2>&1 || true
+  wait "$http_pid" 2>/dev/null || true
+
+  echo "$response" | sed 's/^/    /'
+  if grep -q "status=2" <<<"$response"; then
+    ok "Guarded test send reached RPI endpoint"
+  else
+    warn "Guarded test send did not return a 2xx status"
+  fi
+}
+
+run_rpi_beta_step() {
+  info "RPI (Beta) diagnostics..."
+  warn "RPI send/install is Beta."
+  run_cmd "mkdir -p \"$CONFIG_DIR\""
+
+  local probe
+  probe="$(probe_rpi_endpoint || true)"
+  local now
+  now="$(date +"%Y-%m-%d %H:%M:%S")"
+  if [[ "$DRY_RUN" -eq 0 ]]; then
+    {
+      echo "[$now] RPI diagnostics"
+      echo "  endpoint: ${PS4_IP}:${RPI_PORT}"
+      echo "  probe: $probe"
+    } >> "$RPI_DIAG_LOG"
+  fi
+
+  if [[ "$probe" == online* ]]; then
+    ok "RPI endpoint reachable on ${PS4_IP}:${RPI_PORT}"
+  else
+    warn "RPI endpoint unreachable on ${PS4_IP}:${RPI_PORT} ($probe)"
+    warn "Check that Remote Package Installer is running on PS4."
+    return
+  fi
+
+  local test_pkg
+  test_pkg="$(find_smallest_pkg || true)"
+  if [[ -z "$test_pkg" ]]; then
+    warn "No .pkg found in watch roots; skipping test send diagnostic."
+  else
+    info "Found smallest test package: $test_pkg"
+    run_guarded_rpi_test_send "$test_pkg"
+  fi
+
+  if [[ "$DRY_RUN" -eq 0 ]]; then
+    ok "RPI diagnostics log: $RPI_DIAG_LOG"
+  else
+    echo "[dry-run] log path: $RPI_DIAG_LOG"
+  fi
+}
+
 read_storage_snapshot_path() {
   if [[ ! -f "$LATEST_SNAPSHOT_PTR" ]]; then
     return 1
@@ -561,7 +741,7 @@ print_next_steps() {
 
 main() {
   parse_args "$@"
-  info "PS4 Mission Control installer (Chunk 0/1/2/3)"
+  info "PS4 Mission Control installer (Chunk 0/1/2/3/4/5/6)"
   info "Root: $ROOT_DIR"
   check_os
   ensure_repo
@@ -574,6 +754,11 @@ main() {
   ensure_scripts_executable
   run_data_bootstrap
   run_payload_step
+  if rpi_diagnostics_enabled; then
+    run_rpi_beta_step
+  else
+    info "Skipping RPI diagnostics"
+  fi
   run_doctor
   print_next_steps
 }

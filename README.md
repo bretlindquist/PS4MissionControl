@@ -154,6 +154,9 @@ Use the new terminal setup scripts:
 # installer with payload deploy step
 ~/git/PS4/scripts/install_mission_control.sh --deploy-payload
 
+# installer with RPI beta diagnostics
+~/git/PS4/scripts/install_mission_control.sh --rpi-diagnostics
+
 # installer actual run
 ~/git/PS4/scripts/install_mission_control.sh
 ```
