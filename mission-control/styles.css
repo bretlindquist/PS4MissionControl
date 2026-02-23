@@ -863,6 +863,31 @@ body.details-not-sticky .visual-details-pane {
 #paletteList li:hover,
 #paletteList li.active { background: color-mix(in srgb, var(--accent) 16%, transparent); }
 
+.toast-stack {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: min(420px, 92vw);
+}
+
+.toast {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.62rem 0.72rem;
+  background: color-mix(in srgb, var(--card-solid) 90%, transparent);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+.toast.info { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.toast.success { border-color: color-mix(in srgb, var(--good) 50%, var(--border)); }
+.toast.warn { border-color: color-mix(in srgb, var(--warn) 50%, var(--border)); }
+.toast.error { border-color: color-mix(in srgb, var(--bad) 50%, var(--border)); }
+
 @media (max-width: 1120px) {
   .hero, .controls, .table-card, .watch-card, .ext-uninstalled-card, .uninstalled-card, .tasks-card, .visual-uninstalled-card, .trace-card { grid-column: span 12; }
   .hero__head { flex-direction: column; align-items: flex-start; }

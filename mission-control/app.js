@@ -201,11 +201,12 @@ const el = {
   selectionCopyBtn: document.getElementById("selectionCopyBtn"),
   selectionOpenBtn: document.getElementById("selectionOpenBtn"),
   selectionSendBtn: document.getElementById("selectionSendBtn"),
+  toastStack: document.getElementById("toastStack"),
 };
 
 init().catch((err) => {
   console.error(err);
-  alert("Failed to load Mission Control data. Start server with: python3 ~/git/PS4/mission-control/server.py");
+  notify("Failed to load Mission Control data. Start server with: python3 ~/git/PS4/mission-control/server.py", "error", 5000);
 });
 
 async function init() {
@@ -408,7 +409,7 @@ function renderWatchRootChips() {
       const idx = Number(btn.dataset.rootRm);
       if (!Number.isFinite(idx) || idx < 0) return;
       const root = state.settingsWatchRootsDraft[idx] || "";
-      const ok = window.confirm(`Remove this watch root?\n\n${root}`);
+      const ok = confirmAction("destructive", `Remove this watch root?\n\n${root}`);
       if (!ok) return;
       state.settingsWatchRootsDraft.splice(idx, 1);
       if (el.settingsWatchRoots) el.settingsWatchRoots.value = state.settingsWatchRootsDraft.join(",");
@@ -724,14 +725,15 @@ function bindEvents() {
     if (!row) return;
     const path = extractRowPath(row);
     if (!path || !path.toLowerCase().endsWith(".pkg")) return;
+    if (!confirmAction("send", `Send this package to PS4?\n\n${path}`)) return;
     try {
       setButtonBusy(el.selectionSendBtn, true);
       const payload = await sendToPs4WithRetry(path);
       if (!payload.ok) throw new Error(payload.error || payload.body || "send failed");
       await refreshSendJobs();
-      alert(`Queued sender job ${payload.jobId || ""} for PS4.`);
+      notify(`Queued sender job ${payload.jobId || ""} for PS4.`, "success");
     } catch (err) {
-      alert(`Send to PS4 failed: ${err.message}`);
+      notify(`Send to PS4 failed: ${err.message}`, "error", 4500);
     } finally {
       setButtonBusy(el.selectionSendBtn, false);
       renderSelectionActions();
@@ -741,6 +743,7 @@ function bindEvents() {
     await pickWatchRootFromServer();
   });
   el.settingsResetBtn?.addEventListener("click", async () => {
+    if (!confirmAction("destructive", "Reset all settings to defaults?")) return;
     state.settings = { ...DEFAULT_SETTINGS };
     saveSettings();
     applyUiSettings();
@@ -811,12 +814,12 @@ async function refreshData() {
     const auto = state.settings.autoExtractMissingIcons ? await autoExtractMissingIcons() : { extracted: 0, attempted: 0 };
     renderAll();
     if (auto.extracted > 0) {
-      alert(`Data refreshed. Auto-extracted ${auto.extracted} new icon(s).`);
+      notify(`Data refreshed. Auto-extracted ${auto.extracted} new icon(s).`, "success");
     } else {
-      alert("Data refreshed.");
+      notify("Data refreshed.", "success");
     }
   } catch (err) {
-    alert(`Refresh failed: ${err.message}`);
+    notify(`Refresh failed: ${err.message}`, "error", 4500);
   } finally {
     setButtonBusy(el.refreshBtn, false);
   }
@@ -843,7 +846,7 @@ function saveAutoExtractSeen() {
 
 async function refreshStorageData() {
   if (!state.apiEnabled) {
-    alert("Storage refresh requires API mode (start mission-control/server.py).");
+    notify("Storage refresh requires API mode (start mission-control/server.py).", "warn", 4500);
     return;
   }
   setButtonBusy(el.refreshStorageBtn, true);
@@ -857,18 +860,20 @@ async function refreshStorageData() {
     if (!payload.ok) throw new Error(payload?.send?.error || payload?.snapshot?.stderr || "storage refresh failed");
     await loadServerState();
     renderKpis();
-    alert("Storage refreshed.");
+    notify("Storage refreshed.", "success");
   } catch (err) {
-    alert(`Storage refresh failed: ${err.message}`);
+    notify(`Storage refresh failed: ${err.message}`, "error", 4500);
   } finally {
     setButtonBusy(el.refreshStorageBtn, false);
   }
 }
 
 async function clearThumbCacheNow() {
+  const ok = confirmAction("destructive", "Clear thumbnail cache now?");
+  if (!ok) return;
   if (!state.apiEnabled) {
     state.thumbCache = {};
-    alert("Local thumb cache cleared in browser state.");
+    notify("Local thumb cache cleared in browser state.", "success");
     renderVisualUninstalledCard();
     return;
   }
@@ -881,16 +886,16 @@ async function clearThumbCacheNow() {
     const payload = await res.json();
     if (!payload.ok) throw new Error(payload.error || "clear failed");
     state.thumbCache = {};
-    alert("Thumb cache cleared. Run Refresh Data to repopulate.");
+    notify("Thumb cache cleared. Run Refresh Data to repopulate.", "success");
     renderVisualUninstalledCard();
   } catch (err) {
-    alert(`Clear cache failed: ${err.message}`);
+    notify(`Clear cache failed: ${err.message}`, "error", 4500);
   }
 }
 
 async function pickWatchRootFromServer() {
   if (!state.apiEnabled) {
-    alert("Folder picker requires API mode (start mission-control/server.py).");
+    notify("Folder picker requires API mode (start mission-control/server.py).", "warn", 4500);
     return;
   }
   const btn = el.settingsAddWatchRootBtn;
@@ -913,7 +918,7 @@ async function pickWatchRootFromServer() {
     if (el.settingsWatchRoots) el.settingsWatchRoots.value = state.settingsWatchRootsDraft.join(",");
     renderWatchRootChips();
   } catch (err) {
-    alert(`Folder picker failed: ${err.message}`);
+    notify(`Folder picker failed: ${err.message}`, "error", 4500);
   } finally {
     setButtonBusy(btn, false);
   }
@@ -1562,11 +1567,11 @@ async function extractIconForVisualRow(row) {
   const path = extractRowPath(row);
   const cusa = String(row.CUSA || row["Title ID"] || "").toUpperCase().trim();
   if (!path || !path.toLowerCase().endsWith(".pkg")) {
-    alert("This row has no valid .pkg path to extract icon from.");
+    notify("This row has no valid .pkg path to extract icon from.", "warn");
     return;
   }
   if (!state.apiEnabled) {
-    alert("Icon extraction requires API mode (start mission-control/server.py).");
+    notify("Icon extraction requires API mode (start mission-control/server.py).", "warn", 4500);
     return;
   }
   try {
@@ -1580,9 +1585,9 @@ async function extractIconForVisualRow(row) {
     if (payload.cusa && payload.iconPath) {
       state.localIcons[payload.cusa] = payload.iconPath;
     }
-    alert(`Icon extracted for ${payload.cusa || cusa}.`);
+    notify(`Icon extracted for ${payload.cusa || cusa}.`, "success");
   } catch (err) {
-    alert(`Extract image failed: ${err.message}`);
+    notify(`Extract image failed: ${err.message}`, "error", 4500);
   }
 }
 
@@ -1691,20 +1696,20 @@ async function sendSelectedUninstalledToPs4() {
   const rows = uninstalledCardRows();
   const row = getSelectedUninstalledRow(rows);
   if (!row) {
-    alert("Select a row in Uninstalled Games first.");
+    notify("Select a row in Uninstalled Games first.", "warn");
     return;
   }
   const path = extractRowPath(row);
   if (!path || !path.toLowerCase().endsWith(".pkg")) {
-    alert("Selected row is not a .pkg file path.");
+    notify("Selected row is not a .pkg file path.", "warn");
     return;
   }
   if (!state.apiEnabled) {
-    alert("Send to PS4 requires API mode (start mission-control/server.py).");
+    notify("Send to PS4 requires API mode (start mission-control/server.py).", "warn", 4500);
     return;
   }
   if (state.settings.confirmBeforeSend) {
-    const ok = window.confirm(`Send this package to PS4?\n\n${path}`);
+    const ok = confirmAction("send", `Send this package to PS4?\n\n${path}`);
     if (!ok) return;
   }
   const btn = el.sendToPs4Btn;
@@ -1717,7 +1722,7 @@ async function sendSelectedUninstalledToPs4() {
     const payload = await sendToPs4WithRetry(path);
     if (payload.queued) {
       await refreshSendJobs();
-      alert(`Queued sender job ${payload.jobId} for PS4.`);
+      notify(`Queued sender job ${payload.jobId} for PS4.`, "success");
       return;
     }
     const taskId = Number(payload.taskId || 0);
@@ -1736,9 +1741,9 @@ async function sendSelectedUninstalledToPs4() {
       await refreshRpiTasks();
     }
     const bodyInfo = payload.body ? `\n${payload.body}` : "";
-    alert(`Sent to PS4 (${payload.bytes || 0} bytes).${bodyInfo}`);
+    notify(`Sent to PS4 (${payload.bytes || 0} bytes).${bodyInfo}`, "success", 3800);
   } catch (err) {
-    alert(`Send to PS4 failed: ${err.message}`);
+    notify(`Send to PS4 failed: ${err.message}`, "error", 4500);
   } finally {
     if (btn) {
       btn.textContent = prev;
@@ -1752,20 +1757,20 @@ async function sendSelectedExtUninstalledToPs4() {
   const rows = (state.data.externalUninstalled || []).filter((r) => (r.Installed || "").toLowerCase() !== "installed");
   const row = getSelectedExtUninstalledRow(rows);
   if (!row) {
-    alert("Select a row in Drive Scan Uninstalled first.");
+    notify("Select a row in Drive Scan Uninstalled first.", "warn");
     return;
   }
   const path = extractRowPath(row);
   if (!path || !path.toLowerCase().endsWith(".pkg")) {
-    alert("Selected row is not a .pkg file path.");
+    notify("Selected row is not a .pkg file path.", "warn");
     return;
   }
   if (!state.apiEnabled) {
-    alert("Send to PS4 requires API mode (start mission-control/server.py).");
+    notify("Send to PS4 requires API mode (start mission-control/server.py).", "warn", 4500);
     return;
   }
   if (state.settings.confirmBeforeSend) {
-    const ok = window.confirm(`Send this package to PS4?\n\n${path}`);
+    const ok = confirmAction("send", `Send this package to PS4?\n\n${path}`);
     if (!ok) return;
   }
   const btn = el.extSendToPs4Btn;
@@ -1778,7 +1783,7 @@ async function sendSelectedExtUninstalledToPs4() {
     const payload = await sendToPs4WithRetry(path);
     if (payload.queued) {
       await refreshSendJobs();
-      alert(`Queued sender job ${payload.jobId} for PS4.`);
+      notify(`Queued sender job ${payload.jobId} for PS4.`, "success");
       return;
     }
     const taskId = Number(payload.taskId || 0);
@@ -1797,9 +1802,9 @@ async function sendSelectedExtUninstalledToPs4() {
       await refreshRpiTasks();
     }
     const bodyInfo = payload.body ? `\n${payload.body}` : "";
-    alert(`Sent to PS4 (${payload.bytes || 0} bytes).${bodyInfo}`);
+    notify(`Sent to PS4 (${payload.bytes || 0} bytes).${bodyInfo}`, "success", 3800);
   } catch (err) {
-    alert(`Send to PS4 failed: ${err.message}`);
+    notify(`Send to PS4 failed: ${err.message}`, "error", 4500);
   } finally {
     if (btn) {
       btn.textContent = prev;
@@ -1813,20 +1818,20 @@ async function sendSelectedVisualUninstalledToPs4() {
   const rows = (state.data.externalUninstalled || []).filter((r) => (r.Installed || "").toLowerCase() !== "installed");
   const row = getSelectedVisualUninstalledRow(rows);
   if (!row) {
-    alert("Select a tile in Drive Scan Uninstalled (Visual) first.");
+    notify("Select a tile in Drive Scan Uninstalled (Visual) first.", "warn");
     return;
   }
   const path = extractRowPath(row);
   if (!path || !path.toLowerCase().endsWith(".pkg")) {
-    alert("Selected tile is not a .pkg file path.");
+    notify("Selected tile is not a .pkg file path.", "warn");
     return;
   }
   if (!state.apiEnabled) {
-    alert("Send to PS4 requires API mode (start mission-control/server.py).");
+    notify("Send to PS4 requires API mode (start mission-control/server.py).", "warn", 4500);
     return;
   }
   if (state.settings.confirmBeforeSend) {
-    const ok = window.confirm(`Send this package to PS4?\n\n${path}`);
+    const ok = confirmAction("send", `Send this package to PS4?\n\n${path}`);
     if (!ok) return;
   }
   const btn = el.visualSendToPs4Btn;
@@ -1839,7 +1844,7 @@ async function sendSelectedVisualUninstalledToPs4() {
     const payload = await sendToPs4WithRetry(path);
     if (payload.queued) {
       await refreshSendJobs();
-      alert(`Queued sender job ${payload.jobId} for PS4.`);
+      notify(`Queued sender job ${payload.jobId} for PS4.`, "success");
       return;
     }
     const taskId = Number(payload.taskId || 0);
@@ -1858,9 +1863,9 @@ async function sendSelectedVisualUninstalledToPs4() {
       await refreshRpiTasks();
     }
     const bodyInfo = payload.body ? `\n${payload.body}` : "";
-    alert(`Sent to PS4 (${payload.bytes || 0} bytes).${bodyInfo}`);
+    notify(`Sent to PS4 (${payload.bytes || 0} bytes).${bodyInfo}`, "success", 3800);
   } catch (err) {
-    alert(`Send to PS4 failed: ${err.message}`);
+    notify(`Send to PS4 failed: ${err.message}`, "error", 4500);
   } finally {
     if (btn) {
       btn.textContent = prev;
@@ -2074,6 +2079,28 @@ function setButtonBusy(btn, busy) {
   }
 }
 
+function confirmAction(kind, message) {
+  if (kind === "send" && !state.settings.confirmBeforeSend) return true;
+  if ((kind === "bulk" || kind === "destructive") && !state.settings.confirmBulkActions) return true;
+  return window.confirm(message);
+}
+
+function notify(message, kind = "info", ttlMs = 3000) {
+  const text = String(message || "").trim();
+  if (!text) return;
+  if (!el.toastStack) {
+    alert(text);
+    return;
+  }
+  const node = document.createElement("div");
+  node.className = `toast ${kind}`;
+  node.textContent = text;
+  el.toastStack.appendChild(node);
+  window.setTimeout(() => {
+    node.remove();
+  }, Math.max(1200, Number(ttlMs) || 3000));
+}
+
 function formatBytesShort(bytes) {
   const n = Number(bytes);
   if (!Number.isFinite(n) || n <= 0) return "-";
@@ -2285,13 +2312,13 @@ async function openRowInFinder(row) {
     const payload = await res.json();
     if (!payload.ok) throw new Error(payload.error || "Could not open Finder");
   } catch (err) {
-    alert(`Open in Finder failed: ${err.message}`);
+    notify(`Open in Finder failed: ${err.message}`, "error", 4200);
   }
 }
 
 async function maybeOpenRowInFinder(row) {
   if (!state.settings.enableFinderDblClick) return;
-  await maybeOpenRowInFinder(row);
+  await openRowInFinder(row);
 }
 
 function matchesIgnore(row) {
@@ -2308,7 +2335,7 @@ function matchesHidden(row) {
 async function clearList(type) {
   const map = { watch: "watch", ignore: "ignore", hidden: "hide" };
   const arr = type === "watch" ? state.watch : type === "ignore" ? state.ignore : state.hidden;
-  if (state.settings.confirmBulkActions && !confirm(`Clear ${arr.length} ${type} item(s)?`)) return;
+  if (!confirmAction("bulk", `Clear ${arr.length} ${type} item(s)?`)) return;
 
   if (state.apiEnabled) {
     for (let i = arr.length - 1; i >= 0; i -= 1) {
