@@ -38,11 +38,11 @@ Chunked implementation plan for a terminal-based installer/bootstrap flow.
 
 ## Chunk 3: Credential Strategy
 
-- [ ] Offer mode A: no password persistence (prompt each run)
-- [ ] Offer mode B: macOS Keychain storage + retrieval
+- [x] Offer mode A: no password persistence (prompt each run)
+- [x] Offer mode B: macOS Keychain storage + retrieval
 - [ ] Implement one-time prompt flow for mode A
 - [ ] Implement keychain get/set/delete for mode B
-- [ ] Add explicit warning text for mode A:
+- [x] Add explicit warning text for mode A:
       manual refresh required from terminal when password prompt is needed
 
 ## Chunk 4: Data Bootstrap

@@ -18,6 +18,11 @@ BINLOADER_PORT_DEFAULT="${BINLOADER_PORT_DEFAULT:-9090}"
 WATCH_ROOTS_DEFAULT="${WATCH_ROOTS_DEFAULT:-/Volumes/PS4,/Volumes/MagicLantern}"
 MAX_DEPTH_DEFAULT="${MAX_DEPTH_DEFAULT:-12}"
 INCLUDE_ARCHIVES_DEFAULT="${INCLUDE_ARCHIVES_DEFAULT:-0}"
+FTP_USERNAME_DEFAULT="${FTP_USERNAME_DEFAULT:-anonymous}"
+CREDENTIAL_MODE_DEFAULT="${CREDENTIAL_MODE_DEFAULT:-keychain}"
+if [[ "$OSTYPE" != darwin* ]]; then
+  CREDENTIAL_MODE_DEFAULT="prompt"
+fi
 
 PS4_IP="$PS4_IP_DEFAULT"
 FTP_PORT="$FTP_PORT_DEFAULT"
@@ -26,6 +31,10 @@ BINLOADER_PORT="$BINLOADER_PORT_DEFAULT"
 WATCH_ROOTS="$WATCH_ROOTS_DEFAULT"
 MAX_DEPTH="$MAX_DEPTH_DEFAULT"
 INCLUDE_ARCHIVES="$INCLUDE_ARCHIVES_DEFAULT"
+FTP_USERNAME="$FTP_USERNAME_DEFAULT"
+FTP_CREDENTIAL_MODE="$CREDENTIAL_MODE_DEFAULT"
+FTP_PASSWORD=""
+FTP_PASSWORD_REF=""
 
 color() {
   local code="$1"; shift
@@ -94,6 +103,10 @@ load_existing_config() {
     source "$CONFIG_FILE"
     PS4_IP="${PS4_IP:-$PS4_IP_DEFAULT}"
     FTP_PORT="${FTP_PORT:-$FTP_PORT_DEFAULT}"
+    FTP_USERNAME="${FTP_USERNAME:-$FTP_USERNAME_DEFAULT}"
+    FTP_CREDENTIAL_MODE="${FTP_CREDENTIAL_MODE:-$CREDENTIAL_MODE_DEFAULT}"
+    FTP_PASSWORD_REF="${FTP_PASSWORD_REF:-}"
+    FTP_PASSWORD="${FTP_PASSWORD:-}"
     RPI_PORT="${RPI_PORT:-$RPI_PORT_DEFAULT}"
     BINLOADER_PORT="${BINLOADER_PORT:-$BINLOADER_PORT_DEFAULT}"
     WATCH_ROOTS="${WATCH_ROOTS:-$WATCH_ROOTS_DEFAULT}"
@@ -132,6 +145,97 @@ prompt_yes_no() {
   fi
 }
 
+prompt_secret() {
+  local label="$1" outvar="$2"
+  local input=""
+  read -r -s -p "$label: " input || true
+  echo
+  printf -v "$outvar" '%s' "$input"
+}
+
+validate_credential_mode() {
+  local mode="$1"
+  [[ "$mode" == "prompt" || "$mode" == "keychain" || "$mode" == "config" ]]
+}
+
+keychain_ref() {
+  echo "ps4mc:ftp:${PS4_IP}:${FTP_PORT}:${FTP_USERNAME}"
+}
+
+store_keychain_password() {
+  local ref="$1" password="$2"
+  if ! command -v security >/dev/null 2>&1; then
+    error "macOS security CLI not found; cannot store keychain password"
+    return 1
+  fi
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] security add-generic-password -a \"$FTP_USERNAME\" -s \"$ref\" -U -w '***'"
+    return 0
+  fi
+  security add-generic-password -a "$FTP_USERNAME" -s "$ref" -U -w "$password" >/dev/null
+}
+
+configure_credentials() {
+  if [[ "$NON_INTERACTIVE" -eq 1 ]]; then
+    if ! validate_credential_mode "$FTP_CREDENTIAL_MODE"; then
+      FTP_CREDENTIAL_MODE="$CREDENTIAL_MODE_DEFAULT"
+    fi
+    if [[ "$FTP_CREDENTIAL_MODE" == "keychain" ]]; then
+      FTP_PASSWORD_REF="$(keychain_ref)"
+      FTP_PASSWORD=""
+    fi
+    if [[ "$FTP_CREDENTIAL_MODE" == "prompt" ]]; then
+      FTP_PASSWORD=""
+      FTP_PASSWORD_REF=""
+    fi
+    return
+  fi
+
+  prompt_value "FTP Username" "$FTP_USERNAME" FTP_USERNAME
+
+  while true; do
+    prompt_value "Credential mode (prompt/keychain/config)" "$FTP_CREDENTIAL_MODE" FTP_CREDENTIAL_MODE
+    FTP_CREDENTIAL_MODE="$(echo "$FTP_CREDENTIAL_MODE" | tr '[:upper:]' '[:lower:]')"
+    validate_credential_mode "$FTP_CREDENTIAL_MODE" && break
+    warn "Invalid mode: $FTP_CREDENTIAL_MODE (choose prompt, keychain, or config)"
+  done
+
+  FTP_PASSWORD=""
+  FTP_PASSWORD_REF=""
+
+  case "$FTP_CREDENTIAL_MODE" in
+    prompt)
+      info "Prompt mode selected."
+      warn "Website refresh cannot run passworded FTP sync in this mode."
+      warn "Run terminal sync manually, then click Refresh Data in web UI."
+      ;;
+    keychain)
+      if [[ "$OSTYPE" != darwin* ]]; then
+        warn "Keychain mode requested on non-macOS; switching to prompt mode."
+        FTP_CREDENTIAL_MODE="prompt"
+      else
+        local ref
+        ref="$(keychain_ref)"
+        prompt_secret "Enter FTP password for keychain storage (leave empty to skip)" FTP_PASSWORD
+        if [[ -n "$FTP_PASSWORD" ]]; then
+          store_keychain_password "$ref" "$FTP_PASSWORD"
+          ok "Stored FTP password in macOS Keychain"
+        else
+          warn "No password entered; keychain item not updated"
+        fi
+        FTP_PASSWORD_REF="$ref"
+        FTP_PASSWORD=""
+      fi
+      ;;
+    config)
+      prompt_secret "Enter FTP password to store in config.env (plaintext)" FTP_PASSWORD
+      if [[ -z "$FTP_PASSWORD" ]]; then
+        warn "No password entered. Config mode selected but password is empty."
+      fi
+      ;;
+  esac
+}
+
 run_config_wizard() {
   if [[ "$NON_INTERACTIVE" -eq 1 ]]; then
     info "Non-interactive mode enabled; using defaults/current config"
@@ -168,6 +272,7 @@ run_config_wizard() {
   done
 
   prompt_yes_no "Include archive rows in views" "$INCLUDE_ARCHIVES" INCLUDE_ARCHIVES
+  configure_credentials
 }
 
 write_config() {
@@ -177,6 +282,10 @@ write_config() {
   contents="$(cat <<EOF
 PS4_IP="$PS4_IP"
 FTP_PORT="$FTP_PORT"
+FTP_USERNAME="$FTP_USERNAME"
+FTP_CREDENTIAL_MODE="$FTP_CREDENTIAL_MODE"
+FTP_PASSWORD_REF="$FTP_PASSWORD_REF"
+FTP_PASSWORD="$FTP_PASSWORD"
 RPI_PORT="$RPI_PORT"
 BINLOADER_PORT="$BINLOADER_PORT"
 WATCH_ROOTS="$WATCH_ROOTS"
@@ -249,6 +358,11 @@ print_next_steps() {
   echo "  1) Start server: python3 \"$ROOT_DIR/mission-control/server.py\""
   echo "  2) Open app:      http://localhost:8787/mission-control/"
   echo "  3) Open Settings and confirm PS4 IP/ports/watch roots."
+  if [[ "$FTP_CREDENTIAL_MODE" == "prompt" ]]; then
+    echo
+    warn "Prompt credential mode is active."
+    warn "Manual terminal FTP sync is required before using web Refresh Data."
+  fi
   echo
   echo "Config file:"
   echo "  $CONFIG_FILE"
@@ -256,12 +370,15 @@ print_next_steps() {
 
 main() {
   parse_args "$@"
-  info "PS4 Mission Control installer (Chunk 0/1/2)"
+  info "PS4 Mission Control installer (Chunk 0/1/2/3)"
   info "Root: $ROOT_DIR"
   check_os
   ensure_repo
   load_existing_config
   run_config_wizard
+  if [[ "$NON_INTERACTIVE" -eq 1 ]]; then
+    configure_credentials
+  fi
   write_config
   ensure_scripts_executable
   run_doctor

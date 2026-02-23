@@ -157,6 +157,12 @@ Notes:
 - Installer is idempotent and safe to rerun.
 - Remote send/install remains **Beta**.
 
+Credential mode behavior (installer config):
+
+- `prompt`: password is not stored. Use terminal sync manually before web `Refresh Data`.
+- `keychain`: password is stored in macOS Keychain; config stores only reference key.
+- `config`: password stored in `.ps4mc/config.env` (plaintext, `chmod 600` enforced).
+
 ## Data Model and Source-of-Truth
 
 Installed app data comes from `app.db` (latest snapshot copy preferred):
