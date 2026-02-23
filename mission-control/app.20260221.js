@@ -374,9 +374,14 @@ function renderWatchRootChips() {
     )
     .join("");
   el.settingsWatchRootChips.querySelectorAll("button[data-root-rm]").forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const idx = Number(btn.dataset.rootRm);
       if (!Number.isFinite(idx) || idx < 0) return;
+      const root = state.settingsWatchRootsDraft[idx] || "";
+      const ok = window.confirm(`Remove this watch root?\n\n${root}`);
+      if (!ok) return;
       state.settingsWatchRootsDraft.splice(idx, 1);
       if (el.settingsWatchRoots) el.settingsWatchRoots.value = state.settingsWatchRootsDraft.join(",");
       renderWatchRootChips();
