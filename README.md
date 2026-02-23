@@ -145,6 +145,9 @@ Use the new terminal setup scripts:
 # installer dry-run
 ~/git/PS4/scripts/install_mission_control.sh --dry-run
 
+# installer non-interactive (use existing config/defaults)
+~/git/PS4/scripts/install_mission_control.sh --non-interactive
+
 # installer actual run
 ~/git/PS4/scripts/install_mission_control.sh
 ```

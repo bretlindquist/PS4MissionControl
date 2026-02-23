@@ -27,14 +27,14 @@ Chunked implementation plan for a terminal-based installer/bootstrap flow.
 
 ## Chunk 2: Interactive Config Wizard
 
-- [ ] Prompt for PS4 IP (default `192.168.0.26`)
-- [ ] Prompt for FTP port (default `2121`)
-- [ ] Prompt for RPI port (default `12800`)
-- [ ] Prompt for binloader port (default `9090`)
-- [ ] Prompt for watch roots (comma-separated)
-- [ ] Prompt for max scan depth
-- [ ] Prompt for include archives toggle
-- [ ] Persist config to local settings file/json
+- [x] Prompt for PS4 IP (default `192.168.0.26`)
+- [x] Prompt for FTP port (default `2121`)
+- [x] Prompt for RPI port (default `12800`)
+- [x] Prompt for binloader port (default `9090`)
+- [x] Prompt for watch roots (comma-separated)
+- [x] Prompt for max scan depth
+- [x] Prompt for include archives toggle
+- [x] Persist config to local settings file/json
 
 ## Chunk 3: Credential Strategy
 
