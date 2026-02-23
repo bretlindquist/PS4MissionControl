@@ -99,18 +99,23 @@ input::placeholder { color: var(--muted); }
   border-radius: 10px;
   padding: 0.52rem 0.75rem;
   font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
   transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+.btn:visited { color: var(--text); text-decoration: none; }
 .btn:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 65%, var(--border)); }
 .btn.ghost { background: transparent; }
 .btn.danger { border-color: color-mix(in srgb, var(--bad) 55%, var(--border)); }
 .icon-btn {
-  width: 48px;
-  min-width: 48px;
+  width: 56px;
+  min-width: 56px;
   height: 40px;
   padding: 0;
-  font-size: 1.2rem;
+  font-size: 1.55rem;
   line-height: 1;
   display: inline-flex;
   align-items: center;
