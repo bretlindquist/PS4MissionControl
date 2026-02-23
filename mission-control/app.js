@@ -188,6 +188,7 @@ const el = {
   settingsOpenReadmeBtn: document.getElementById("settingsOpenReadmeBtn"),
   settingsOpenInstallerSpecBtn: document.getElementById("settingsOpenInstallerSpecBtn"),
   settingsExportProfile: document.getElementById("settingsExportProfile"),
+  settingsExportNowBtn: document.getElementById("settingsExportNowBtn"),
   settingsSaveBtn: document.getElementById("settingsSaveBtn"),
   settingsResetBtn: document.getElementById("settingsResetBtn"),
   palette: document.getElementById("palette"),
@@ -757,6 +758,11 @@ function bindEvents() {
   });
   el.settingsOpenReadmeBtn?.addEventListener("click", () => window.open("../README.md", "_blank", "noopener"));
   el.settingsOpenInstallerSpecBtn?.addEventListener("click", () => window.open("../PS4MISSIONCONTROL_INSTALLER_SPEC.md", "_blank", "noopener"));
+  el.settingsExportNowBtn?.addEventListener("click", () => {
+    const ok = exportCurrentView();
+    if (!ok) notify("No rows in current view to export.", "warn");
+    else notify("Export started for current view.", "success");
+  });
   el.cmdBtn.addEventListener("click", openPalette);
   el.themeBtn.addEventListener("click", toggleTheme);
 
@@ -2387,7 +2393,7 @@ function persistLocalLists() {
 
 function exportCurrentView() {
   const rows = currentDataset();
-  if (!rows.length) return;
+  if (!rows.length) return false;
   const headers = pickExportHeaders(rows);
   const csv = [headers.join(",")]
     .concat(rows.map((r) => headers.map((h) => csvEscape(r[h] || "")).join(",")))
@@ -2399,6 +2405,7 @@ function exportCurrentView() {
   a.download = `ps4-mission-control-${state.view}.csv`;
   a.click();
   URL.revokeObjectURL(url);
+  return true;
 }
 
 function exportUninstalledCard() {
