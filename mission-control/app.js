@@ -196,6 +196,11 @@ const el = {
   cmdBtn: document.getElementById("cmdBtn"),
   themeBtn: document.getElementById("themeBtn"),
   sources: document.getElementById("sources"),
+  selectionTitle: document.getElementById("selectionTitle"),
+  selectionSub: document.getElementById("selectionSub"),
+  selectionCopyBtn: document.getElementById("selectionCopyBtn"),
+  selectionOpenBtn: document.getElementById("selectionOpenBtn"),
+  selectionSendBtn: document.getElementById("selectionSendBtn"),
 };
 
 init().catch((err) => {
@@ -701,6 +706,37 @@ function bindEvents() {
       setSettingsGroupFilter(group);
     });
   });
+  el.selectionCopyBtn?.addEventListener("click", async () => {
+    const row = getUnifiedSelectedUninstalledRow();
+    const id = row ? extractRowId(row) : "";
+    if (!id) return;
+    try {
+      await navigator.clipboard?.writeText(id);
+    } catch {}
+  });
+  el.selectionOpenBtn?.addEventListener("click", async () => {
+    const row = getUnifiedSelectedUninstalledRow();
+    if (!row) return;
+    await openRowInFinder(row);
+  });
+  el.selectionSendBtn?.addEventListener("click", async () => {
+    const row = getUnifiedSelectedUninstalledRow();
+    if (!row) return;
+    const path = extractRowPath(row);
+    if (!path || !path.toLowerCase().endsWith(".pkg")) return;
+    try {
+      setButtonBusy(el.selectionSendBtn, true);
+      const payload = await sendToPs4WithRetry(path);
+      if (!payload.ok) throw new Error(payload.error || payload.body || "send failed");
+      await refreshSendJobs();
+      alert(`Queued sender job ${payload.jobId || ""} for PS4.`);
+    } catch (err) {
+      alert(`Send to PS4 failed: ${err.message}`);
+    } finally {
+      setButtonBusy(el.selectionSendBtn, false);
+      renderSelectionActions();
+    }
+  });
   el.settingsAddWatchRootBtn?.addEventListener("click", async () => {
     await pickWatchRootFromServer();
   });
@@ -890,6 +926,45 @@ function renderAll() {
   renderVisualUninstalledCard();
   renderRpiTasks();
   renderMainTable();
+  renderSelectionActions();
+}
+
+function setUnifiedUninstalledSelection(row, key) {
+  const rowKey = key || (row ? makeRule(row).key : "");
+  state.uninstalledCard.selectedRowKey = rowKey || "";
+  state.extUninstalledCard.selectedRowKey = rowKey || "";
+  state.visualUninstalledCard.selectedRowKey = rowKey || "";
+}
+
+function getUnifiedSelectedUninstalledRow() {
+  const key = state.uninstalledCard.selectedRowKey || state.extUninstalledCard.selectedRowKey || state.visualUninstalledCard.selectedRowKey;
+  if (!key) return null;
+  const pools = [
+    ...(state.data.externalUninstalled || []),
+    ...(state.data.externalGames || []),
+  ];
+  return pools.find((r, idx) => (makeRule(r).key || String(idx)) === key) || null;
+}
+
+function renderSelectionActions() {
+  const row = getUnifiedSelectedUninstalledRow();
+  const id = row ? extractRowId(row) : "";
+  const path = row ? extractRowPath(row) : "";
+  const canSend = !!(path && path.toLowerCase().endsWith(".pkg") && state.apiEnabled);
+  if (el.selectionTitle) el.selectionTitle.textContent = row ? (row.Title || row.File || "Selected item") : "No selection";
+  if (el.selectionSub) el.selectionSub.textContent = row ? `${id || "-"} ${path ? "· " + path : ""}` : "Select a row or tile in an uninstalled view.";
+  if (el.selectionCopyBtn) {
+    el.selectionCopyBtn.disabled = !id;
+    el.selectionCopyBtn.title = id ? `Copy ${id}` : "No ID available";
+  }
+  if (el.selectionOpenBtn) {
+    el.selectionOpenBtn.disabled = !path;
+    el.selectionOpenBtn.title = path ? `Open ${path}` : "No path available";
+  }
+  if (el.selectionSendBtn) {
+    el.selectionSendBtn.disabled = !canSend;
+    el.selectionSendBtn.title = canSend ? `Send ${path}` : "Need a selected .pkg row";
+  }
 }
 
 function uninstalledCardRows() {
@@ -1136,7 +1211,7 @@ function renderExternalUninstalledCard() {
   el.extUninstalledTbody.querySelectorAll("tr.row-clickable").forEach((tr) => {
     tr.addEventListener("click", async () => {
       const row = rows[Number(tr.dataset.idx)];
-      state.extUninstalledCard.selectedRowKey = tr.dataset.key || "";
+      setUnifiedUninstalledSelection(row, tr.dataset.key || "");
       const id = extractRowId(row);
       if (id) {
         try {
@@ -1144,6 +1219,9 @@ function renderExternalUninstalledCard() {
         } catch {}
       }
       renderExternalUninstalledCard();
+      renderUninstalledCard();
+      renderVisualUninstalledCard();
+      renderSelectionActions();
     });
     tr.addEventListener("dblclick", async () => {
       const row = rows[Number(tr.dataset.idx)];
@@ -1432,7 +1510,7 @@ function renderVisualUninstalledCard() {
       }
       const row = rows[Number(tile.dataset.idx)];
       const nextKey = tile.dataset.key || "";
-      state.visualUninstalledCard.selectedRowKey = nextKey;
+      setUnifiedUninstalledSelection(row, nextKey);
       el.visualUninstalledGrid.querySelectorAll(".visual-tile.selected").forEach((t) => t.classList.remove("selected"));
       tile.classList.add("selected");
       updateVisualSendToPs4Button(rows);
@@ -1443,6 +1521,8 @@ function renderVisualUninstalledCard() {
           await navigator.clipboard?.writeText(id);
         } catch {}
       }
+      renderUninstalledCard();
+      renderSelectionActions();
     });
     tile.addEventListener("dblclick", async () => {
       const row = rows[Number(tile.dataset.idx)];
@@ -1543,7 +1623,7 @@ function renderUninstalledCard() {
   el.uninstalledTbody.querySelectorAll("tr.row-clickable").forEach((tr) => {
     tr.addEventListener("click", async () => {
       const row = rows[Number(tr.dataset.idx)];
-      state.uninstalledCard.selectedRowKey = tr.dataset.key || "";
+      setUnifiedUninstalledSelection(row, tr.dataset.key || "");
       const id = extractRowId(row);
       if (id) {
         try {
@@ -1551,6 +1631,8 @@ function renderUninstalledCard() {
         } catch {}
       }
       renderUninstalledCard();
+      renderVisualUninstalledCard();
+      renderSelectionActions();
     });
     tr.addEventListener("dblclick", async () => {
       const row = rows[Number(tr.dataset.idx)];
@@ -1662,6 +1744,7 @@ async function sendSelectedUninstalledToPs4() {
       btn.textContent = prev;
       updateSendToPs4Button(rows);
     }
+    renderSelectionActions();
   }
 }
 
@@ -1722,6 +1805,7 @@ async function sendSelectedExtUninstalledToPs4() {
       btn.textContent = prev;
       updateExtSendToPs4Button(rows);
     }
+    renderSelectionActions();
   }
 }
 
@@ -1782,6 +1866,7 @@ async function sendSelectedVisualUninstalledToPs4() {
       btn.textContent = prev;
       updateVisualSendToPs4Button(rows);
     }
+    renderSelectionActions();
   }
 }
 

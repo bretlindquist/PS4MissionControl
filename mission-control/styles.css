@@ -715,6 +715,43 @@ tbody tr.row-selected { background: color-mix(in srgb, var(--accent) 18%, transp
   gap: 0.6rem;
   margin-top: 0.6rem;
 }
+.selection-actions {
+  margin-top: 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.6rem 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  background: color-mix(in srgb, var(--bg-soft) 70%, transparent);
+}
+.selection-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.selection-meta strong {
+  font-size: 0.92rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.selection-meta small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.selection-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
 
 #settingsWatchRoots {
   margin-top: 0.45rem;
@@ -835,4 +872,5 @@ body.details-not-sticky .visual-details-pane {
   .visual-layout { grid-template-columns: 1fr; }
   .visual-details-pane { position: static; }
   .settings-grid { grid-template-columns: 1fr; }
+  .selection-actions { flex-direction: column; align-items: flex-start; }
 }
