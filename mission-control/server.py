@@ -828,6 +828,8 @@ class Handler(SimpleHTTPRequestHandler):
         parsed = urlparse(self.path)
         p = parsed.path
         # Allow operation behind /mission-control prefix proxies
+        if p.startswith('/mission-control/mission-control/api/'):
+            p = p[len('/mission-control'):]  # collapse duplicated prefix
         if p.startswith('/mission-control/api/'):
             p = p[len('/mission-control'):]
         query = parse_qs(parsed.query or "", keep_blank_values=False)
@@ -879,6 +881,8 @@ class Handler(SimpleHTTPRequestHandler):
         parsed = urlparse(self.path)
         p = parsed.path
         # Allow operation behind /mission-control prefix proxies
+        if p.startswith('/mission-control/mission-control/api/'):
+            p = p[len('/mission-control'):]  # collapse duplicated prefix
         if p.startswith('/mission-control/api/'):
             p = p[len('/mission-control'):]
         query = parse_qs(parsed.query or "", keep_blank_values=False)
