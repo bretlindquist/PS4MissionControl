@@ -827,6 +827,9 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
         p = parsed.path
+        # Allow operation behind /mission-control prefix proxies
+        if p.startswith('/mission-control/api/'):
+            p = p[len('/mission-control'):]
         query = parse_qs(parsed.query or "", keep_blank_values=False)
         if p == "/api/send-jobs":
             jobs = _list_send_jobs(limit=80)
@@ -875,6 +878,9 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         parsed = urlparse(self.path)
         p = parsed.path
+        # Allow operation behind /mission-control prefix proxies
+        if p.startswith('/mission-control/api/'):
+            p = p[len('/mission-control'):]
         query = parse_qs(parsed.query or "", keep_blank_values=False)
         length = int(self.headers.get("Content-Length", "0"))
         raw = self.rfile.read(length) if length > 0 else b"{}"
