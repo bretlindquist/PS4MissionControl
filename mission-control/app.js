@@ -80,6 +80,12 @@ const state = {
     status: "offline",
     ip: "",
   },
+  ftpStatus: {
+    online: false,
+    ip: "",
+    port: 2121,
+    error: "",
+  },
   rpiStatus: {
     online: false,
     ip: "",
@@ -104,6 +110,9 @@ const state = {
   settings: { ...DEFAULT_SETTINGS },
   settingsWatchRootsDraft: [],
 };
+
+let paletteActions = [];
+let paletteCursor = 0;
 
 const el = {
   kpiInstalled: document.getElementById("kpiInstalled"),
@@ -492,6 +501,7 @@ async function loadServerState() {
     state.hidden = Array.isArray(payload.hide) ? payload.hide : [];
     state.localIcons = payload.localIcons && typeof payload.localIcons === "object" ? payload.localIcons : {};
     state.ftpConfig = payload.ftpConfig || state.ftpConfig;
+    state.ftpStatus = payload.ftpStatus || state.ftpStatus;
     state.ps4Status = payload.ps4Status || state.ps4Status;
     state.rpiStatus = payload.rpiStatus || state.rpiStatus;
     state.ps4Storage = payload.ps4Storage || state.ps4Storage;
@@ -831,6 +841,29 @@ function bindEvents() {
     if (e.target === el.palette) closePalette();
   });
   el.paletteInput.addEventListener("input", renderPalette);
+  el.paletteInput.addEventListener("keydown", (e) => {
+    if (!paletteActions.length) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      paletteCursor = (paletteCursor + 1) % paletteActions.length;
+      renderPalette();
+      return;
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      paletteCursor = (paletteCursor - 1 + paletteActions.length) % paletteActions.length;
+      renderPalette();
+      return;
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const action = paletteActions[paletteCursor];
+      if (action) {
+        action.run();
+        closePalette();
+      }
+    }
+  });
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".visual-menu")) {
       if (state.visualUninstalledCard.menuRowKey) {
@@ -1240,19 +1273,21 @@ function renderKpis() {
   el.kpiUninstalled.textContent = getUninstalledRows().length.toLocaleString();
   el.kpiWatch.textContent = state.watch.length.toLocaleString();
   if (el.kpiPs4Online) {
-    const online = !!state.ps4Status?.online;
+    const online = !!state.ftpStatus?.online;
     el.kpiPs4Online.textContent = online ? "Online" : "Offline";
     el.kpiPs4Online.classList.toggle("online", online);
     el.kpiPs4Online.classList.toggle("offline", !online);
-    const ip = state.ps4Status?.ip ? ` (${state.ps4Status.ip})` : "";
-    el.kpiPs4Online.title = `GoldHEN status${ip}`;
+    const port = Number(state.ftpStatus?.port || state.ftpConfig?.port) || 2121;
+    const ip = state.ftpStatus?.ip ? ` (${state.ftpStatus.ip}:${port})` : "";
+    const err = state.ftpStatus?.error ? `\n${state.ftpStatus.error}` : "";
+    el.kpiPs4Online.title = `FTP status${ip}${err}`;
   }
   if (el.headerFtpInfo) {
-    const port = Number(state.ftpConfig?.port) || 2121;
+    const port = Number(state.ftpStatus?.port || state.ftpConfig?.port) || 2121;
     el.headerFtpInfo.textContent = `FTP :${port}`;
     if (el.railFtpInfo) el.railFtpInfo.textContent = `:${port}`;
     if (el.railPs4Online) {
-      const online = !!state.ps4Status?.online;
+      const online = !!state.ftpStatus?.online;
       el.railPs4Online.textContent = "FTP";
       el.railPs4Online.classList.toggle("online", online);
       el.railPs4Online.classList.toggle("offline", !online);
@@ -2680,7 +2715,7 @@ function renderSourceList() {
 
 function renderPalette() {
   const q = (el.paletteInput.value || "").toLowerCase().trim();
-  const actions = [
+  const commandActions = [
     { label: "View Uninstalled Games", run: () => setView("uninstalled_games") },
     { label: "View Uninstalled Packages", run: () => setView("uninstalled_packages") },
     { label: "View All Packages", run: () => setView("all_packages") },
@@ -2698,13 +2733,74 @@ function renderPalette() {
     { label: "Focus Search", run: () => el.inlineFilter.focus() },
   ].filter((a) => a.label.toLowerCase().includes(q));
 
-  el.paletteList.innerHTML = actions.map((a, idx) => `<li data-act="${idx}">${a.label}</li>`).join("");
+  const titleActions = q.length >= 2 ? buildPaletteTitleActions(q) : [];
+  paletteActions = titleActions.concat(commandActions);
+  if (paletteCursor >= paletteActions.length) paletteCursor = 0;
+
+  el.paletteList.innerHTML = paletteActions.map((a, idx) => {
+    const active = idx === paletteCursor ? "active" : "";
+    const meta = a.meta ? `<small>${escapeHtml(a.meta)}</small>` : "";
+    return `<li class="${active}" data-act="${idx}"><span>${a.label}</span>${meta}</li>`;
+  }).join("");
   el.paletteList.querySelectorAll("li").forEach((item, idx) => {
     item.addEventListener("click", () => {
-      actions[idx].run();
+      paletteActions[idx].run();
       closePalette();
     });
   });
+}
+
+function paletteRowTitle(row) {
+  return row.Title || row.title || row["Game Title"] || row.Name || row.File || row["Title Name"] || "";
+}
+
+function paletteRowId(row) {
+  return row["Title ID"] || row.CUSA || row.titleId || row["Content ID"] || "";
+}
+
+function paletteRowPath(row) {
+  return row.Path || row["Example Path"] || row.File || "";
+}
+
+function buildPaletteTitleActions(query) {
+  const buckets = [
+    { label: "Installed", view: "installed", rows: state.data.installed || [] },
+    { label: "Uninstalled Games", view: "uninstalled_games", rows: getUninstalledRows() },
+    { label: "Uninstalled PKGs", view: "uninstalled_packages", rows: state.data.externalUninstalled || [] },
+    { label: "All Packages", view: "all_packages", rows: allPackagesRows() },
+  ];
+  const q = query.toLowerCase();
+  const hits = [];
+  const seen = new Set();
+  for (const b of buckets) {
+    for (const row of b.rows) {
+      const title = String(paletteRowTitle(row) || "").trim();
+      if (!title) continue;
+      const id = String(paletteRowId(row) || "").trim();
+      const path = String(paletteRowPath(row) || "").trim();
+      const hay = `${title} ${id} ${path}`.toLowerCase();
+      if (!hay.includes(q)) continue;
+      const key = `${normalizeTitle(title)}|${id}|${b.view}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      hits.push({
+        label: `Title: ${title}`,
+        meta: `${b.label}${id ? ` • ${id}` : ""}`,
+        run: () => jumpToPaletteTitle({ view: b.view, title, id }),
+      });
+      if (hits.length >= 40) return hits;
+    }
+  }
+  return hits;
+}
+
+function jumpToPaletteTitle(hit) {
+  setView(hit.view);
+  const query = String(hit.id || hit.title || "").trim();
+  state.search = query.toLowerCase();
+  el.inlineFilter.value = query;
+  renderMainTable();
+  scrollToRailTarget("mainTableCard");
 }
 
 function setView(v) {
@@ -2717,6 +2813,7 @@ function openPalette() {
   el.palette.classList.add("open");
   el.palette.setAttribute("aria-hidden", "false");
   el.paletteInput.value = "";
+  paletteCursor = 0;
   renderPalette();
   el.paletteInput.focus();
 }
