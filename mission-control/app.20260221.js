@@ -1,6 +1,7 @@
 const DATA_VERSION = "20260222-1";
 const AUTO_EXTRACT_SEEN_KEY = "ps4mc_auto_extract_seen_cusas_v1";
 const AUTO_EXTRACT_MAX_PER_REFRESH = 3;
+const MAX_REFRESH_LOG_LINES = 350;
 const SETTINGS_KEY = "ps4mc_settings_v1";
 const SEND_BUTTON_LABEL = "Send to PS4 (Beta)";
 const DEFAULT_SETTINGS = Object.freeze({
@@ -85,6 +86,18 @@ const state = {
     ip: "",
     port: 12800,
   },
+  ftpStatus: {
+    online: false,
+    ip: "",
+    port: 2121,
+    error: "",
+  },
+  binStatus: {
+    online: false,
+    ip: "",
+    port: 9090,
+    error: "",
+  },
   ftpConfig: {
     host: "",
     port: 2121,
@@ -100,10 +113,14 @@ const state = {
   rpiTasks: [],
   sendJobs: [],
   rpiPollTimer: null,
+  refreshLogs: [],
   settingsGroupFilter: "basic",
   settings: { ...DEFAULT_SETTINGS },
   settingsWatchRootsDraft: [],
 };
+
+let paletteActions = [];
+let paletteCursor = 0;
 
 const el = {
   kpiInstalled: document.getElementById("kpiInstalled"),
@@ -114,8 +131,10 @@ const el = {
   kpiRpiOnline: document.getElementById("kpiRpiOnline"),
   headerFtpInfo: document.getElementById("headerFtpInfo"),
   railPs4Online: document.getElementById("railPs4Online"),
+  railBinOnline: document.getElementById("railBinOnline"),
   railRpiOnline: document.getElementById("railRpiOnline"),
   railFtpInfo: document.getElementById("railFtpInfo"),
+  railBinInfo: document.getElementById("railBinInfo"),
   railRpiInfo: document.getElementById("railRpiInfo"),
   railSettingsBtn: document.getElementById("railSettingsBtn"),
   railVisualBtn: document.getElementById("railVisualBtn"),
@@ -155,6 +174,9 @@ const el = {
   exportBtn: document.getElementById("exportBtn"),
   refreshBtn: document.getElementById("refreshBtn"),
   refreshStorageBtn: document.getElementById("refreshStorageBtn"),
+  refreshLogsOutput: document.getElementById("refreshLogsOutput"),
+  refreshLogsMeta: document.getElementById("refreshLogsMeta"),
+  clearRefreshLogsBtn: document.getElementById("clearRefreshLogsBtn"),
   watchForm: document.getElementById("watchForm"),
   watchItems: document.getElementById("watchItems"),
   clearWatchBtn: document.getElementById("clearWatchBtn"),
@@ -238,6 +260,7 @@ async function init() {
   renderSourceList();
   renderAll();
   renderSettingsForm();
+  renderRefreshLogs();
   el.chips.forEach((c) => c.classList.toggle("active", c.dataset.view === state.view));
   renderPalette();
   startRpiPolling();
@@ -492,11 +515,14 @@ async function loadServerState() {
     state.hidden = Array.isArray(payload.hide) ? payload.hide : [];
     state.localIcons = payload.localIcons && typeof payload.localIcons === "object" ? payload.localIcons : {};
     state.ftpConfig = payload.ftpConfig || state.ftpConfig;
+    state.ftpStatus = payload.ftpStatus || state.ftpStatus;
+    state.binStatus = payload.binStatus || state.binStatus;
     state.ps4Status = payload.ps4Status || state.ps4Status;
     state.rpiStatus = payload.rpiStatus || state.rpiStatus;
     state.ps4Storage = payload.ps4Storage || state.ps4Storage;
     state.settings.ps4Ip = String(payload?.ftpConfig?.host || state.settings.ps4Ip || DEFAULT_SETTINGS.ps4Ip).trim() || DEFAULT_SETTINGS.ps4Ip;
     state.settings.ftpPort = normalizePort(payload?.ftpConfig?.port, state.settings.ftpPort);
+    state.settings.binloaderPort = normalizePort(payload?.binloaderConfig?.port, state.settings.binloaderPort);
     state.settings.rpiPort = normalizePort(payload?.rpiStatus?.port, state.settings.rpiPort);
     saveSettings();
     state.apiEnabled = true;
@@ -727,6 +753,10 @@ function bindEvents() {
   el.clearTasksBtn?.addEventListener("click", clearFinishedRpiTasks);
   el.refreshBtn.addEventListener("click", refreshData);
   el.refreshStorageBtn?.addEventListener("click", refreshStorageData);
+  el.clearRefreshLogsBtn?.addEventListener("click", () => {
+    state.refreshLogs = [];
+    renderRefreshLogs();
+  });
 
   el.closeInspector.addEventListener("click", closeInspector);
   el.settingsBtn?.addEventListener("click", openSettings);
@@ -831,6 +861,29 @@ function bindEvents() {
     if (e.target === el.palette) closePalette();
   });
   el.paletteInput.addEventListener("input", renderPalette);
+  el.paletteInput.addEventListener("keydown", (e) => {
+    if (!paletteActions.length) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      paletteCursor = (paletteCursor + 1) % paletteActions.length;
+      renderPalette();
+      return;
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      paletteCursor = (paletteCursor - 1 + paletteActions.length) % paletteActions.length;
+      renderPalette();
+      return;
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const action = paletteActions[paletteCursor];
+      if (action) {
+        action.run();
+        closePalette();
+      }
+    }
+  });
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".visual-menu")) {
       if (state.visualUninstalledCard.menuRowKey) {
@@ -849,28 +902,49 @@ function toggleTheme() {
 }
 
 async function refreshData() {
+  addRefreshLog("data", "Refresh started.");
   setButtonBusy(el.refreshBtn, true);
   try {
     if (state.apiEnabled) {
+      addRefreshLog("data", "POST /api/refresh");
       const res = await fetch("/api/refresh", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestSettingsBody()),
       });
       const payload = await res.json();
+      addRefreshLog("data", `API refresh ${payload.ok ? "ok" : "failed"}.`);
+      if (Array.isArray(payload.runs)) {
+        payload.runs.forEach((run) => {
+          const runOk = !!run?.ok;
+          const cmd = String(run?.cmd || "command");
+          addRefreshLog("data", `${runOk ? "ok" : "fail"}: ${cmd}`);
+          const stderr = String(run?.stderr || "").trim();
+          if (stderr) addRefreshLog("data", `stderr: ${stderr.slice(0, 260)}`);
+        });
+      }
+      if (payload.warning) addRefreshLog("data", String(payload.warning));
       if (!payload.ok) throw new Error(payload.stderr || "refresh failed");
+    } else {
+      addRefreshLog("data", "API mode disabled. Refreshing client-side data only.");
     }
+    addRefreshLog("data", "Reloading markdown datasets.");
     await loadMarkdownData();
+    addRefreshLog("data", "Loading thumbnail cache.");
     await loadThumbCache();
+    addRefreshLog("data", "Hydrating missing thumbnails.");
     await hydrateThumbsForExternalUninstalled();
     const auto = state.settings.autoExtractMissingIcons ? await autoExtractMissingIcons() : { extracted: 0, attempted: 0 };
+    addRefreshLog("data", `Auto extract complete: ${auto.extracted}/${auto.attempted}.`);
     renderAll();
     if (auto.extracted > 0) {
       notify(`Data refreshed. Auto-extracted ${auto.extracted} new icon(s).`, "success");
     } else {
       notify("Data refreshed.", "success");
     }
+    addRefreshLog("data", "Refresh completed.");
   } catch (err) {
+    addRefreshLog("data", `Refresh failed: ${err.message}`);
     notify(`Refresh failed: ${err.message}`, "error", 4500);
   } finally {
     setButtonBusy(el.refreshBtn, false);
@@ -898,25 +972,67 @@ function saveAutoExtractSeen() {
 
 async function refreshStorageData() {
   if (!state.apiEnabled) {
+    addRefreshLog("storage", "Storage refresh blocked: API mode disabled.");
     notify("Storage refresh requires API mode (start mission-control/server.py).", "warn", 4500);
     return;
   }
+  addRefreshLog("storage", "Refresh started.");
   setButtonBusy(el.refreshStorageBtn, true);
   try {
+    addRefreshLog("storage", "POST /api/refresh-storage");
     const res = await fetch("/api/refresh-storage", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestSettingsBody()),
     });
     const payload = await res.json();
+    addRefreshLog("storage", `send: ${payload?.send?.ok ? "ok" : "failed"}`);
+    addRefreshLog("storage", `snapshot: ${payload?.snapshot?.ok ? "ok" : "failed"}`);
+    addRefreshLog("storage", `storage snapshot: ${payload?.storage?.available ? "available" : "missing"}`);
     if (!payload.ok) throw new Error(payload?.send?.error || payload?.snapshot?.stderr || "storage refresh failed");
     await loadServerState();
     renderKpis();
     notify("Storage refreshed.", "success");
+    addRefreshLog("storage", "Refresh completed.");
   } catch (err) {
+    addRefreshLog("storage", `Refresh failed: ${err.message}`);
     notify(`Storage refresh failed: ${err.message}`, "error", 4500);
   } finally {
     setButtonBusy(el.refreshStorageBtn, false);
+  }
+}
+
+function addRefreshLog(channel, message) {
+  const line = String(message || "").trim();
+  if (!line) return;
+  const src = String(channel || "refresh").toLowerCase();
+  state.refreshLogs.push({
+    at: new Date().toISOString(),
+    channel: src,
+    line,
+  });
+  if (state.refreshLogs.length > MAX_REFRESH_LOG_LINES) {
+    state.refreshLogs = state.refreshLogs.slice(-MAX_REFRESH_LOG_LINES);
+  }
+  renderRefreshLogs();
+}
+
+function renderRefreshLogs() {
+  if (!el.refreshLogsOutput) return;
+  if (!state.refreshLogs.length) {
+    el.refreshLogsOutput.textContent = "No refresh activity yet.";
+    if (el.refreshLogsMeta) el.refreshLogsMeta.textContent = "No refresh activity yet.";
+    return;
+  }
+  const lines = state.refreshLogs.map((entry) => {
+    const ts = formatDateTimeShort(entry.at);
+    return `[${ts}] [${entry.channel}] ${entry.line}`;
+  });
+  el.refreshLogsOutput.textContent = lines.join("\n");
+  el.refreshLogsOutput.scrollTop = el.refreshLogsOutput.scrollHeight;
+  if (el.refreshLogsMeta) {
+    const last = state.refreshLogs[state.refreshLogs.length - 1];
+    el.refreshLogsMeta.textContent = `${state.refreshLogs.length} lines · last ${formatDateTimeShort(last.at)}`;
   }
 }
 
@@ -1240,23 +1356,42 @@ function renderKpis() {
   el.kpiUninstalled.textContent = getUninstalledRows().length.toLocaleString();
   el.kpiWatch.textContent = state.watch.length.toLocaleString();
   if (el.kpiPs4Online) {
-    const online = !!state.ps4Status?.online;
+    const online = !!state.ftpStatus?.online;
     el.kpiPs4Online.textContent = online ? "Online" : "Offline";
     el.kpiPs4Online.classList.toggle("online", online);
     el.kpiPs4Online.classList.toggle("offline", !online);
-    const ip = state.ps4Status?.ip ? ` (${state.ps4Status.ip})` : "";
-    el.kpiPs4Online.title = `GoldHEN status${ip}`;
+    const port = Number(state.ftpStatus?.port || state.ftpConfig?.port) || 2121;
+    const ip = state.ftpStatus?.ip ? ` (${state.ftpStatus.ip}:${port})` : "";
+    const err = state.ftpStatus?.error ? `\n${state.ftpStatus.error}` : "";
+    el.kpiPs4Online.title = `FTP status${ip}${err}`;
   }
   if (el.headerFtpInfo) {
-    const port = Number(state.ftpConfig?.port) || 2121;
+    const port = Number(state.ftpStatus?.port || state.ftpConfig?.port) || 2121;
     el.headerFtpInfo.textContent = `FTP :${port}`;
     if (el.railFtpInfo) el.railFtpInfo.textContent = `:${port}`;
     if (el.railPs4Online) {
-      const online = !!state.ps4Status?.online;
+      const online = !!state.ftpStatus?.online;
       el.railPs4Online.textContent = "FTP";
       el.railPs4Online.classList.toggle("online", online);
       el.railPs4Online.classList.toggle("offline", !online);
+      const ip = state.ftpStatus?.ip || state.settings.ps4Ip || "";
+      const err = state.ftpStatus?.error ? `\n${state.ftpStatus.error}` : "";
+      el.railPs4Online.title = `FTP ${ip}:${port}${err}`;
     }
+  }
+  if (el.railBinInfo) {
+    const port = Number(state.binStatus?.port) || Number(state.settings.binloaderPort) || 9090;
+    el.railBinInfo.textContent = `:${port}`;
+  }
+  if (el.railBinOnline) {
+    const online = !!state.binStatus?.online;
+    el.railBinOnline.textContent = "BIN";
+    el.railBinOnline.classList.toggle("online", online);
+    el.railBinOnline.classList.toggle("offline", !online);
+    const ip = state.binStatus?.ip || state.settings.ps4Ip || "";
+    const port = Number(state.binStatus?.port) || Number(state.settings.binloaderPort) || 9090;
+    const err = state.binStatus?.error ? `\n${state.binStatus.error}` : "";
+    el.railBinOnline.title = `BIN ${ip}:${port}${err}`;
   }
   if (el.kpiRpiOnline) {
     const online = !!state.rpiStatus?.online;
@@ -2680,7 +2815,7 @@ function renderSourceList() {
 
 function renderPalette() {
   const q = (el.paletteInput.value || "").toLowerCase().trim();
-  const actions = [
+  const commandActions = [
     { label: "View Uninstalled Games", run: () => setView("uninstalled_games") },
     { label: "View Uninstalled Packages", run: () => setView("uninstalled_packages") },
     { label: "View All Packages", run: () => setView("all_packages") },
@@ -2698,13 +2833,74 @@ function renderPalette() {
     { label: "Focus Search", run: () => el.inlineFilter.focus() },
   ].filter((a) => a.label.toLowerCase().includes(q));
 
-  el.paletteList.innerHTML = actions.map((a, idx) => `<li data-act="${idx}">${a.label}</li>`).join("");
+  const titleActions = q.length >= 2 ? buildPaletteTitleActions(q) : [];
+  paletteActions = titleActions.concat(commandActions);
+  if (paletteCursor >= paletteActions.length) paletteCursor = 0;
+
+  el.paletteList.innerHTML = paletteActions.map((a, idx) => {
+    const active = idx === paletteCursor ? "active" : "";
+    const meta = a.meta ? `<small>${escapeHtml(a.meta)}</small>` : "";
+    return `<li class="${active}" data-act="${idx}"><span>${a.label}</span>${meta}</li>`;
+  }).join("");
   el.paletteList.querySelectorAll("li").forEach((item, idx) => {
     item.addEventListener("click", () => {
-      actions[idx].run();
+      paletteActions[idx].run();
       closePalette();
     });
   });
+}
+
+function paletteRowTitle(row) {
+  return row.Title || row.title || row["Game Title"] || row.Name || row.File || row["Title Name"] || "";
+}
+
+function paletteRowId(row) {
+  return row["Title ID"] || row.CUSA || row.titleId || row["Content ID"] || "";
+}
+
+function paletteRowPath(row) {
+  return row.Path || row["Example Path"] || row.File || "";
+}
+
+function buildPaletteTitleActions(query) {
+  const buckets = [
+    { label: "Installed", view: "installed", rows: state.data.installed || [] },
+    { label: "Uninstalled Games", view: "uninstalled_games", rows: getUninstalledRows() },
+    { label: "Uninstalled PKGs", view: "uninstalled_packages", rows: state.data.externalUninstalled || [] },
+    { label: "All Packages", view: "all_packages", rows: allPackagesRows() },
+  ];
+  const q = query.toLowerCase();
+  const hits = [];
+  const seen = new Set();
+  for (const b of buckets) {
+    for (const row of b.rows) {
+      const title = String(paletteRowTitle(row) || "").trim();
+      if (!title) continue;
+      const id = String(paletteRowId(row) || "").trim();
+      const path = String(paletteRowPath(row) || "").trim();
+      const hay = `${title} ${id} ${path}`.toLowerCase();
+      if (!hay.includes(q)) continue;
+      const key = `${normalizeTitle(title)}|${id}|${b.view}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      hits.push({
+        label: `Title: ${title}`,
+        meta: `${b.label}${id ? ` • ${id}` : ""}`,
+        run: () => jumpToPaletteTitle({ view: b.view, title, id }),
+      });
+      if (hits.length >= 40) return hits;
+    }
+  }
+  return hits;
+}
+
+function jumpToPaletteTitle(hit) {
+  setView(hit.view);
+  const query = String(hit.id || hit.title || "").trim();
+  state.search = query.toLowerCase();
+  el.inlineFilter.value = query;
+  renderMainTable();
+  scrollToRailTarget("mainTableCard");
 }
 
 function setView(v) {
@@ -2717,6 +2913,7 @@ function openPalette() {
   el.palette.classList.add("open");
   el.palette.setAttribute("aria-hidden", "false");
   el.paletteInput.value = "";
+  paletteCursor = 0;
   renderPalette();
   el.paletteInput.focus();
 }
